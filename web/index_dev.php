@@ -2,6 +2,15 @@
 
 use Symfony\Component\Debug\Debug;
 
+$extensions = array("php", "jpg", "jpeg", "gif", "css", "png", "ico");
+
+$path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$ext = pathinfo($path, PATHINFO_EXTENSION);
+if (in_array($ext, $extensions)) {
+    // let the server handle the request as-is
+    return false;
+}
+
 // This check prevents access to debug front controllers that are deployed by accident to production servers.
 // Feel free to remove this, extend it, or make something more sophisticated.
 if (isset($_SERVER['HTTP_CLIENT_IP'])

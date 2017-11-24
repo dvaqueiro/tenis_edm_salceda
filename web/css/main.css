@@ -8,7 +8,7 @@ html
 body
 { font: normal 85% Arial, Helvetica, sans-serif;
   color: #000;
-  background: #FFF url(../images/background.jpg) repeat;
+  background: #FFF url(/images/background.jpg) repeat;
 }
 
 p
@@ -73,13 +73,13 @@ ol li
 #header
 { height: 400px;
   width: 960px;
-  background: transparent url(../images/header.jpg) no-repeat;}
+  background: transparent url(/images/header.jpg) no-repeat;}
 
 #menubar
 { width: 960px;
   height: 100px;
   margin-top: -100px;
-  background: transparent url(../images/transparent.png) repeat;} 
+  background: transparent url(/images/transparent.png) repeat;} 
 
 #welcome
 { 
@@ -145,7 +145,7 @@ ul#menu li.current a, ul#menu li:hover a
   overflow: hidden;
   margin: 0 auto;
   padding: 0 0 20px 0;
-  background: transparent url(../images/transparent_light.png) repeat;} 
+  background: transparent url(/images/transparent_light.png) repeat;} 
 
 .sidebar_container
 { float: left;
@@ -391,7 +391,7 @@ ul#menu li.current a, ul#menu li:hover a
 
 .resultados
 {
-    background:transparent url(../images/transparent_light.png) repeat;
+    background:transparent url(/images/transparent_light.png) repeat;
     padding:1em;
     border-radius:.4em;
     font-weight:bold;	

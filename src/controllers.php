@@ -20,37 +20,37 @@ $app->get('/players', function () use ($app) {
 ->bind('players');
 
 $app->get('/scores', function () use ($app) {
-    return $app['twig']->render('players.html.twig', array());
+    return $app['twig']->render('scores.html.twig', array());
 })
 ->bind('scores');
 
 $app->get('/standings', function () use ($app) {
-    return $app['twig']->render('players.html.twig', array());
+    return $app['twig']->render('standings.html.twig', array());
 })
 ->bind('standings');
 
 $app->get('/ranking', function () use ($app) {
-    return $app['twig']->render('players.html.twig', array());
+    return $app['twig']->render('ranking.html.twig', array());
 })
 ->bind('ranking');
 
 $app->get('/comments', function () use ($app) {
-    return $app['twig']->render('players.html.twig', array());
+    return $app['twig']->render('comments.html.twig', array());
 })
 ->bind('comments');
 
 $app->get('/contact', function () use ($app) {
-    return $app['twig']->render('players.html.twig', array());
+    return $app['twig']->render('contact.html.twig', array());
 })
 ->bind('contact');
 
 $app->get('/stadium', function () use ($app) {
-    return $app['twig']->render('players.html.twig', array());
+    return $app['twig']->render('stadium.html.twig', array());
 })
 ->bind('stadium');
 
 $app->get('/facebook', function () use ($app) {
-    return $app['twig']->render('players.html.twig', array());
+    return $app['twig']->render('facebook.html.twig', array());
 })
 ->bind('facebook');
 
