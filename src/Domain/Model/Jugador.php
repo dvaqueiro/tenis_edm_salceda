@@ -21,7 +21,7 @@ class Jugador
 
         $this->id = $id;
         $this->dni = $dni;
-        $this->nombre = $nombre;
+        $this->nombre = mb_convert_case(mb_strtolower($nombre), MB_CASE_TITLE, "UTF-8");
         $this->telefono = $telefono;
         $this->email = $email;
         $this->password = $password;

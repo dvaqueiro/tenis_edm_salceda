@@ -2,12 +2,17 @@
 
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
+use Application\ResultadosPorLigaCommand;
+use Application\ResultadosPorLigaHandler;
 use Domain\Model\ArrayDivisionFactory;
 use Domain\Model\ArrayJugadorFactory;
 use Domain\Model\ArrayLigaFactory;
+use Domain\Model\ArrayResultadoFactory;
+use Domain\Model\Liga;
 use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
 use Infrastructure\Persistence\DbalLigaRepository;
+use Infrastructure\Persistence\DbalResultadoRepository;
 use League\Tactician\CommandBus;
 use League\Tactician\Doctrine\DBAL\TransactionMiddleware;
 use League\Tactician\Handler\CommandHandlerMiddleware;
@@ -60,14 +65,47 @@ $app['jugador_factory'] = $app->factory(function ($app) {
     return new ArrayJugadorFactory();
 });
 
+$app['resultado_factory'] = $app->factory(function ($app) {
+    return new ArrayResultadoFactory();
+});
+
+/**
+ * Repositories
+ */
+$app['liga_repository'] = $app->factory(function ($app) {
+    return new DbalLigaRepository($app['db'], $app['liga_factory']);
+});
+
+$app['division_repository'] = $app->factory(function ($app) {
+    return new DbalDivisionRepository($app['db'], $app['division_factory']);
+});
+
+$app['jugador_repository'] = $app->factory(function ($app) {
+    return new DbalJugadorRepository($app['db'], $app['jugador_factory']);
+});
+
+$app['resultado_repository'] = $app->factory(function ($app) {
+    return new DbalResultadoRepository($app['db'], $app['resultado_factory']);
+});
+
+
 /**
  * CommandHandlers
  */
 $app['jugadores_por_liga_handler'] = $app->factory(function ($app) {
     return new JugadoresPorLigaHandler(
-        new DbalLigaRepository($app['db'], new ArrayLigaFactory()),
-        new DbalDivisionRepository($app['db'], new ArrayDivisionFactory()),
-        new DbalJugadorRepository($app['db'], new ArrayJugadorFactory()));
+        $app['liga_repository'],
+        $app['division_repository'],
+        $app['jugador_repository']
+    );
+});
+
+$app['resultados_por_liga_handler'] = $app->factory(function ($app) {
+    return new ResultadosPorLigaHandler(
+        $app['liga_repository'],
+        $app['division_repository'],
+        $app['resultado_repository']
+    );
 });
 
 /**
@@ -81,6 +119,7 @@ $app['commandBus'] = function ($app){
             new ClassNameExtractor(),
             new InMemoryLocator([
                 JugadoresPorLigaCommand::class => $app['jugadores_por_liga_handler'],
+                ResultadosPorLigaCommand::class => $app['resultados_por_liga_handler']
             ]), new HandleInflector()
         )
     ]);

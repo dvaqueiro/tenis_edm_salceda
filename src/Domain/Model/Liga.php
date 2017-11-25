@@ -2,6 +2,8 @@
 
 namespace Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
@@ -16,12 +18,12 @@ class Liga
     {
         $this->idLiga = $idLiga;
         $this->nombreLiga = $nombreLiga;
-        $this->divisiones = [];
+        $this->divisiones = new ArrayCollection();
     }
 
     public function addDivision(Division $division)
     {
-        $this->divisiones[$division->getIdDivision()] = $division;
+        $this->divisiones->set($division->getIdDivision(), $division);
     }
 
     function getIdLiga()

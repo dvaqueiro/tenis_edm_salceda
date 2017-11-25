@@ -1,9 +1,9 @@
 <?php
 
 use Application\JugadoresPorLigaCommand;
+use Application\ResultadosPorLigaCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\VarDumper\VarDumper;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
@@ -13,14 +13,15 @@ $app->get('/', function () use ($app) {
 ->bind('homepage');
 
 $app->get('/players', function () use ($app) {
-    //Solo registrados
+    //TODO: Solo registrados
     $liga = $app['commandBus']->handle(new JugadoresPorLigaCommand(null));
     return $app['twig']->render('players.html.twig', array('liga' => $liga));
 })
 ->bind('players');
 
 $app->get('/scores', function () use ($app) {
-    return $app['twig']->render('scores.html.twig', array());
+    $liga = $app['commandBus']->handle(new ResultadosPorLigaCommand(null));
+    return $app['twig']->render('scores.html.twig', array('liga' => $liga));
 })
 ->bind('scores');
 
