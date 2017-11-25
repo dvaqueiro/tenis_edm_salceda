@@ -3,16 +3,35 @@
          <h1>Club de Tenis EDM Salceda</h1>
      </div>
      <div id="menu_items">
+         {% set currentRoute = global.request.get('_route') %}
          <ul id="menu">
-          <li class="current"><a href="{{ url('homepage') }}">Portada</a></li>
-          <li><a href="{{ url('players') }}">Jugadores</a></li>
-          <li><a href="{{ url('scores') }}">Resultados</a></li>
-          <li><a href="{{ url('standings') }}">Clasificación</a></li>
-          <li><a href="{{ url('ranking') }}">Ranking</a></li>
-          <li><a href="{{ url('comments') }}">Comentarios</a></li>
-          <li><a href="{{ url('contact') }}">Contacto</a></li>
-          <li><a href="{{ url('stadium') }}">Pabellón</a></li>
-          <li><a href="{{ url('facebook') }}">Facebook</a></li>
+          <li {% if currentRoute == 'homepage' %}class="current"{% endif %}>
+              <a href="{{ url('homepage') }}">Portada</a>
+          </li>
+          <li {% if currentRoute == 'players' %}class="current"{% endif %}>
+              <a href="{{ url('players') }}">Jugadores</a>
+          </li>
+          <li {% if currentRoute == 'scores' %}class="current"{% endif %}>
+              <a href="{{ url('scores') }}">Resultados</a>
+          </li>
+          <li {% if currentRoute == 'standings' %}class="current"{% endif %}>
+              <a href="{{ url('standings') }}">Clasificación</a>
+          </li>
+          <li {% if currentRoute == 'ranking' %}class="current"{% endif %}>
+              <a href="{{ url('ranking') }}">Ranking</a>
+          </li>
+          <li {% if currentRoute == 'comments' %}class="current"{% endif %}>
+              <a href="{{ url('comments') }}">Comentarios</a>
+          </li>
+          <li {% if currentRoute == 'contact' %}class="current"{% endif %}>
+              <a href="{{ url('contact') }}">Contacto</a>
+          </li>
+          <li {% if currentRoute == 'stadium' %}class="current"{% endif %}>
+              <a href="{{ url('stadium') }}">Pabellón</a>
+          </li>
+          <li {% if currentRoute == 'facebook' %}class="current"{% endif %}>
+              <a href="{{ url('facebook') }}">Facebook</a>
+          </li>
         </ul>
      </div>
  </div>

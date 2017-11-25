@@ -1,21 +1,21 @@
 <?php
 
+use Application\JugadoresPorLigaCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\VarDumper\VarDumper;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
 $app->get('/', function () use ($app) {
-    //$data = $app['db']->fetchAll('SELECT * FROM comentarios limit 1');
     return $app['twig']->render('homepage.html.twig', array());
 })
 ->bind('homepage');
 
 $app->get('/players', function () use ($app) {
-    return $app['twig']->render('players.html.twig', array());
+    //Solo registrados
+    $liga = $app['commandBus']->handle(new JugadoresPorLigaCommand(null));
+    return $app['twig']->render('players.html.twig', array('liga' => $liga));
 })
 ->bind('players');
 
@@ -54,7 +54,7 @@ $app->get('/facebook', function () use ($app) {
 })
 ->bind('facebook');
 
-$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+$app->error(function (Exception $e, Request $request, $code) use ($app) {
     if ($app['debug']) {
         return;
     }

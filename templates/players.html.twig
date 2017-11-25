@@ -1,5 +1,29 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <h1>Jugadores</h1>
+    <h1 class="encabezado">{{ liga.nombreLiga }}</h1>
+    {% for division in liga.divisiones %}
+        <h2 class="divisiones" style="margin-bottom:0;">{{ division.nombre }}</h2>
+        <div class="resultados" style="margin-top:0; margin-bottom:2em;">
+        {% for jugador in division.participantes %}
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <div class="titulo" style="font-size:18px;">{{ jugador.nombre }}</div>
+                    <div style="margin-top:3px; margin-bottom:28px;">
+                        <strong>{{ jugador.telefono }}</strong> / 
+                        <a href="mailto:{{ jugador.email }}">{{ jugador.email }}</a>
+                    </div>
+                  </td>
+                  <td align="center" width="170">
+                    {% if jugador.foto %}
+                        <a href="{{ jugador.foto }}" data-lightbox="{{ jugador.nombre }}" title="{{ jugador.nombre }}">
+                        <img src="{{ jugador.foto }}" width="150" /></a>
+                    {% endif %}
+                  </td>
+                </tr>
+              </table>
+        {% endfor %}
+        </div>
+    {% endfor %}
 {% endblock %}
