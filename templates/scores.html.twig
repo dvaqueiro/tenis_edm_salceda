@@ -6,19 +6,20 @@
         <h2 class="divisiones" style="margin-bottom:0;">{{ division.nombre }}</h2>
         <div class="resultados" style="margin-top:0; margin-bottom:2em;">
         {% for resultado in division.resultados %}
-            <table width="100%" border="0" cellspacing="3" cellpadding="0">
+            <table class="cadaResultado" width="100%" border="0" cellspacing="3" cellpadding="0">
                 <tr>
-                    <td height="30" width="42%" align="left"><strong>{{ resultado.nombreGanador }}</strong></td>
-                    <td width="4%" align="center" style="font-weight:normal;">def</td>
-                    <td width="42%" align="left" style="font-weight:normal;">{{ resultado.nombrePerdedor }}</td>
+                    <td height="30" width="40%" align="left"><strong>{{ resultado.nombreGanador }}</strong></td>
+                    <td width="4%" align="center" style="font-weight:normal;font-size: smaller;">def</td>
+                    <td width="40%" align="left" style="font-weight:normal;">{{ resultado.nombrePerdedor }}</td>
                     {% for setNumber in range(0,2) %}
                         {% if resultado.set(setNumber).ganadorSet %}
-                            <td width="4%" align="center" style="font-weight:normal;">{{ resultado.set(setNumber).juegos(resultado.ganador) }}-{{ resultado.set(setNumber).juegos(resultado.perdedor) }}</td>
+                            <td width="5%" align="center" style="font-weight:normal;">
+                                {{ resultado.set(setNumber).juegos(resultado.ganador) }}-{{ resultado.set(setNumber).juegos(resultado.perdedor) }}
+                            </td>
                         {% else %}
-                            <td width="4%" align="center" style="font-weight:normal;"></td>
+                            <td width="5%" align="center" style="font-weight:normal;"></td>
                         {% endif %}    
                     {% endfor %}
-                    
                 </tr>
             </table>
         {% endfor %}

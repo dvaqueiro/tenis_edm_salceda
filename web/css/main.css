@@ -416,7 +416,7 @@ ul#menu li.current a, ul#menu li:hover a
     width:3.3em;
     display:inline-block;	
     text-align:center;
-    padding:.2em .5em;
+    padding:.2em .4em;
     margin:3px;
     margin-left:6px;
 }
@@ -427,6 +427,11 @@ ul#menu li.current a, ul#menu li:hover a
 }
 
 .cadaclasi:hover
+{
+    background-color:#E3FFDF;
+}
+
+.cadaResultado:hover
 {
     background-color:#E3FFDF;
 }

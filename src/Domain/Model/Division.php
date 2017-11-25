@@ -16,6 +16,7 @@ class Division
     private $categoria;
     private $participantes;
     private $resultados;
+    private $clasificacion;
 
     function __construct($idDivision, $idLiga, $nombre, $categoria)
     {
@@ -65,5 +66,15 @@ class Division
     function getResultados()
     {
         return $this->resultados;
+    }
+
+    function getClasificacion()
+    {
+        return $this->clasificacion;
+    }
+
+    function setClasificacion(Clasificacion $clasificacion)
+    {
+        $this->clasificacion = $clasificacion;
     }
 }

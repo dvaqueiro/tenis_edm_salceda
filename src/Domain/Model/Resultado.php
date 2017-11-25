@@ -27,6 +27,8 @@ class Resultado
     private $nombreGanador;
     private $nombrePerdedor;
     private $perdedor;
+    private $idGanador;
+    private $idPerdedor;
 
     function __construct($idResultado, $idDivision, $idJugadorLocal, $idJugadorVisitante, $nombreJugadorLocal = null, $nombreJugadorVisitante = null)
     {
@@ -109,14 +111,18 @@ class Resultado
             $this->ganador = self::_LOCAL_;
             $this->perdedor = self::_VISITANTE_;
             $this->nombreGanador = $this->nombreJugadorLocal;
+            $this->idGanador = $this->idJugadorLocal;
             $this->nombrePerdedor = $this->nombreJugadorVisitante;
+            $this->idPerdedor = $this->idJugadorVisitante;
         }
 
         if($this->setGanadosVisitante >= $setsParaGanar) {
             $this->ganador = self::_VISITANTE_;
             $this->perdedor = self::_LOCAL_;
+            $this->idGanador = $this->idJugadorVisitante;
             $this->nombreGanador = $this->nombreJugadorVisitante;
             $this->nombrePerdedor = $this->nombreJugadorLocal;
+            $this->idPerdedor = $this->idJugadorLocal;
         }
     }
 
@@ -145,5 +151,54 @@ class Resultado
         return $this->nombrePerdedor;
     }
 
+    function getIdGanador()
+    {
+        $this->getGanador();
+        return $this->idGanador;
+    }
 
+    function getIdPerdedor()
+    {
+        $this->getGanador();
+        return $this->idPerdedor;
+    }
+
+    function getDiferenciaSetsGanador()
+    {
+        $this->getGanador();
+        $diff = 0;
+        if($this->ganador == self::_LOCAL_) {
+            $diff = $this->setGanadosLocal - $this->setGanadosVisitante;
+        }
+
+        if($this->ganador == self::_VISITANTE_) {
+            $diff = $this->setGanadosVisitante - $this->setGanadosLocal;
+        }
+
+        return $diff;
+    }
+
+    function getDiferenciaSetsPerdedor()
+    {
+        return - $this->getDiferenciaSetsGanador();
+    }
+
+    function getDiferenciaJuegosGanador()
+    {
+        $this->getGanador();
+        $juegosGanador = 0;
+        $juegosPerdedor = 0;
+        foreach ($this->sets as $set) {
+            /* @var $set Set */
+            $juegosGanador += $set->getJuegos($this->ganador);
+            $juegosPerdedor += $set->getJuegos($this->perdedor);
+        }
+
+        return $juegosGanador - $juegosPerdedor;
+    }
+
+    function getDiferenciaJuegosPerdedor()
+    {
+        return - $this->getDiferenciaSetsGanador();
+    }
 }

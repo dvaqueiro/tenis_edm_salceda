@@ -25,12 +25,12 @@ class JugadoresPorLigaHandler
     /**
      * @var LigaRepository
      */
-    private $LigaRepository;
+    private $ligaRepository;
 
-    function __construct(LigaRepository $LigaRepository, DivisionRepository $divisionRepositorio,
+    function __construct(LigaRepository $ligaRepository, DivisionRepository $divisionRepositorio,
         JugadorRepository $jugadorRespositorio)
     {
-        $this->LigaRepository = $LigaRepository;
+        $this->ligaRepository = $ligaRepository;
         $this->divisionRepositorio = $divisionRepositorio;
         $this->jugadorRespositorio = $jugadorRespositorio;
     }
@@ -38,7 +38,7 @@ class JugadoresPorLigaHandler
     public function handle(JugadoresPorLigaCommand $command)
     {
         $ligaId = $command->getLigaId();
-        $liga = $this->LigaRepository->findByIdOrLast($ligaId);
+        $liga = $this->ligaRepository->findByIdOrLast($ligaId);
 
         $divisiones = $this->divisionRepositorio->findByLiga($liga->getIdLiga());
         foreach ($divisiones as $division) {

@@ -1,5 +1,7 @@
 <?php
 
+use Application\ClasificacionPorLigaHandler;
+use Application\ClasificacionPorLigaCommand;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
 use Application\ResultadosPorLigaCommand;
@@ -8,7 +10,6 @@ use Domain\Model\ArrayDivisionFactory;
 use Domain\Model\ArrayJugadorFactory;
 use Domain\Model\ArrayLigaFactory;
 use Domain\Model\ArrayResultadoFactory;
-use Domain\Model\Liga;
 use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
 use Infrastructure\Persistence\DbalLigaRepository;
@@ -108,6 +109,14 @@ $app['resultados_por_liga_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['clasificacion_por_liga_handler'] = $app->factory(function ($app) {
+    return new ClasificacionPorLigaHandler(
+        $app['liga_repository'],
+        $app['division_repository'],
+        $app['resultado_repository']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -119,7 +128,8 @@ $app['commandBus'] = function ($app){
             new ClassNameExtractor(),
             new InMemoryLocator([
                 JugadoresPorLigaCommand::class => $app['jugadores_por_liga_handler'],
-                ResultadosPorLigaCommand::class => $app['resultados_por_liga_handler']
+                ResultadosPorLigaCommand::class => $app['resultados_por_liga_handler'],
+                ClasificacionPorLigaCommand::class => $app['clasificacion_por_liga_handler'],
             ]), new HandleInflector()
         )
     ]);

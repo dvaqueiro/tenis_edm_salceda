@@ -1,5 +1,6 @@
 <?php
 
+use Application\ClasificacionPorLigaCommand;
 use Application\JugadoresPorLigaCommand;
 use Application\ResultadosPorLigaCommand;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,15 @@ $app->get('/scores', function () use ($app) {
 ->bind('scores');
 
 $app->get('/standings', function () use ($app) {
-    return $app['twig']->render('standings.html.twig', array());
+    $puntosGanador = 3;
+    $puntosPerdedor = 1;
+    $order = [
+        'puntos' => 'DESC',
+        'difSets' => 'DESC',
+        'difJuegos' => 'DESC',
+    ];
+    $liga = $app['commandBus']->handle(new ClasificacionPorLigaCommand(null, $puntosGanador, $puntosPerdedor, $order));
+    return $app['twig']->render('standings.html.twig', array('liga' => $liga));
 })
 ->bind('standings');
 

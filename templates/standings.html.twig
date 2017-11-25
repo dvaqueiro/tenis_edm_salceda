@@ -1,5 +1,26 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <h1>Clasificación</h1>
+    <h1 class="encabezado">{{ liga.nombreLiga }}</h1>
+    {% for division in liga.divisiones %}
+        <h2 class="divisiones" style="margin-bottom:0;">{{ division.nombre }}</h2>
+        <div class="resultados" style="margin-top:0; margin-bottom:2em;">
+            <div style="padding:0 .5em;">
+                <div class="nombres" style="border:dashed 3px white; margin:0;">Jugador</div>
+                <div class="puntos" style="border:dashed 3px white; margin:0; margin-left:3px;">Puntos</div>
+                <div class="puntos" style="border:dashed 3px white; margin:0; margin-left:3px;">PJ</div>
+                <div class="puntos" style="border:dashed 3px white; margin:0; margin-left:3px;">DS</div>
+                <div class="puntos" style="border:dashed 3px white; margin:0; margin-left:3px;">DJ</div>
+            </div>
+            {% for clasificacion in division.clasificacion.agregados %}
+                <div class='cadaclasi'>
+                    <div class='nombres'>{{ clasificacion.nombre }}</div>
+                    <div class='puntos'>{{ clasificacion.puntos }}</div>
+                    <div class='puntos'>{{ clasificacion.partidos }}</div>
+                    <div class='puntos'>{{ clasificacion.difSets }}</div>
+                    <div class='puntos'>{{ clasificacion.difJuegos }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 {% endblock %}
