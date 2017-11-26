@@ -37,4 +37,16 @@ class DbalLigaRepository implements LigaRepository
 
         return $this->factory->make($data);
     }
+
+    public function findLastLimit($limit)
+    {
+        $sql = 'SELECT * FROM ligas ORDER BY id DESC LIMIT ?';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll();
+
+        return $this->factory->makeAll($data);
+    }
 }

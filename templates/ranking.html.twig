@@ -1,5 +1,14 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <h1>Ranking</h1>
+    <h1 class="encabezado">Ranking</h1>
+    <div class="resultados" style="margin-top:0; margin-bottom:2em;">
+        {% for rank in ranking.agregados %}
+            <div class='cadaclasi'>
+                <div class='nombres'>{{ loop.index }} - {{ rank.nombre }}</div>
+                <div class='puntos'>{{ rank.puntos }}</div> 
+                <span style='font-weight:normal;'>{{ rank.victorias }}/{{ rank.jugados }} victorias/partidos.</span>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

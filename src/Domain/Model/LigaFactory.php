@@ -8,5 +8,8 @@ namespace Domain\Model;
  */
 interface LigaFactory
 {
+
+    function makeAll($data);
+
     function make($data);
 }

@@ -1,9 +1,11 @@
 <?php
 
-use Application\ClasificacionPorLigaHandler;
 use Application\ClasificacionPorLigaCommand;
+use Application\ClasificacionPorLigaHandler;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
+use Application\RankingCommand;
+use Application\RankingCommandHandler;
 use Application\ResultadosPorLigaCommand;
 use Application\ResultadosPorLigaHandler;
 use Domain\Model\ArrayDivisionFactory;
@@ -117,6 +119,14 @@ $app['clasificacion_por_liga_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['ranking_command_handler'] = $app->factory(function ($app) {
+    return new RankingCommandHandler(
+        $app['liga_repository'],
+        $app['division_repository'],
+        $app['resultado_repository']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -130,6 +140,7 @@ $app['commandBus'] = function ($app){
                 JugadoresPorLigaCommand::class => $app['jugadores_por_liga_handler'],
                 ResultadosPorLigaCommand::class => $app['resultados_por_liga_handler'],
                 ClasificacionPorLigaCommand::class => $app['clasificacion_por_liga_handler'],
+                RankingCommand::class => $app['ranking_command_handler'],
             ]), new HandleInflector()
         )
     ]);

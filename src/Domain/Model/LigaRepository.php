@@ -8,6 +8,9 @@ namespace Domain\Model;
  */
 interface LigaRepository
 {
+
+    public function findLastLimit($limit);
+
     /**
      *
      * @param int $idLiga

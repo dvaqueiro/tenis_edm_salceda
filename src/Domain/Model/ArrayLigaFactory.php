@@ -12,4 +12,13 @@ class ArrayLigaFactory implements LigaFactory
     {
         return new Liga($data['id'], $data['nombre']);
     }
+
+    public function makeAll($data)
+    {
+        foreach ($data as $row) {
+            $ligas[] = new Liga($row['id'], $row['nombre']);
+        }
+
+        return $ligas;
+    }
 }

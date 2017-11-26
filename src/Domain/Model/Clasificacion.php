@@ -22,10 +22,6 @@ class Clasificacion
      */
     private $agregados;
 
-    /**
-     *
-     * @param Resultado $resultados
-     */
     function __construct($resultados, $puntosGanador = 3, $puntosPerdedor = 1, $orderBy = null)
     {
         $this->resultados = $resultados;
@@ -39,6 +35,7 @@ class Clasificacion
     private function construirClasificacion()
     {
         foreach ($this->resultados as $resultado) {
+            if($resultado->getIdGanador() == null) continue;
             $this->initAgregado($resultado->getIdGanador(), $resultado->getNombreGanador());
             $this->initAgregado($resultado->getIdPerdedor(), $resultado->getNombrePerdedor());
 

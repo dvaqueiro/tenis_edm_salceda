@@ -2,6 +2,7 @@
 
 use Application\ClasificacionPorLigaCommand;
 use Application\JugadoresPorLigaCommand;
+use Application\RankingCommand;
 use Application\ResultadosPorLigaCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,18 +30,35 @@ $app->get('/scores', function () use ($app) {
 $app->get('/standings', function () use ($app) {
     $puntosGanador = 3;
     $puntosPerdedor = 1;
-    $order = [
+    $orderBy = [
         'puntos' => 'DESC',
         'difSets' => 'DESC',
         'difJuegos' => 'DESC',
     ];
-    $liga = $app['commandBus']->handle(new ClasificacionPorLigaCommand(null, $puntosGanador, $puntosPerdedor, $order));
+    $liga = $app['commandBus']->handle(new ClasificacionPorLigaCommand(null, $puntosGanador, $puntosPerdedor, $orderBy));
     return $app['twig']->render('standings.html.twig', array('liga' => $liga));
 })
 ->bind('standings');
 
 $app->get('/ranking', function () use ($app) {
-    return $app['twig']->render('ranking.html.twig', array());
+    $limit = 3;
+    $puntosGanador = 3;
+    $puntosPerdedor = 1;
+    $puntosPorCategoria = [
+        '1' => 50,
+        '2' => 40,
+        '3' => 30,
+        '4' => 20,
+        '5' => 10,
+        '6' => 0,
+    ];
+    $orderBy = [
+        'puntos' => 'DESC',
+    ];
+    $ranking = $app['commandBus']->handle(
+        new RankingCommand($limit, $puntosPorCategoria, $puntosGanador, $puntosPerdedor, $orderBy)
+    );
+    return $app['twig']->render('ranking.html.twig', array('ranking' => $ranking));
 })
 ->bind('ranking');
 
