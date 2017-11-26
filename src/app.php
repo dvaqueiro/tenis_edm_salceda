@@ -1,17 +1,23 @@
 <?php
 
+use Application\AddComentarioCommand;
+use Application\AddComentarioCommandHandler;
 use Application\ClasificacionPorLigaCommand;
 use Application\ClasificacionPorLigaHandler;
+use Application\ComentariosCommand;
+use Application\ComentariosCommandHandler;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
 use Application\RankingCommand;
 use Application\RankingCommandHandler;
 use Application\ResultadosPorLigaCommand;
 use Application\ResultadosPorLigaHandler;
+use Domain\Model\ArrayComentarioFactory;
 use Domain\Model\ArrayDivisionFactory;
 use Domain\Model\ArrayJugadorFactory;
 use Domain\Model\ArrayLigaFactory;
 use Domain\Model\ArrayResultadoFactory;
+use Infrastructure\Persistence\DbalComentarioRepository;
 use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
 use Infrastructure\Persistence\DbalLigaRepository;
@@ -33,7 +39,7 @@ use Silex\Provider\TwigServiceProvider;
 $app = new Application();
 
 /**
- * ServicePrividers
+ * ServiceProviders
  */
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new AssetServiceProvider());
@@ -72,6 +78,10 @@ $app['resultado_factory'] = $app->factory(function ($app) {
     return new ArrayResultadoFactory();
 });
 
+$app['comentario_factory'] = $app->factory(function ($app) {
+    return new ArrayComentarioFactory();
+});
+
 /**
  * Repositories
  */
@@ -89,6 +99,10 @@ $app['jugador_repository'] = $app->factory(function ($app) {
 
 $app['resultado_repository'] = $app->factory(function ($app) {
     return new DbalResultadoRepository($app['db'], $app['resultado_factory']);
+});
+
+$app['comentario_repository'] = $app->factory(function ($app) {
+    return new DbalComentarioRepository($app['db'], $app['comentario_factory']);
 });
 
 
@@ -127,6 +141,18 @@ $app['ranking_command_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['comentarios_command_handler'] = $app->factory(function ($app) {
+    return new ComentariosCommandHandler(
+        $app['comentario_repository']
+    );
+});
+
+$app['add_comentario_command_handler'] = $app->factory(function ($app) {
+    return new AddComentarioCommandHandler(
+        $app['comentario_repository']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -141,6 +167,8 @@ $app['commandBus'] = function ($app){
                 ResultadosPorLigaCommand::class => $app['resultados_por_liga_handler'],
                 ClasificacionPorLigaCommand::class => $app['clasificacion_por_liga_handler'],
                 RankingCommand::class => $app['ranking_command_handler'],
+                ComentariosCommand::class => $app['comentarios_command_handler'],
+                AddComentarioCommand::class => $app['add_comentario_command_handler'],
             ]), new HandleInflector()
         )
     ]);

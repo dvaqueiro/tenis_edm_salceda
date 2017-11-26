@@ -2,7 +2,7 @@
 
 ini_set('display_errors', 0);
 
-$extensions = array("php", "jpg", "jpeg", "gif", "css", "png", "ico");
+$extensions = array("php", "jpg", "jpeg", "gif", "css", "png", "ico", "js");
 
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $ext = pathinfo($path, PATHINFO_EXTENSION);

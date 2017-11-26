@@ -1,6 +1,8 @@
 <?php
 
+use Application\AddComentarioCommand;
 use Application\ClasificacionPorLigaCommand;
+use Application\ComentariosCommand;
 use Application\JugadoresPorLigaCommand;
 use Application\RankingCommand;
 use Application\ResultadosPorLigaCommand;
@@ -62,10 +64,21 @@ $app->get('/ranking', function () use ($app) {
 })
 ->bind('ranking');
 
-$app->get('/comments', function () use ($app) {
-    return $app['twig']->render('comments.html.twig', array());
+$app->get('/comments', function (Request $request) use ($app) {
+    $limit = 50;
+    $comentarios = $app['commandBus']->handle(new ComentariosCommand($limit));
+    return $app['twig']->render('comments.html.twig', array('comentarios' => $comentarios));
 })
 ->bind('comments');
+
+$app->post('/comments', function (Request $request) use ($app) {
+    if($contenido = $request->get('comentario')) {
+        $nombreUsuario = "Daniel Vaqueiro Crispín";
+        $error = $app['commandBus']->handle(new AddComentarioCommand($nombreUsuario, $contenido));
+    }
+    return $app->redirect('/comments');
+})
+->bind('addcomment');
 
 $app->get('/contact', function () use ($app) {
     return $app['twig']->render('contact.html.twig', array());

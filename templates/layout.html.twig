@@ -7,8 +7,9 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
         <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css" />
+        {% block extra_css %}{% endblock %}
+        {% block scripts %}{% endblock %}
     </head>
-    <body>
     <body>
         <div id="main">
             <div id="header"></div>
@@ -22,10 +23,6 @@
                 </div>
             </div>
         </div>
-       {{ include('footer.html.twig') }}
-        <script>
-            {% block scripts %}{% endblock %}
-        </script>
-    </body>
+        {{ include('footer.html.twig') }}
     </body>
 </html>
