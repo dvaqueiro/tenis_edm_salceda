@@ -1,5 +1,9 @@
 {% extends "layout.html.twig" %}
 
+{% block sidebar %}
+    {{ include('logout_sidebar.html.twig') }}
+{% endblock %}
+
 {% block content %}
-    An error occurred.
+    <div class="error">An error occurred.</div>
 {% endblock %}
