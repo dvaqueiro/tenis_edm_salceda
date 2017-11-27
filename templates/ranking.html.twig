@@ -1,5 +1,9 @@
 {% extends "layout.html.twig" %}
 
+{% block sidebar %}
+    {{ include('logout_sidebar.html.twig') }}
+{% endblock %}
+
 {% block content %}
     <h1 class="encabezado">Ranking</h1>
     <div class="resultados" style="margin-top:0; margin-bottom:2em;">

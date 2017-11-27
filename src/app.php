@@ -22,6 +22,7 @@ use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
 use Infrastructure\Persistence\DbalLigaRepository;
 use Infrastructure\Persistence\DbalResultadoRepository;
+use Infrastructure\UserProvider;
 use League\Tactician\CommandBus;
 use League\Tactician\Doctrine\DBAL\TransactionMiddleware;
 use League\Tactician\Handler\CommandHandlerMiddleware;
@@ -33,6 +34,7 @@ use Silex\Application;
 use Silex\Provider\AssetServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\HttpFragmentServiceProvider;
+use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 
@@ -58,6 +60,45 @@ $app->register(new DoctrineServiceProvider(), array(
 $app['twig'] = $app->extend('twig', function ($twig, $app) {
     return $twig;
 });
+
+$app['user_provider'] = $app->factory(function() use ($app) {
+    return new UserProvider($app['db']);
+});
+
+$app->register(new SecurityServiceProvider(), array(
+    'security.firewalls' => array(
+        'profiler' => array('pattern' => '^/_'), // Example of an url available as anonymous user
+        'login' => array('pattern' => '^/login$'),
+        'admin' => array(
+            'pattern' => '^/admin',
+            'form' => array('login_path' => '/loginadmin', 'check_path' => '/admin/login_check'),
+            'logout' => array('logout_path' => '/admin/logout', 'invalidate_session' => true),
+            'users' => array(
+                // raw password is foo
+                'admin' => array('ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
+            ),
+        ),
+        'default' => array(
+            'pattern' => '^.*$',
+//            'anonymous' => true, // Needed as the login path is under the secured area
+            'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
+            'logout' => array('logout_path' => '/logout', 'invalidate_session' => true),
+            'users' => $app['user_provider'],
+//            'users' => array(
+//                // raw password is foo
+//                'user' => array('ROLE_USER', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
+//            ),
+        ),
+    
+    ),
+    'security.access_rules' => array(
+        array('^/admin$', 'ROLE_ADMIN'),
+        array('^/.+$', 'ROLE_USER'),
+    )
+));
+
+$app->register(new Silex\Provider\SessionServiceProvider());
+
 
 /**
  * Factories

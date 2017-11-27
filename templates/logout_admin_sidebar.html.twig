@@ -1,0 +1,8 @@
+{% extends "sidebar.html.twig" %}
+
+{% block login_form %}
+<div style="border-radius:.4em; background-color:#1F400F; color:white; padding:10px; margin-right:10px;">
+    Conectado como<br /><br /><strong>Administrador</strong><br /><br />
+    <a href="{{ path('admin_logout') }}">salir</a>
+</div>
+{% endblock %}

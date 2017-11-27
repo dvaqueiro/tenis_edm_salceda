@@ -16,20 +16,40 @@ $app->get('/', function () use ($app) {
 })
 ->bind('homepage');
 
-$app->get('/players', function () use ($app) {
-    //TODO: Solo registrados
+$app->get('/login', function(Request $request) use ($app) {
+    return $app['twig']->render('login.html.twig', array(
+        'error'         => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security'),
+    ));
+});
+
+$app->get('/loginadmin', function(Request $request) use ($app) {
+    return $app['twig']->render('login_admin.html.twig', array(
+        'error'         => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security.last_username'),
+    ));
+});
+
+$app->get('/admin', function () use ($app) {
+    return $app['twig']->render('admin.html.twig', array());
+})
+->bind('admin');
+
+$app->get('/players/{ligaId}', function ($ligaId) use ($app) {
     $liga = $app['commandBus']->handle(new JugadoresPorLigaCommand(null));
     return $app['twig']->render('players.html.twig', array('liga' => $liga));
 })
+->value('ligaId', null)
 ->bind('players');
 
-$app->get('/scores', function () use ($app) {
+$app->get('/scores/{ligaId}', function ($ligaId) use ($app) {
     $liga = $app['commandBus']->handle(new ResultadosPorLigaCommand(null));
     return $app['twig']->render('scores.html.twig', array('liga' => $liga));
 })
+->value('ligaId', null)
 ->bind('scores');
 
-$app->get('/standings', function () use ($app) {
+$app->get('/standings/{ligaId}', function ($ligaId) use ($app) {
     $puntosGanador = 3;
     $puntosPerdedor = 1;
     $orderBy = [
@@ -37,9 +57,10 @@ $app->get('/standings', function () use ($app) {
         'difSets' => 'DESC',
         'difJuegos' => 'DESC',
     ];
-    $liga = $app['commandBus']->handle(new ClasificacionPorLigaCommand(null, $puntosGanador, $puntosPerdedor, $orderBy));
+    $liga = $app['commandBus']->handle(new ClasificacionPorLigaCommand($ligaId, $puntosGanador, $puntosPerdedor, $orderBy));
     return $app['twig']->render('standings.html.twig', array('liga' => $liga));
 })
+->value('ligaId', null)
 ->bind('standings');
 
 $app->get('/ranking', function () use ($app) {

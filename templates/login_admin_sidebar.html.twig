@@ -1,0 +1,15 @@
+{% extends "sidebar.html.twig" %}
+
+{% block login_form %}
+    <div style="border-radius:.4em; background-color:#1F400F; color:white; padding:10px; margin-right:10px;">
+        <div style="border-bottom:dashed 1px; margin-bottom:1em;">Acceder</div>
+        <form action="{{ path('admin_login_check') }}" method="post">
+            {{ error }}
+            Usuario<br>
+            <input type="text" name="_username" value="{{ last_username }}" style="width:95%; border-radius:.4em;"/><br><br>
+            Contraseña<br>
+            <input type="password" name="_password" value="" style="width:95%; border-radius:.4em;"/><br>
+            <input type="submit" style="cursor:pointer; width:60%; margin-top:.5em;" name="entrar" value="entrar"/>
+        </form>
+    </div>
+{% endblock %}

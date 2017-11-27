@@ -9,5 +9,6 @@ namespace Domain\Model;
 interface JugadorRepository
 {
 
-    public function findByDivision($idDivision);
+    function findByDivision($idDivision);
+
 }
