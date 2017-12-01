@@ -3,6 +3,7 @@
 namespace Infrastructure\Persistence;
 
 use Doctrine\DBAL\Driver\Connection;
+use Domain\Model\Comentario;
 use Domain\Model\ComentarioFactory;
 use Domain\Model\ComentarioRepository;
 use PDO;
@@ -35,7 +36,7 @@ class DbalComentarioRepository implements ComentarioRepository
         return $this->factory->makeAll($data);
     }
 
-    public function add(\Domain\Model\Comentario $comentario)
+    public function add(Comentario $comentario)
     {
         $sql = "INSERT INTO comentarios (usuario, fecha, comentario, id) VALUES (?,?,?)";
         $stmt = $this->dbal->prepare($sql);

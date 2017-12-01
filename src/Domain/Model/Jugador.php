@@ -63,4 +63,39 @@ class Jugador
         return $this->id;
     }
 
+    function setFoto($foto)
+    {
+        $this->foto = $foto;
+    }
+
+    function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+    }
+
+    function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+    }
+
+    function setDni($dni)
+    {
+        $this->dni = $dni;
+    }
+    
+    function setId($id)
+    {
+        $this->id = $id;
+    }
+
 }

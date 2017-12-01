@@ -18,6 +18,12 @@
                 {% block sidebar %}{% endblock %}
                 <div id="content">
                     <div class="content_item">
+                        {% for error in app.session.flashbag.get('error') %}
+                            <div class='error'>{{ error }}</div>
+                        {% endfor %}
+                        {% for mensaje in app.session.flashbag.get('mensaje') %}
+                            <div class='mensaje'>{{ mensaje }}</div>
+                        {% endfor %}
                         {% block content %}{% endblock %}
                     </div>
                 </div>

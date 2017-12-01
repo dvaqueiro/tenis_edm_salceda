@@ -3,6 +3,7 @@
 namespace Infrastructure\Persistence;
 
 use Doctrine\DBAL\Connection;
+use Domain\Model\Jugador;
 use Domain\Model\JugadorFactory;
 use Domain\Model\JugadorRepository;
 
@@ -32,5 +33,22 @@ class DbalJugadorRepository implements JugadorRepository
         $data = $stmt->fetchAll();
         
         return $this->factory->makeAll($data);
+    }
+
+    public function add(Jugador $newJugador)
+    {
+        $sql = "INSERT INTO usuarios (dni, nombre, telefono, email, contrasena) VALUES (?,?,?,?,?)";
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $newJugador->getDni());
+        $stmt->bindValue(2, $newJugador->getNombre());
+        $stmt->bindValue(3, $newJugador->getTelefono());
+        $stmt->bindValue(4, $newJugador->getEmail());
+        $stmt->bindValue(5, $newJugador->getPassword());
+        $stmt->execute();
+
+        $id = $this->dbal->lastInsertId();
+        $newJugador->setId($id);
+
+        return $newJugador;
     }
 }

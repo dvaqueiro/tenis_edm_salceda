@@ -5,9 +5,13 @@ use Application\ClasificacionPorLigaCommand;
 use Application\ComentariosCommand;
 use Application\JugadoresPorLigaCommand;
 use Application\RankingCommand;
+use Application\RegisterJugadorCommand;
 use Application\ResultadosPorLigaCommand;
+use Domain\Model\Jugador;
+use Infrastructure\Forms\JugadorType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\VarDumper\VarDumper;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
@@ -16,11 +20,25 @@ $app->get('/', function () use ($app) {
 })
 ->bind('homepage');
 
-$app->get('/login', function(Request $request) use ($app) {
-    return $app['twig']->render('login.html.twig', array(
+$app->match('/login', function(Request $request) use ($app) {
+    $jugador = new Jugador(null, null, null, null, null, null, null);
+    /* @var $form Symfony\Component\Form\Form */
+    $form = $app['form.factory']->createBuilder(JugadorType::class, $jugador)->getForm();
+
+    $form->handleRequest($request);
+
+    if ($form->isValid()) {
+        $newJugador = $form->getData();
+        $message = $app['commandBus']->handle(new RegisterJugadorCommand($newJugador));
+        $app['session']->getFlashBag()->add('mensaje', $message);
+        return $app->redirect($request->getUri());
+    }
+
+    return $app['twig']->render('login.html.twig', [
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security'),
-    ));
+        'form' => $form->createView(),
+    ]);
 });
 
 $app->get('/loginadmin', function(Request $request) use ($app) {

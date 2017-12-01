@@ -327,14 +327,10 @@ ul#menu li.current a, ul#menu li:hover a
 
 .formulario
 {
-    border-radius:0.4em;
-    border:solid 2px #ccc;
-    width:20em;
-    margin:.3em 0;
     padding:.2em 1em;	
 }
 
-.formulario:hover, .formulario:focus
+/*.formulario:hover, .formulario:focus
 {
     background-color:#DFFFDF;
     -moz-transition: background-color .25s ease-in-out, color .25s ease-in-out;
@@ -342,7 +338,7 @@ ul#menu li.current a, ul#menu li:hover a
     -o-transition: background-color .25s ease-in-out, color .25s ease-in-out;
     -ms-transition: background-color .25s ease-in-out, color .25s ease-in-out;
     transition: background-color .25s ease-in-out, color .25s ease-in-out;	
-}
+}*/
 
 .error
 {
@@ -481,4 +477,28 @@ ul#menu li.current a, ul#menu li:hover a
 .rojo
 {
     background-color:#FFECEA;	
+}
+
+.formulario label {
+    display: block;
+    border-bottom: dashed 4px white;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.formulario input {
+    border-radius: 0.4em;
+    border: solid 2px #ccc;
+    width: 20em;
+    margin: .3em 0;
+    padding: .2em 1em;
+}
+
+.formulario button {
+    border-radius: 0.4em;
+    border: solid 2px #ccc;
+    width: 20em;
+    margin: .3em 0;
+    padding: .2em 1em;
 }

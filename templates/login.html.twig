@@ -3,3 +3,10 @@
 {% block sidebar %}
     {{ include('login_sidebar.html.twig') }}
 {% endblock %}
+
+{% block content %}
+    <h1>Inscripción en la liga de tenis de Salceda</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form, {'attr': {'class': 'formulario'}}) }}
+    {{ form_end(form) }}
+{% endblock %}

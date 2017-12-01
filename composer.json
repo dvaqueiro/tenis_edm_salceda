@@ -1,6 +1,6 @@
 {
-    "name": "fabpot/silex-skeleton",
-    "description": "A pre-configured skeleton for the Silex microframework",
+    "name": "dvaqueiro/tenis_edm_salceda",
+    "description": "Simple web app used to manage tenis league of edm salceda tenis club",
     "license": "MIT",
     "type": "project",
     "require": {
@@ -15,12 +15,12 @@
         "symfony/css-selector": "~2.8|^3.0",
         "symfony/debug": "~2.8|^3.0",
         "symfony/finder": "~2.8|^3.0",
-        "symfony/form": "~2.8|^3.0",
+        "symfony/form": "^3.3",
         "symfony/monolog-bridge": "~2.8|^3.0",
         "symfony/process": "~2.8|^3.0",
         "symfony/security": "~2.8|^3.0",
         "symfony/translation": "~2.8|^3.0",
-        "symfony/twig-bridge": "~2.8|^3.0",
+        "symfony/twig-bridge": "^3.3",
         "symfony/validator": "~2.8|^3.0",
         "doctrine/dbal": "^2.6",
         "league/tactician": "^1.0",

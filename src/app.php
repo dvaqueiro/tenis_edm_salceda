@@ -10,6 +10,8 @@ use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
 use Application\RankingCommand;
 use Application\RankingCommandHandler;
+use Application\RegisterJugadorCommandHandler;
+use Application\RegisterJugadorCommand;
 use Application\ResultadosPorLigaCommand;
 use Application\ResultadosPorLigaHandler;
 use Domain\Model\ArrayComentarioFactory;
@@ -33,10 +35,15 @@ use League\Tactician\Plugins\LockingMiddleware;
 use Silex\Application;
 use Silex\Provider\AssetServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\FormServiceProvider;
 use Silex\Provider\HttpFragmentServiceProvider;
+use Silex\Provider\LocaleServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\SessionServiceProvider;
+use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\ValidatorServiceProvider;
 
 $app = new Application();
 
@@ -47,6 +54,13 @@ $app->register(new ServiceControllerServiceProvider());
 $app->register(new AssetServiceProvider());
 $app->register(new TwigServiceProvider());
 $app->register(new HttpFragmentServiceProvider());
+$app->register(new FormServiceProvider());
+$app->register(new LocaleServiceProvider());
+$app->register(new ValidatorServiceProvider());
+$app->register(new SessionServiceProvider());
+$app->register(new TranslationServiceProvider(), array(
+    'translator.domains' => array(),
+));
 $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array (
         'driver'    => 'pdo_mysql',
@@ -68,6 +82,7 @@ $app['user_provider'] = $app->factory(function() use ($app) {
 $app->register(new SecurityServiceProvider(), array(
     'security.firewalls' => array(
         'profiler' => array('pattern' => '^/_'), // Example of an url available as anonymous user
+        'scores' => array('pattern' => '^/scores$'),
         'login' => array('pattern' => '^/login$'),
         'admin' => array(
             'pattern' => '^/admin',
@@ -89,15 +104,12 @@ $app->register(new SecurityServiceProvider(), array(
 //                'user' => array('ROLE_USER', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
 //            ),
         ),
-    
     ),
     'security.access_rules' => array(
         array('^/admin$', 'ROLE_ADMIN'),
         array('^/.+$', 'ROLE_USER'),
     )
 ));
-
-$app->register(new Silex\Provider\SessionServiceProvider());
 
 
 /**
@@ -194,6 +206,12 @@ $app['add_comentario_command_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['register_jugador_command_handler'] = $app->factory(function ($app) {
+    return new RegisterJugadorCommandHandler(
+        $app['jugador_repository']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -210,6 +228,7 @@ $app['commandBus'] = function ($app){
                 RankingCommand::class => $app['ranking_command_handler'],
                 ComentariosCommand::class => $app['comentarios_command_handler'],
                 AddComentarioCommand::class => $app['add_comentario_command_handler'],
+                RegisterJugadorCommand::class => $app['register_jugador_command_handler'],
             ]), new HandleInflector()
         )
     ]);
