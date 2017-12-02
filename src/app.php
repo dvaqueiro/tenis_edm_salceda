@@ -6,6 +6,8 @@ use Application\ClasificacionPorLigaCommand;
 use Application\ClasificacionPorLigaHandler;
 use Application\ComentariosCommand;
 use Application\ComentariosCommandHandler;
+use Application\ContactFormCommand;
+use Application\ContactFormCommandHandler;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
 use Application\RankingCommand;
@@ -19,12 +21,12 @@ use Domain\Model\ArrayDivisionFactory;
 use Domain\Model\ArrayJugadorFactory;
 use Domain\Model\ArrayLigaFactory;
 use Domain\Model\ArrayResultadoFactory;
-use Infrastructure\Services\FileUploader;
 use Infrastructure\Persistence\DbalComentarioRepository;
 use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
 use Infrastructure\Persistence\DbalLigaRepository;
 use Infrastructure\Persistence\DbalResultadoRepository;
+use Infrastructure\Services\FileUploader;
 use Infrastructure\UserProvider;
 use League\Tactician\CommandBus;
 use League\Tactician\Doctrine\DBAL\TransactionMiddleware;
@@ -42,13 +44,12 @@ use Silex\Provider\LocaleServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SessionServiceProvider;
+use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 
 $app = new Application();
-
-$app['photos_directory'] = __DIR__ . '/../web/fotos/';
 
 /**
  * ServiceProviders
@@ -74,6 +75,9 @@ $app->register(new DoctrineServiceProvider(), array(
         'charset'   => 'utf8mb4',
     )
 ));
+
+$app->register(new SwiftmailerServiceProvider());
+
 $app['twig'] = $app->extend('twig', function ($twig, $app) {
     return $twig;
 });
@@ -221,6 +225,10 @@ $app['register_jugador_command_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['contactform_command_handler'] = $app->factory(function ($app) {
+    return new ContactFormCommandHandler($app['mailer']);
+});
+
 /**
  * Command Bus
  */
@@ -238,6 +246,7 @@ $app['commandBus'] = function ($app){
                 ComentariosCommand::class => $app['comentarios_command_handler'],
                 AddComentarioCommand::class => $app['add_comentario_command_handler'],
                 RegisterJugadorCommand::class => $app['register_jugador_command_handler'],
+                ContactFormCommand::class => $app['contactform_command_handler'],
             ]), new HandleInflector()
         )
     ]);

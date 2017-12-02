@@ -502,3 +502,12 @@ ul#menu li.current a, ul#menu li:hover a
     margin: .3em 0;
     padding: .2em 1em;
 }
+
+.formulario textarea {
+    border-radius: 0.4em;
+    border: solid 2px #ccc;
+    width: 95%;
+    height: 200px;
+    margin: .3em 0;
+    padding: .2em 1em;
+}

@@ -3,15 +3,18 @@
 use Application\AddComentarioCommand;
 use Application\ClasificacionPorLigaCommand;
 use Application\ComentariosCommand;
+use Application\ContactFormCommand;
 use Application\JugadoresPorLigaCommand;
 use Application\RankingCommand;
 use Application\RegisterJugadorCommand;
 use Application\ResultadosPorLigaCommand;
+use Domain\Model\ContactForm;
 use Domain\Model\Jugador;
+use Infrastructure\Forms\ContactType;
 use Infrastructure\Forms\JugadorType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\VarDumper\VarDumper;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
@@ -22,7 +25,7 @@ $app->get('/', function () use ($app) {
 
 $app->match('/login', function(Request $request) use ($app) {
     $jugador = new Jugador(null, null, null, null, null, null, null);
-    /* @var $form Symfony\Component\Form\Form */
+    /* @var $form Form */
     $form = $app['form.factory']->createBuilder(JugadorType::class, $jugador)->getForm();
 
     $form->handleRequest($request);
@@ -119,8 +122,21 @@ $app->post('/comments', function (Request $request) use ($app) {
 })
 ->bind('addcomment');
 
-$app->get('/contact', function () use ($app) {
-    return $app['twig']->render('contact.html.twig', array());
+$app->match('/contact', function (Request $request) use ($app) {
+    $contactForm = new ContactForm(null, null, null);
+    /* @var $form Form */
+    $form = $app['form.factory']->createBuilder(ContactType::class, $contactForm)->getForm();
+
+    $form->handleRequest($request);
+
+    if ($form->isValid()) {
+        $newContactForm = $form->getData();
+        $message = $app['commandBus']->handle(new ContactFormCommand($newContactForm));
+        $app['session']->getFlashBag()->add('mensaje', $message);
+        return $app->redirect($request->getUri());
+    }
+
+    return $app['twig']->render('contact.html.twig', ['form' => $form->createView()]);
 })
 ->bind('contact');
 

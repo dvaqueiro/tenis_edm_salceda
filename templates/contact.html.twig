@@ -5,5 +5,10 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Contacto</h1>
+    <h1>Envía tus dudas o sugerencias a los organizadores...</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form, {'attr': {'class': 'formulario'}}) }}
+    {{ form_end(form) }}
 {% endblock %}
+
+
