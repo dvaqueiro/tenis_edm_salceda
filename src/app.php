@@ -10,8 +10,8 @@ use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
 use Application\RankingCommand;
 use Application\RankingCommandHandler;
-use Application\RegisterJugadorCommandHandler;
 use Application\RegisterJugadorCommand;
+use Application\RegisterJugadorCommandHandler;
 use Application\ResultadosPorLigaCommand;
 use Application\ResultadosPorLigaHandler;
 use Domain\Model\ArrayComentarioFactory;
@@ -19,6 +19,7 @@ use Domain\Model\ArrayDivisionFactory;
 use Domain\Model\ArrayJugadorFactory;
 use Domain\Model\ArrayLigaFactory;
 use Domain\Model\ArrayResultadoFactory;
+use Infrastructure\Services\FileUploader;
 use Infrastructure\Persistence\DbalComentarioRepository;
 use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
@@ -46,6 +47,8 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 
 $app = new Application();
+
+$app['photos_directory'] = __DIR__ . '/../web/fotos/';
 
 /**
  * ServiceProviders
@@ -111,6 +114,12 @@ $app->register(new SecurityServiceProvider(), array(
     )
 ));
 
+/**
+ * Services
+ */
+$app['photo_uploader_service'] = $app->factory(function ($app) {
+    return new FileUploader($app['photos_directory']);
+});
 
 /**
  * Factories
@@ -208,7 +217,7 @@ $app['add_comentario_command_handler'] = $app->factory(function ($app) {
 
 $app['register_jugador_command_handler'] = $app->factory(function ($app) {
     return new RegisterJugadorCommandHandler(
-        $app['jugador_repository']
+        $app['jugador_repository'], $app['photo_uploader_service']
     );
 });
 

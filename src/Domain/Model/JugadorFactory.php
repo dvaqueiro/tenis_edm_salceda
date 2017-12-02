@@ -9,5 +9,7 @@ namespace Domain\Model;
 interface JugadorFactory
 {
 
+    public function make($data);
+
     public function makeAll($data);
 }

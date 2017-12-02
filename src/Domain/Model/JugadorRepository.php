@@ -9,6 +9,8 @@ namespace Domain\Model;
 interface JugadorRepository
 {
 
+    public function findByDni($dni);
+
     public function add(Jugador $newJugador);
 
     function findByDivision($idDivision);

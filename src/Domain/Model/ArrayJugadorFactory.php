@@ -19,4 +19,10 @@ class ArrayJugadorFactory implements JugadorFactory
 
         return $jugadores;
     }
+
+    public function make($data)
+    {
+        return new Jugador($data['id'], $data['dni'], $data['nombre'], $data['telefono'],
+                $data['email'], $data['contrasena'], $data['foto']);
+    }
 }

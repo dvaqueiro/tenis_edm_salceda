@@ -37,18 +37,30 @@ class DbalJugadorRepository implements JugadorRepository
 
     public function add(Jugador $newJugador)
     {
-        $sql = "INSERT INTO usuarios (dni, nombre, telefono, email, contrasena) VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO usuarios (dni, nombre, telefono, email, contrasena, foto) VALUES (?,?,?,?,?,?)";
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $newJugador->getDni());
         $stmt->bindValue(2, $newJugador->getNombre());
         $stmt->bindValue(3, $newJugador->getTelefono());
         $stmt->bindValue(4, $newJugador->getEmail());
         $stmt->bindValue(5, $newJugador->getPassword());
+        $stmt->bindValue(6, $newJugador->getFoto());
         $stmt->execute();
 
         $id = $this->dbal->lastInsertId();
         $newJugador->setId($id);
 
         return $newJugador;
+    }
+
+    public function findByDni($dni)
+    {
+        $sql = 'SELECT u.* FROM usuarios u where u.dni = ?';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $dni);
+        $stmt->execute();
+        $data = $stmt->fetch();
+
+        return $this->factory->make($data);
     }
 }
