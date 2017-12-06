@@ -17,6 +17,14 @@ class Reserva
     private $fecha;
     private $hora;
     private $aprobado;
+    private $horas = [
+        1 => '10 a 12',
+        2 => '12 a 14',
+        3 => '14 a 16',
+        4 => '16 a 18',
+        5 => '18 a 20',
+        6 => '20 a 22',
+    ];
 
     function __construct($id, $idJugador, $pista, $fecha, $hora)
     {
@@ -86,5 +94,10 @@ class Reserva
     function setAprobado($aprobado)
     {
         $this->aprobado = $aprobado;
+    }
+
+    public function getHoraTexto()
+    {
+        return $this->horas[$this->hora];
     }
 }

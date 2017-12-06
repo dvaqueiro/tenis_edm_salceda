@@ -63,4 +63,15 @@ class DbalJugadorRepository implements JugadorRepository
 
         return $this->factory->make($data);
     }
+
+    public function findById($jugadorId)
+    {
+        $sql = 'SELECT u.* FROM usuarios u where u.id = ?';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $jugadorId);
+        $stmt->execute();
+        $data = $stmt->fetch();
+
+        return $this->factory->make($data);
+    }
 }

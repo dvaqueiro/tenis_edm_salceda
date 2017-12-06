@@ -18,4 +18,9 @@ class ArrayReservaFactory implements ReservaFactory
 
         return $reservas;
     }
+
+    public function make($data)
+    {
+        return new Reserva($data['id'], $data['idusuario'], $data['pista'], $data['fecha'], $data['hora']);
+    }
 }

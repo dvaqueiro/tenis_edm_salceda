@@ -8,6 +8,7 @@ namespace Domain\Model;
  */
 interface ReservaFactory
 {
+    public function make($data);
 
     public function makeAll($data);
 }

@@ -2,16 +2,17 @@
 
 use Application\AddComentarioCommand;
 use Application\AddComentarioCommandHandler;
-use Application\CourtBooking\AddReservaCommand;
-use Application\CourtBooking\AddReservaCommandHandler;
 use Application\ClasificacionPorLigaCommand;
 use Application\ClasificacionPorLigaHandler;
 use Application\ComentariosCommand;
 use Application\ComentariosCommandHandler;
 use Application\ContactFormCommand;
 use Application\ContactFormCommandHandler;
+use Application\CourtBooking\AddReservaCommand;
+use Application\CourtBooking\AddReservaCommandHandler;
 use Application\CourtBooking\HorasLibresReservaCommand;
 use Application\CourtBooking\HorasLibresReservaCommandHandler;
+use Application\CourtBooking\SendMailToBookingConfirmationSuscriber;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
 use Application\RankingCommand;
@@ -20,6 +21,7 @@ use Application\RegisterJugadorCommand;
 use Application\RegisterJugadorCommandHandler;
 use Application\ResultadosPorLigaCommand;
 use Application\ResultadosPorLigaHandler;
+use Ddd\Domain\DomainEventPublisher;
 use Domain\Model\ArrayComentarioFactory;
 use Domain\Model\ArrayDivisionFactory;
 use Domain\Model\ArrayJugadorFactory;
@@ -27,6 +29,8 @@ use Domain\Model\ArrayLigaFactory;
 use Domain\Model\ArrayReservaFactory;
 use Domain\Model\ArrayResultadoFactory;
 use Domain\Model\BookingChecker;
+use Infrastructure\Events\DbalEventRepository;
+use Infrastructure\Events\DomainEventsMiddelware;
 use Infrastructure\Persistence\DbalComentarioRepository;
 use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
@@ -55,6 +59,7 @@ use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
 
 $app = new Application();
 
@@ -167,6 +172,10 @@ $app['reserva_factory'] = $app->factory(function ($app) {
 /**
  * Repositories
  */
+$app['event_store'] = $app->factory(function ($app) {
+    return new DbalEventRepository($app['db']);
+});
+
 $app['liga_repository'] = $app->factory(function ($app) {
     return new DbalLigaRepository($app['db'], $app['liga_factory']);
 });
@@ -190,7 +199,6 @@ $app['comentario_repository'] = $app->factory(function ($app) {
 $app['reserva_repository'] = $app->factory(function ($app) {
     return new DbalReservaRespository($app['db'], $app['reserva_factory']);
 });
-
 
 /**
  * CommandHandlers
@@ -264,6 +272,7 @@ $app['commandBus'] = function ($app){
     return new CommandBus([
         new LockingMiddleware(),
         new TransactionMiddleware($app['db']),
+        new DomainEventsMiddelware($app['event_store']),
         new CommandHandlerMiddleware(
             new ClassNameExtractor(),
             new InMemoryLocator([
@@ -281,5 +290,15 @@ $app['commandBus'] = function ($app){
         )
     ]);
 };
+
+$app->before(function (Request $request) use ($app) {
+    DomainEventPublisher::instance()->subscribe(
+       new SendMailToBookingConfirmationSuscriber(
+        $app['reserva_repository'],
+        $app['jugador_repository'],
+        $app['mailer'],
+        $app['booking_config']
+    ));
+});
 
 return $app;

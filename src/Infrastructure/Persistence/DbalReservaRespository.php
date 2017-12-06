@@ -54,4 +54,17 @@ class DbalReservaRespository implements ReservaRespository
 
         return $newReserva;
     }
+
+    public function findById($reservaId)
+    {
+        $sql = 'SELECT *
+                FROM pabellon p
+                where id = ?';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $reservaId, PDO::PARAM_INT);
+        $stmt->execute();
+        $data = $stmt->fetch();
+
+        return $this->factory->make($data);
+    }
 }

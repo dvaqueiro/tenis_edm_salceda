@@ -2,7 +2,9 @@
 
 namespace Application\CourtBooking;
 
+use Ddd\Domain\DomainEventPublisher;
 use Domain\Model\ReservaRespository;
+use Swift_Mailer;
 
 /**
  *
@@ -26,6 +28,10 @@ class AddReservaCommandHandler
         if(!$newReserva->getId()) {
             $out = "Se ha producido un error al registrar tu reserva, vuelve a intentarlo o ponte en contacto con los organizadores.";
         }
+
+        DomainEventPublisher::instance()->publish(
+            new CourtBookingWasCreatedEvent($newReserva->getId())
+        );
 
         return $out;
     }
