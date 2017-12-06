@@ -25,7 +25,8 @@
         "doctrine/dbal": "^2.6",
         "league/tactician": "^1.0",
         "league/tactician-doctrine": "^1.1",
-        "swiftmailer/swiftmailer": "^6.0"
+        "swiftmailer/swiftmailer": "^6.0",
+        "nesbot/carbon": "^1.22"
     },
     "autoload": {
         "psr-4": { "": "src/" }

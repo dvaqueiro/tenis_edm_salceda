@@ -141,11 +141,14 @@ ul#menu li.current a, ul#menu li:hover a
   box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 5px;  }
 
 #site_content
-{ width: 960px;
-  overflow: hidden;
-  margin: 0 auto;
-  padding: 0 0 20px 0;
-  background: transparent url(/img/transparent_light.png) repeat;} 
+{ 
+    width: 960px;
+    min-height: 400px;
+    overflow: hidden;
+    margin: 0 auto;
+    padding: 0 0 20px 0;
+    background: transparent url(/img/transparent_light.png) repeat;
+} 
 
 .sidebar_container
 { float: left;
@@ -491,6 +494,7 @@ ul#menu li.current a, ul#menu li:hover a
     border-radius: 0.4em;
     border: solid 2px #ccc;
     width: 20em;
+    height: 20px;
     margin: .3em 0;
     padding: .2em 1em;
 }
@@ -499,6 +503,7 @@ ul#menu li.current a, ul#menu li:hover a
     border-radius: 0.4em;
     border: solid 2px #ccc;
     width: 20em;
+    height: 20px;
     margin: .3em 0;
     padding: .2em 1em;
 }
@@ -510,4 +515,17 @@ ul#menu li.current a, ul#menu li:hover a
     height: 200px;
     margin: .3em 0;
     padding: .2em 1em;
+}
+
+.formulario select {
+    border-radius: 0.4em;
+    border: solid 2px #ccc;
+    width: 20em;
+    height: 20px;
+    margin: .3em 0;
+    padding: .2em 1em;
+}
+
+#booking_fecha {
+    width: 90px;
 }

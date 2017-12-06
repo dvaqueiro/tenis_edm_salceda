@@ -4,12 +4,15 @@ use Application\AddComentarioCommand;
 use Application\ClasificacionPorLigaCommand;
 use Application\ComentariosCommand;
 use Application\ContactFormCommand;
+use Application\HorasLibresReservaCommand;
 use Application\JugadoresPorLigaCommand;
 use Application\RankingCommand;
 use Application\RegisterJugadorCommand;
 use Application\ResultadosPorLigaCommand;
 use Domain\Model\ContactForm;
 use Domain\Model\Jugador;
+use Domain\Model\Reserva;
+use Infrastructure\Forms\BookingType;
 use Infrastructure\Forms\ContactType;
 use Infrastructure\Forms\JugadorType;
 use Symfony\Component\Form\Form;
@@ -30,7 +33,7 @@ $app->match('/login', function(Request $request) use ($app) {
 
     $form->handleRequest($request);
 
-    if ($form->isValid()) {
+    if ($form->isSubmitted() && $form->isValid()) {
         $newJugador = $form->getData();
         $message = $app['commandBus']->handle(new RegisterJugadorCommand($newJugador));
         $app['session']->getFlashBag()->add('mensaje', $message);
@@ -129,7 +132,7 @@ $app->match('/contact', function (Request $request) use ($app) {
 
     $form->handleRequest($request);
 
-    if ($form->isValid()) {
+    if ($form->isSubmitted() && $form->isValid()) {
         $newContactForm = $form->getData();
         $message = $app['commandBus']->handle(new ContactFormCommand($newContactForm));
         $app['session']->getFlashBag()->add('mensaje', $message);
@@ -140,10 +143,42 @@ $app->match('/contact', function (Request $request) use ($app) {
 })
 ->bind('contact');
 
-$app->get('/stadium', function () use ($app) {
-    return $app['twig']->render('stadium.html.twig', array());
+$app->match('/courts', function (Request $request) use ($app) {
+    if(!$app['booking_checker']->checkInDate()) {
+        $app['session']->getFlashBag()->add('error', "Debe reservar la pista antes del viernes a las 12h");
+        return $app->redirect('/');
+    }
+
+    $token = $app['security.token_storage']->getToken();
+    $user = $token->getUser();
+
+    $newReserva = new Reserva(null, $user->getId(), null, null, null);
+    /* @var $form Form */
+    $form = $app['form.factory']->createBuilder(BookingType::class, $newReserva)->getForm();
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $newReserva = $form->getData();
+        $message = $app['commandBus']->handle(new Application\AddReservaCommand($newReserva));
+        $app['session']->getFlashBag()->add('mensaje', $message);
+        return $app->redirect($request->getUri());
+    }
+
+    return $app['twig']->render('courts.html.twig', ['form' => $form->createView()]);
 })
-->bind('stadium');
+->bind('courts');
+
+$app->post('/freehours', function (Request $request) use ($app) {
+
+    $out = $app['commandBus']->handle(new HorasLibresReservaCommand(
+        $request->request->get('pista'), 
+        $request->request->get('fecha'))
+    );
+
+    return $app->json($out);
+})
+->bind('freehours');
+
 
 $app->get('/facebook', function () use ($app) {
     return $app['twig']->render('facebook.html.twig', array());

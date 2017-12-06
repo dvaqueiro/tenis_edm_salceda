@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  */
 final class User implements AdvancedUserInterface
 {
+    private $id;
     private $name;
     private $username;
     private $password;
@@ -20,7 +21,7 @@ final class User implements AdvancedUserInterface
     private $accountNonLocked;
     private $roles;
 
-    public function __construct($username, $password, $name, array $roles = array(), $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
+    public function __construct($id, $username, $password, $name, array $roles = array(), $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
     {
         if ('' === $username || null === $username) {
             throw new InvalidArgumentException('The username cannot be empty.');
@@ -33,6 +34,12 @@ final class User implements AdvancedUserInterface
         $this->accountNonLocked = $userNonLocked;
         $this->roles = $roles;
         $this->name = $name;
+        $this->id = $id;
+    }
+
+    function getId()
+    {
+        return $this->id;
     }
 
     public function __toString()

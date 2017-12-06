@@ -1,0 +1,86 @@
+{% extends "layout.html.twig" %}
+
+{% block sidebar %}
+    {{ include('logout_sidebar.html.twig') }}
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ asset('js/jquery-ui-1.12.1/jquery-ui.css') }}">
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{{ asset('js/jquery-1.10.2.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui-1.12.1/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $( "#{{ form.hora.vars.id }}" ).prop( "disabled", true );
+            $( "#{{ form.submit.vars.id }}" ).prop( "disabled", true );
+            $( "#{{ form.fecha.vars.id }}" ).datepicker({
+                dateFormat: "dd-mm-yy",
+                firstDay: 1,
+{#                minDate : 0,#}
+                dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ]
+            });
+            $( "#{{ form.fecha.vars.id }}" ).change(function(){
+                fecha = $(this).val();
+                pista = $( "#{{ form.pista.vars.id }}" ).val();
+                data = {
+                    pista,
+                    fecha 
+                }
+                getBookingFreeHours(data);
+            });
+            $( "#{{ form.pista.vars.id }}" ).change(function(){
+                if ($( "#{{ form.fecha.vars.id }}" ).val() != '') {
+                    fecha = $( "#{{ form.fecha.vars.id }}" ).val();
+                    pista = $(this).val() 
+                    data = {
+                        pista,
+                        fecha 
+                    }
+                    getBookingFreeHours(data);
+                }
+            });
+            
+            $( "#{{ form.hora.vars.id }}" ).change(function(){
+                $submitButton = $( "#{{ form.submit.vars.id }}" );
+                if ($(this).val() != 0) {
+                    $submitButton.prop( "disabled", false );
+                }
+            });
+        });
+        
+        
+        function getBookingFreeHours(data) {
+            $.ajax({
+                url: "/freehours",
+                method: "POST",
+                data: data
+            }).done(function(data) {
+                initHoraSelect();
+                if(data.horas_libres) {
+                    for(var prop in data.horas_libres) {
+                        $( "#{{ form.hora.vars.id }} option[value=" + data.horas_libres[prop] +"]" ).prop( "disabled", false );
+                    }
+                }
+            });
+        }
+        
+        function initHoraSelect()
+        {
+            $( "#{{ form.submit.vars.id }}" ).prop( "disabled", true );
+            $selectHora = $( "#{{ form.hora.vars.id }}" );
+            $selectHora.prop( "selectedIndex", 0 );
+            $selectHora.prop( "disabled", false );
+            $selectHora.children().prop( "disabled", true );
+        }
+    </script> 
+{% endblock %}
+
+{% block content %}
+    <h1>Reserva de Pista</h1>
+    {% if form.fecha is defined %}
+        {{ form_start(form) }}
+        {{ form_widget(form, {'attr': {'class': 'formulario'}}) }}
+        {{ form_end(form) }}
+    {% endif %}
+{% endblock %}

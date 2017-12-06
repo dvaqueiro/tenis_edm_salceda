@@ -2,12 +2,16 @@
 
 use Application\AddComentarioCommand;
 use Application\AddComentarioCommandHandler;
+use Application\AddReservaCommand;
+use Application\AddReservaCommandHandler;
 use Application\ClasificacionPorLigaCommand;
 use Application\ClasificacionPorLigaHandler;
 use Application\ComentariosCommand;
 use Application\ComentariosCommandHandler;
 use Application\ContactFormCommand;
 use Application\ContactFormCommandHandler;
+use Application\HorasLibresReservaCommand;
+use Application\HorasLibresReservaCommandHandler;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
 use Application\RankingCommand;
@@ -20,11 +24,14 @@ use Domain\Model\ArrayComentarioFactory;
 use Domain\Model\ArrayDivisionFactory;
 use Domain\Model\ArrayJugadorFactory;
 use Domain\Model\ArrayLigaFactory;
+use Domain\Model\ArrayReservaFactory;
 use Domain\Model\ArrayResultadoFactory;
+use Domain\Model\BookingChecker;
 use Infrastructure\Persistence\DbalComentarioRepository;
 use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
 use Infrastructure\Persistence\DbalLigaRepository;
+use Infrastructure\Persistence\DbalReservaRespository;
 use Infrastructure\Persistence\DbalResultadoRepository;
 use Infrastructure\Services\FileUploader;
 use Infrastructure\UserProvider;
@@ -126,6 +133,10 @@ $app['photo_uploader_service'] = $app->factory(function ($app) {
     return new FileUploader($app['photos_directory']);
 });
 
+$app['booking_checker'] = $app->factory(function ($app) {
+    return new BookingChecker();
+});
+
 /**
  * Factories
  */
@@ -149,6 +160,10 @@ $app['comentario_factory'] = $app->factory(function ($app) {
     return new ArrayComentarioFactory();
 });
 
+$app['reserva_factory'] = $app->factory(function ($app) {
+    return new ArrayReservaFactory();
+});
+
 /**
  * Repositories
  */
@@ -170,6 +185,10 @@ $app['resultado_repository'] = $app->factory(function ($app) {
 
 $app['comentario_repository'] = $app->factory(function ($app) {
     return new DbalComentarioRepository($app['db'], $app['comentario_factory']);
+});
+
+$app['reserva_repository'] = $app->factory(function ($app) {
+    return new DbalReservaRespository($app['db'], $app['reserva_factory']);
 });
 
 
@@ -230,6 +249,14 @@ $app['contactform_command_handler'] = $app->factory(function ($app) {
     return new ContactFormCommandHandler($app['mailer']);
 });
 
+$app['horas_libres_reserva_command_handler'] = $app->factory(function ($app) {
+    return new HorasLibresReservaCommandHandler($app['reserva_repository']);
+});
+
+$app['add_reserva_command_handler'] = $app->factory(function ($app) {
+    return new AddReservaCommandHandler($app['reserva_repository']);
+});
+
 /**
  * Command Bus
  */
@@ -248,6 +275,8 @@ $app['commandBus'] = function ($app){
                 AddComentarioCommand::class => $app['add_comentario_command_handler'],
                 RegisterJugadorCommand::class => $app['register_jugador_command_handler'],
                 ContactFormCommand::class => $app['contactform_command_handler'],
+                HorasLibresReservaCommand::class => $app['horas_libres_reserva_command_handler'],
+                AddReservaCommand::class => $app['add_reserva_command_handler'],
             ]), new HandleInflector()
         )
     ]);
