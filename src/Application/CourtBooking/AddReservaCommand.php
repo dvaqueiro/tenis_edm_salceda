@@ -1,6 +1,6 @@
 <?php
 
-namespace Application;
+namespace Application\CourtBooking;
 
 use Domain\Model\Reserva;
 

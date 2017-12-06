@@ -1,7 +1,8 @@
 <?php
 
-namespace Application;
+namespace Application\CourtBooking;
 
+use Carbon\Carbon;
 use Domain\Model\ReservaRespository;
 use Domain\Model\Reservas;
 
@@ -21,7 +22,7 @@ class HorasLibresReservaCommandHandler
     public function handle(HorasLibresReservaCommand $command)
     {
         $pista = $command->getPista();
-        $fecha = \Carbon\Carbon::createFromFormat('d-m-Y', $command->getFecha());
+        $fecha = Carbon::createFromFormat('d-m-Y', $command->getFecha());
 
         $arrayReservas = $this->horasLibresRepository->findByPistaYFecha($pista, $fecha);
 

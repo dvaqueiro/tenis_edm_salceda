@@ -1,10 +1,11 @@
 <?php
 
 use Application\AddComentarioCommand;
+use Application\CourtBooking\AddReservaCommand;
 use Application\ClasificacionPorLigaCommand;
 use Application\ComentariosCommand;
 use Application\ContactFormCommand;
-use Application\HorasLibresReservaCommand;
+use Application\CourtBooking\HorasLibresReservaCommand;
 use Application\JugadoresPorLigaCommand;
 use Application\RankingCommand;
 use Application\RegisterJugadorCommand;
@@ -159,7 +160,7 @@ $app->match('/courts', function (Request $request) use ($app) {
 
     if ($form->isSubmitted() && $form->isValid()) {
         $newReserva = $form->getData();
-        $message = $app['commandBus']->handle(new Application\AddReservaCommand($newReserva));
+        $message = $app['commandBus']->handle(new AddReservaCommand($newReserva));
         $app['session']->getFlashBag()->add('mensaje', $message);
         return $app->redirect($request->getUri());
     }

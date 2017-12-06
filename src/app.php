@@ -2,16 +2,16 @@
 
 use Application\AddComentarioCommand;
 use Application\AddComentarioCommandHandler;
-use Application\AddReservaCommand;
-use Application\AddReservaCommandHandler;
+use Application\CourtBooking\AddReservaCommand;
+use Application\CourtBooking\AddReservaCommandHandler;
 use Application\ClasificacionPorLigaCommand;
 use Application\ClasificacionPorLigaHandler;
 use Application\ComentariosCommand;
 use Application\ComentariosCommandHandler;
 use Application\ContactFormCommand;
 use Application\ContactFormCommandHandler;
-use Application\HorasLibresReservaCommand;
-use Application\HorasLibresReservaCommandHandler;
+use Application\CourtBooking\HorasLibresReservaCommand;
+use Application\CourtBooking\HorasLibresReservaCommandHandler;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
 use Application\RankingCommand;
