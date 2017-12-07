@@ -32,12 +32,12 @@ class BookingType extends AbstractType
             ->add('hora', ChoiceType::class, [
                 'choices' => [
                     '- Escoje una hora -' => 0,
-                    '10 a 12' => 1,
-                    '12 a 14' => 2,
-                    '14 a 16' => 3,
-                    '16 a 18' => 4,
-                    '18 a 20' => 5,
-                    '20 a 22' => 6,
+                    '10:00 a 12:00' => 1,
+                    '12:00 a 14:00' => 2,
+                    '14:00 a 16:00' => 3,
+                    '16:00 a 18:00' => 4,
+                    '18:00 a 20:00' => 5,
+                    '20:00 a 22:00' => 6,
                 ]
             ])
             ->add('submit', SubmitType::class,

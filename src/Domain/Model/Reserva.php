@@ -2,6 +2,10 @@
 
 namespace Domain\Model;
 
+use DateTime;
+use DateTimeInterface;
+use function random_bytes;
+
 /**
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
@@ -18,15 +22,16 @@ class Reserva
     private $hora;
     private $aprobado;
     private $horas = [
-        1 => '10 a 12',
-        2 => '12 a 14',
-        3 => '14 a 16',
-        4 => '16 a 18',
-        5 => '18 a 20',
-        6 => '20 a 22',
+        1 => '10:00 a 12:00',
+        2 => '12:00 a 14:00',
+        3 => '14:00 a 16:00',
+        4 => '16:00 a 18:00',
+        5 => '18:00 a 20:00',
+        6 => '20:00 a 22:00',
     ];
+    private $token;
 
-    function __construct($id, $idJugador, $pista, $fecha, $hora)
+    function __construct($id, $idJugador, $pista, $fecha, $hora, $token = null)
     {
         $this->hora = $hora;
         $this->fecha = $fecha;
@@ -34,6 +39,7 @@ class Reserva
         $this->id = $id;
         $this->idJugador = $idJugador;
         $this->aprobado = false;
+        $this->token = ($token)?$token:bin2hex(random_bytes(10));
     }
 
     function getId()
@@ -51,6 +57,10 @@ class Reserva
         return $this->pista;
     }
 
+    /**
+     *
+     * @return DateTimeInterface
+     */
     function getFecha()
     {
         return $this->fecha;
@@ -99,5 +109,15 @@ class Reserva
     public function getHoraTexto()
     {
         return $this->horas[$this->hora];
+    }
+
+    public function checkToken($token)
+    {
+        return $this->token === $token;
+    }
+
+    function getToken()
+    {
+        return $this->token;
     }
 }

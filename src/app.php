@@ -10,8 +10,11 @@ use Application\ContactFormCommand;
 use Application\ContactFormCommandHandler;
 use Application\CourtBooking\AddReservaCommand;
 use Application\CourtBooking\AddReservaCommandHandler;
+use Application\CourtBooking\ConfirmBookingCommand;
+use Application\CourtBooking\ConfirmBookingCommandHandler;
 use Application\CourtBooking\HorasLibresReservaCommand;
 use Application\CourtBooking\HorasLibresReservaCommandHandler;
+use Application\CourtBooking\SendMailBookingConfirmationSuscriber;
 use Application\CourtBooking\SendMailToBookingConfirmationSuscriber;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaHandler;
@@ -52,6 +55,7 @@ use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\FormServiceProvider;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\LocaleServiceProvider;
+use Silex\Provider\RoutingServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SessionServiceProvider;
@@ -68,6 +72,7 @@ $app = new Application();
  */
 $app->register(new ServiceControllerServiceProvider());
 $app->register(new AssetServiceProvider());
+$app->register(new RoutingServiceProvider());
 $app->register(new TwigServiceProvider());
 $app->register(new HttpFragmentServiceProvider());
 $app->register(new FormServiceProvider());
@@ -103,6 +108,7 @@ $app->register(new SecurityServiceProvider(), array(
         'profiler' => array('pattern' => '^/_'), // Example of an url available as anonymous user
         'scores' => array('pattern' => '^/scores$'),
         'facebook' => array('pattern' => '^/facebook$'),
+        'booking_confirm' => array('pattern' => '^/courts/confirm/.*$'),
         'login' => array('pattern' => '^/login$'),
         'admin' => array(
             'pattern' => '^/admin',
@@ -265,6 +271,10 @@ $app['add_reserva_command_handler'] = $app->factory(function ($app) {
     return new AddReservaCommandHandler($app['reserva_repository']);
 });
 
+$app['confirm_booking_command_handler'] = $app->factory(function ($app) {
+    return new ConfirmBookingCommandHandler($app['reserva_repository']);
+});
+
 /**
  * Command Bus
  */
@@ -286,6 +296,7 @@ $app['commandBus'] = function ($app){
                 ContactFormCommand::class => $app['contactform_command_handler'],
                 HorasLibresReservaCommand::class => $app['horas_libres_reserva_command_handler'],
                 AddReservaCommand::class => $app['add_reserva_command_handler'],
+                ConfirmBookingCommand::class => $app['confirm_booking_command_handler'],
             ]), new HandleInflector()
         )
     ]);
@@ -296,8 +307,17 @@ $app->before(function (Request $request) use ($app) {
        new SendMailToBookingConfirmationSuscriber(
         $app['reserva_repository'],
         $app['jugador_repository'],
+        $app['url_generator'],
         $app['mailer'],
-        $app['booking_config']
+        $app['mail.config']
+    ));
+
+    DomainEventPublisher::instance()->subscribe(
+       new SendMailBookingConfirmationSuscriber(
+        $app['reserva_repository'],
+        $app['jugador_repository'],
+        $app['mailer'],
+        $app['mail.config']
     ));
 });
 

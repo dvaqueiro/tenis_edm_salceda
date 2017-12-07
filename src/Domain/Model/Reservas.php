@@ -16,12 +16,12 @@ class Reservas
     public function __construct()
     {
         $this->horasLibres = [
-            1 => '10 a 12',
-            2 => '12 a 14',
-            3 => '14 a 16',
-            4 => '16 a 18',
-            5 => '18 a 20',
-            6 => '20 a 22',
+            1 => '10:00 a 12:00',
+            2 => '12:00 a 14:00',
+            3 => '14:00 a 16:00',
+            4 => '16:00 a 18:00',
+            5 => '18:00 a 20:00',
+            6 => '20:00 a 22:00',
         ];
         $this->reservas = new ArrayCollection();
     }

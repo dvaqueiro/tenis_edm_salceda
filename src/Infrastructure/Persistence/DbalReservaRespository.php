@@ -3,7 +3,7 @@
 namespace Infrastructure\Persistence;
 
 use DateTime;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Domain\Model\Reserva;
 use Domain\Model\ReservaFactory;
 use Domain\Model\ReservaRespository;
@@ -40,13 +40,14 @@ class DbalReservaRespository implements ReservaRespository
 
     public function add(Reserva $newReserva)
     {
-        $sql = "INSERT INTO pabellon (idusuario, hora, fecha, pista, aprobado) VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO pabellon (idusuario, hora, fecha, pista, aprobado, token) VALUES (?,?,?,?,?,?)";
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $newReserva->getIdJugador());
         $stmt->bindValue(2, $newReserva->getHora());
         $stmt->bindValue(3, $newReserva->getFecha()->format('Y-m-d'));
         $stmt->bindValue(4, $newReserva->getPista());
         $stmt->bindValue(5, $newReserva->getAprobado());
+        $stmt->bindValue(6, $newReserva->getToken());
         $stmt->execute();
 
         $id = $this->dbal->lastInsertId();
@@ -66,5 +67,18 @@ class DbalReservaRespository implements ReservaRespository
         $data = $stmt->fetch();
 
         return $this->factory->make($data);
+    }
+
+    public function update(Reserva $reserva)
+    {
+        $sql = "UPDATE pabellon set idusuario=?, hora=?, fecha=?, pista=?, aprobado=? WHERE id = ?";
+        return $this->dbal->executeUpdate($sql, [
+            $reserva->getIdJugador(),
+            $reserva->getHora(),
+            $reserva->getFecha()->format('Y-m-d'),
+            $reserva->getPista(),
+            $reserva->getAprobado(),
+            $reserva->getId()
+        ]);
     }
 }

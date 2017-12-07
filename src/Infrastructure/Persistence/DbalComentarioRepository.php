@@ -2,7 +2,7 @@
 
 namespace Infrastructure\Persistence;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Domain\Model\Comentario;
 use Domain\Model\ComentarioFactory;
 use Domain\Model\ComentarioRepository;

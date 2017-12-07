@@ -16,12 +16,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
  */
-class SendMailToBookingConfirmationSuscriber implements DomainEventSubscriber
+class SendMailBookingConfirmationSuscriber implements DomainEventSubscriber
 {
-    /**
-     * @var UrlGenerator
-     */
-    private $urlGenerator;
     private $config;
 
     /**
@@ -41,13 +37,12 @@ class SendMailToBookingConfirmationSuscriber implements DomainEventSubscriber
     private $body;
 
     function __construct(ReservaRespository $reservaRepository, JugadorRepository $jugadorRepository, 
-        UrlGenerator $urlGenerator, Swift_Mailer $mailer, $config)
+        Swift_Mailer $mailer, $config)
     {
         $this->reservaRepository = $reservaRepository;
         $this->mailer = $mailer;
         $this->jugadorRepository = $jugadorRepository;
         $this->config = $config;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -61,29 +56,24 @@ class SendMailToBookingConfirmationSuscriber implements DomainEventSubscriber
         $jugador = $this->jugadorRepository->findById($reserva->getIdJugador());
         $this->buildEmailBody($reserva, $jugador);
 
-        $message = new Swift_Message('Confirmar de reserva de pista');
-        $message->setTo($this->config['to']);
+        $message = new Swift_Message('Tu reserva ha sido confirmada.');
+        $message->setTo($jugador->getEmail());
         $message->setFrom($this->config['from']);
         $message->setBody($this->body, 'text/html');
 
-        $ok = $this->mailer->send($message);
+        return $this->mailer->send($message);
     }
 
     public function isSubscribedTo($aDomainEvent): bool
     {
-        return $aDomainEvent instanceof CourtBookingWasCreatedEvent;
+        return $aDomainEvent instanceof CourtBookingWasConfirmedEvent;
     }
 
     public function buildEmailBody(Reserva $reserva, Jugador $jugador)
     {
         $pista = ($reserva->getPista() == 1)? "Pabellón de Parderrubias":"Pista exterior de Parderrubias";
 
-        $urlConfirmBooking = $this->urlGenerator->generate('booking_confirm', [
-            'token' => $reserva->getToken(),
-            'idReserva' => $reserva->getId(),
-        ], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        $this->body = "<h2>Se ha solicitado una reserva de pista con los siguientes datos...</h2>";
+        $this->body = "<h2>Tu reserva con los siguientes datos ha sido confirmada...</h2>";
         $this->body .= "<table width='500' border='0' cellspacing='5' cellpadding='5'>
             <tr>
                 <td width='98' bgcolor='#CDFDC6'><strong>Pista</strong></td>
@@ -104,10 +94,6 @@ class SendMailToBookingConfirmationSuscriber implements DomainEventSubscriber
             <tr>
                 <td bgcolor='#CDFDC6'><strong>Fecha y hora reservadas</strong></td>
                 <td bgcolor='#EEFFDF'>{$reserva->getFecha()->format('d-m-Y')} de {$reserva->getHoraTexto()}</td>
-            </tr>
-            <tr>
-                <td bgcolor='#CDFDC6'><strong>Confirmar Reserva</strong></td>
-                <td bgcolor='#EEFFDF'><a href='{$urlConfirmBooking}'>Pulse para confirmar</a></td>
             </tr>
         </table>";
     }

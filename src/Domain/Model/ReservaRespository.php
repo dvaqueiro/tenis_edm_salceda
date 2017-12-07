@@ -10,6 +10,12 @@ interface ReservaRespository
 {
 
     /**
+     * 
+     * @param Reserva $reserva
+     */
+    public function update(Reserva $reserva);
+
+    /**
      *
      * @param int $reservaId
      * @return Reserva

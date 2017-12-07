@@ -2,6 +2,8 @@
 
 namespace Domain\Model;
 
+use DateTime;
+
 /**
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
@@ -13,7 +15,8 @@ class ArrayReservaFactory implements ReservaFactory
     {
         $reservas = [];
         foreach ($data as $row) {
-            $reservas[] = new Reserva($row['id'], $row['idusuario'], $row['pista'], $row['fecha'], $row['hora']);
+            $reservas[] = new Reserva($row['id'], $row['idusuario'], $row['pista'],
+                DateTime::createFromFormat('Y-m-d', $data['fecha']), $row['hora'], $row['token']);
         }
 
         return $reservas;
@@ -21,6 +24,7 @@ class ArrayReservaFactory implements ReservaFactory
 
     public function make($data)
     {
-        return new Reserva($data['id'], $data['idusuario'], $data['pista'], $data['fecha'], $data['hora']);
+        return new Reserva($data['id'], $data['idusuario'], $data['pista'],
+            DateTime::createFromFormat('Y-m-d', $data['fecha']), $data['hora'], $data['token']);
     }
 }

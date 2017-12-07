@@ -1,10 +1,11 @@
 <?php
 
 use Application\AddComentarioCommand;
-use Application\CourtBooking\AddReservaCommand;
 use Application\ClasificacionPorLigaCommand;
 use Application\ComentariosCommand;
 use Application\ContactFormCommand;
+use Application\CourtBooking\AddReservaCommand;
+use Application\CourtBooking\ConfirmBookingCommand;
 use Application\CourtBooking\HorasLibresReservaCommand;
 use Application\JugadoresPorLigaCommand;
 use Application\RankingCommand;
@@ -179,6 +180,13 @@ $app->post('/freehours', function (Request $request) use ($app) {
     return $app->json($out);
 })
 ->bind('freehours');
+
+$app->get('/courts/confirm/{token}/{idReserva}', function ($token, $idReserva) use ($app) {
+    $out = $app['commandBus']->handle(new ConfirmBookingCommand($token, $idReserva));
+    
+    return $app->json($out);
+})
+->bind('booking_confirm');
 
 
 $app->get('/facebook', function () use ($app) {
