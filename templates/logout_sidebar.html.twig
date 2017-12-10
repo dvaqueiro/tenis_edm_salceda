@@ -4,7 +4,7 @@
 <div class="login-box">
     <div class="title">Conectado como</div>
     <div class="username"><strong>{{ global.user.name }}</strong></div>
-    <div class="link"><a href="#">Modificar datos</a></div>
+    <div class="link"><a href="{{ path('player_update') }}">Modificar datos</a></div>
     <div class="link"><a href="{{ path('logout') }}">Salir</a></div>
 </div>
 {% endblock %}

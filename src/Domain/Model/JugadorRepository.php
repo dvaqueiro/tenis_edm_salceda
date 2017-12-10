@@ -9,7 +9,9 @@ namespace Domain\Model;
 interface JugadorRepository
 {
 
-    public function findById($param0);
+    public function update(Jugador $jugador);
+
+    public function findById($id);
 
     public function findByDni($dni);
 

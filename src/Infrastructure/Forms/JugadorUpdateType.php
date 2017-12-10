@@ -18,25 +18,28 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
  */
-class JugadorType extends AbstractType
+class JugadorUpdateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dni', TextType::class)
+            ->add('dni', TextType::class, ['disabled' => true ])
             ->add('nombre', TextType::class)
             ->add('telefono', TextType::class, ['constraints' => new Assert\Regex('@\d+@') ])
             ->add('email', EmailType::class, ['constraints' => new Assert\Email() ])
             ->add('password',  RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'invalid_message' => 'Las contraseñas deben de coincidir',
-                'options' => array('attr' => array('class' => 'password-field')),
-                'required' => true,
+                'options' => [
+                    'attr' => array('class' => 'password-field'),
+                    'always_empty' => false,
+                ],
+                'required' => false,
                 'first_options'  => array('label' => 'Contraseña'),
                 'second_options' => array('label' => 'Repita Contraseña'),
             ))
             ->add('fotoFile', FileType::class, ['required' => false])
-            ->add('submit', SubmitType::class, array('label' => 'Registrarse'));
+            ->add('submit', SubmitType::class, array('label' => 'Guardar'));
     }
 
     public function configureOptions(OptionsResolver $resolver)

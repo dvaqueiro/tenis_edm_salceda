@@ -18,10 +18,12 @@ use Application\CourtBooking\SendMailBookingConfirmationSuscriber;
 use Application\CourtBooking\SendMailToBookingConfirmationSuscriber;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaCommandHandler;
+use Application\Player\RegisterJugadorCommand;
+use Application\Player\RegisterJugadorCommandHandler;
+use Application\Player\UpdateJugadorCommand;
+use Application\Player\UpdateJugadorCommandHandler;
 use Application\RankingCommand;
 use Application\RankingCommandHandler;
-use Application\RegisterJugadorCommand;
-use Application\RegisterJugadorCommandHandler;
 use Application\ResultadosPorLigaCommand;
 use Application\ResultadosPorLigaCommandHandler;
 use Ddd\Domain\DomainEventPublisher;
@@ -141,7 +143,7 @@ $app->register(new SecurityServiceProvider(), array(
  * Services
  */
 $app['photo_uploader_service'] = $app->factory(function ($app) {
-    return new FileUploader($app['photos_directory']);
+    return new FileUploader($app['photos_directory'], $app['photos_public_directory']);
 });
 
 $app['booking_checker'] = $app->factory(function ($app) {
@@ -275,6 +277,12 @@ $app['confirm_booking_command_handler'] = $app->factory(function ($app) {
     return new ConfirmBookingCommandHandler($app['reserva_repository']);
 });
 
+$app['update_jugador_command_handler'] = $app->factory(function ($app) {
+    return new UpdateJugadorCommandHandler(
+        $app['jugador_repository'], $app['photo_uploader_service']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -297,6 +305,7 @@ $app['commandBus'] = function ($app){
                 HorasLibresReservaCommand::class => $app['horas_libres_reserva_command_handler'],
                 AddReservaCommand::class => $app['add_reserva_command_handler'],
                 ConfirmBookingCommand::class => $app['confirm_booking_command_handler'],
+                UpdateJugadorCommand::class => $app['update_jugador_command_handler'],
             ]), new HandleInflector()
         )
     ]);

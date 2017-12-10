@@ -10,24 +10,41 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class FileUploader
 {
-    private $targetDir;
+    private $fotoDir;
+    private $publicRootDir;
 
-    public function __construct($targetDir)
+    public function __construct($publicRootDir, $fotoDir)
     {
-        $this->targetDir = $targetDir;
+        $this->publicRootDir = $publicRootDir;
+        $this->fotoDir = $fotoDir;
     }
 
     public function upload(UploadedFile $file)
     {
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
-        $file->move($this->getTargetDir(), $fileName);
+        $file->move($this->getPublicRootDir().$this->getFotoDir(), $fileName);
 
-        return $fileName;
+        return $this->getFotoDir() . $fileName;
     }
 
-    public function getTargetDir()
+    public function deleteFile($filename)
     {
-        return $this->targetDir;
+        $ok = false;
+        if(file_exists($this->getPublicRootDir().$filename)){
+            $ok = unlink($this->getPublicRootDir().$filename);
+        }
+
+        return $ok;
+    }
+
+    function getFotoDir()
+    {
+        return $this->fotoDir;
+    }
+
+    function getPublicRootDir()
+    {
+        return $this->publicRootDir;
     }
 }

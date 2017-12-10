@@ -8,8 +8,9 @@ use Application\CourtBooking\AddReservaCommand;
 use Application\CourtBooking\ConfirmBookingCommand;
 use Application\CourtBooking\HorasLibresReservaCommand;
 use Application\JugadoresPorLigaCommand;
+use Application\Player\RegisterJugadorCommand;
+use Application\Player\UpdateJugadorCommand;
 use Application\RankingCommand;
-use Application\RegisterJugadorCommand;
 use Application\ResultadosPorLigaCommand;
 use Domain\Model\ContactForm;
 use Domain\Model\Jugador;
@@ -17,16 +18,13 @@ use Domain\Model\Reserva;
 use Infrastructure\Forms\BookingType;
 use Infrastructure\Forms\ContactType;
 use Infrastructure\Forms\JugadorType;
+use Infrastructure\Forms\JugadorUpdateType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\VarDumper\VarDumper;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
-
-$app->get('/', function () use ($app) {
-    return $app['twig']->render('homepage.html.twig', array());
-})
-->bind('homepage');
 
 $app->match('/login', function(Request $request) use ($app) {
     $jugador = new Jugador(null, null, null, null, null, null, null);
@@ -48,6 +46,34 @@ $app->match('/login', function(Request $request) use ($app) {
         'form' => $form->createView(),
     ]);
 });
+
+$app->get('/', function () use ($app) {
+    return $app['twig']->render('homepage.html.twig', array());
+})
+->bind('homepage');
+
+$app->match('/player/update', function (Request $request) use ($app) {
+    $token = $app['security.token_storage']->getToken();
+    $user = $token->getUser();
+    $jugador = $app['jugador_repository']->findById($user->getId());
+
+    /* @var $form Form */
+    $form = $app['form.factory']->createBuilder(JugadorUpdateType::class, $jugador)->getForm();
+
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $jugador = $form->getData();
+        $message = $app['commandBus']->handle(new UpdateJugadorCommand($jugador));
+        $app['session']->getFlashBag()->add('mensaje', $message);
+        return $app->redirect($request->getUri());
+    }
+
+    return $app['twig']->render('player_update.html.twig', [
+        'form' => $form->createView(),
+    ]);
+})
+->bind('player_update');
 
 $app->get('/loginadmin', function(Request $request) use ($app) {
     return $app['twig']->render('login_admin.html.twig', array(

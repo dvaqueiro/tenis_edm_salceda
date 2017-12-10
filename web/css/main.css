@@ -494,16 +494,17 @@ ul#menu li.current a, ul#menu li:hover a
     border-radius: 0.4em;
     border: solid 2px #ccc;
     width: 20em;
-    height: 20px;
+    font-size: large;
     margin: .3em 0;
     padding: .2em 1em;
 }
 
 .formulario button {
-    border-radius: 0.4em;
+    cursor: pointer; 
+    margin-top: .5em;
+    font-size: inherit;
+    border-radius: 0.2em;
     border: solid 2px #ccc;
-    width: 20em;
-    height: 20px;
     margin: .3em 0;
     padding: .2em 1em;
 }
@@ -553,7 +554,6 @@ ul#menu li.current a, ul#menu li:hover a
 
 .login-box input[type="submit"], .login-box input[type="button"] {
     cursor: pointer; 
-    width: 50%; 
     margin-top: .5em;
     font-size: inherit;
     border-radius: 0.2em;

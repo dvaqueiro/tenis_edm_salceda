@@ -9,6 +9,7 @@ namespace Domain\Model;
 class Jugador
 {
     private $foto;
+    private $fotoFile;
     private $password;
     private $email;
     private $telefono;
@@ -26,6 +27,16 @@ class Jugador
         $this->email = $email;
         $this->password = $password;
         $this->foto = $foto;
+    }
+
+    function getFotoFile()
+    {
+        return $this->fotoFile;
+    }
+
+    function setFotoFile($fotoFile)
+    {
+        $this->fotoFile = $fotoFile;
     }
 
     function getFoto()
@@ -70,7 +81,9 @@ class Jugador
 
     function setPassword($password)
     {
-        $this->password = $password;
+        if($password != null) {
+            $this->password = password_hash(trim($password), PASSWORD_BCRYPT, ['cost' => 13]);
+        }
     }
 
     function setEmail($email)
@@ -85,7 +98,7 @@ class Jugador
 
     function setNombre($nombre)
     {
-        $this->nombre = $nombre;
+        $this->nombre = mb_convert_case(mb_strtolower($nombre), MB_CASE_TITLE, "UTF-8");
     }
 
     function setDni($dni)

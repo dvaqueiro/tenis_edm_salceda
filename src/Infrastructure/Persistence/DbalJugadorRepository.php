@@ -38,7 +38,7 @@ class DbalJugadorRepository implements JugadorRepository
 
     public function add(Jugador $newJugador)
     {
-        $sql = "INSERT INTO usuarios (dni, nombre, telefono, email, contrasena, foto) VALUES (?,?,?,?,?,?)";
+        $sql = "INSERT INTO usuarios (dni, nombre, telefono, email, password, foto) VALUES (?,?,?,?,?,?)";
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $newJugador->getDni());
         $stmt->bindValue(2, $newJugador->getNombre());
@@ -74,5 +74,18 @@ class DbalJugadorRepository implements JugadorRepository
         $data = $stmt->fetch();
 
         return $this->factory->make($data);
+    }
+
+    public function update(Jugador $jugador)
+    {
+        $sql = "UPDATE usuarios set nombre=?, telefono=?, email=?, foto=?, password=? WHERE id = ?";
+        return $this->dbal->executeUpdate($sql, [
+            $jugador->getNombre(),
+            $jugador->getTelefono(),
+            $jugador->getEmail(),
+            $jugador->getFoto(),
+            $jugador->getPassword(),
+            $jugador->getId(),
+        ]);
     }
 }

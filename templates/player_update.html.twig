@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+
+{% block sidebar %}
+    {{ include('logout_sidebar.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <h1>Modificar datos del jugador...</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form, {'attr': {'class': 'formulario'}}) }}
+    {{ form_end(form) }}
+    {% if form.vars.value.foto %}
+        <a href="{{ form.vars.value.foto }}" data-lightbox="{{ form.vars.value.nombre }}" title="{{ form.vars.value.nombre }}">
+        <img src="{{ form.vars.value.foto }}" width="150" /></a>
+    {% endif %}
+{% endblock %}

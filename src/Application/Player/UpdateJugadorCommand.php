@@ -1,12 +1,12 @@
 <?php
 
-namespace Application;
+namespace Application\Player;
 
 /**
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
  */
-class RegisterJugadorCommand
+class UpdateJugadorCommand
 {
     /**
      * @var \Domain\Model\Jugador

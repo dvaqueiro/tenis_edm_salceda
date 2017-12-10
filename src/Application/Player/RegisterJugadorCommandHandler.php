@@ -1,6 +1,6 @@
 <?php
 
-namespace Application;
+namespace Application\Player;
 
 use Domain\Model\JugadorRepository;
 use Infrastructure\Services\FileUploader;
@@ -27,9 +27,10 @@ class RegisterJugadorCommandHandler
     {
         $newJugador = $command->getJugador();
         
-        $fotoFile = $newJugador->getFoto();
-        $newFileName = $this->fileUploader->upload($fotoFile);
-        $newJugador->setFoto($newFileName);
+        if($fotoFile = $newJugador->getFotoFile()) {
+            $newFileName = $this->fileUploader->upload($fotoFile);
+            $newJugador->setFoto($newFileName);
+        }
 
         $newJugador = $this->jugadorRepository->add($newJugador);
         if($newJugador->getId()) {
