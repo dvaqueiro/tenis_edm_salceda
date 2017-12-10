@@ -17,13 +17,13 @@ use Application\CourtBooking\HorasLibresReservaCommandHandler;
 use Application\CourtBooking\SendMailBookingConfirmationSuscriber;
 use Application\CourtBooking\SendMailToBookingConfirmationSuscriber;
 use Application\JugadoresPorLigaCommand;
-use Application\JugadoresPorLigaHandler;
+use Application\JugadoresPorLigaCommandHandler;
 use Application\RankingCommand;
 use Application\RankingCommandHandler;
 use Application\RegisterJugadorCommand;
 use Application\RegisterJugadorCommandHandler;
 use Application\ResultadosPorLigaCommand;
-use Application\ResultadosPorLigaHandler;
+use Application\ResultadosPorLigaCommandHandler;
 use Ddd\Domain\DomainEventPublisher;
 use Domain\Model\ArrayComentarioFactory;
 use Domain\Model\ArrayDivisionFactory;
@@ -210,7 +210,7 @@ $app['reserva_repository'] = $app->factory(function ($app) {
  * CommandHandlers
  */
 $app['jugadores_por_liga_handler'] = $app->factory(function ($app) {
-    return new JugadoresPorLigaHandler(
+    return new JugadoresPorLigaCommandHandler(
         $app['liga_repository'],
         $app['division_repository'],
         $app['jugador_repository']
@@ -218,7 +218,7 @@ $app['jugadores_por_liga_handler'] = $app->factory(function ($app) {
 });
 
 $app['resultados_por_liga_handler'] = $app->factory(function ($app) {
-    return new ResultadosPorLigaHandler(
+    return new ResultadosPorLigaCommandHandler(
         $app['liga_repository'],
         $app['division_repository'],
         $app['resultado_repository']

@@ -10,7 +10,7 @@ use Domain\Model\ResultadoRepository;
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
  */
-class ResultadosPorLigaHandler
+class ResultadosPorLigaCommandHandler
 {
     private $LigaRepository;
     private $divisionRepositorio;

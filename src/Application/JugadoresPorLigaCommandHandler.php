@@ -10,7 +10,7 @@ use Domain\Model\LigaRepository;
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
  */
-class JugadoresPorLigaHandler
+class JugadoresPorLigaCommandHandler
 {
     /**
      * @var JugadorRepository

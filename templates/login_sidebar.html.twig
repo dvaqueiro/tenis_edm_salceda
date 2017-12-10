@@ -1,17 +1,24 @@
 {% extends "sidebar.html.twig" %}
 
 {% block login_form %}
-    <div style="border-radius:.4em; background-color:#1F400F; color:white; padding:10px; margin-right:10px;">
-        <div style="border-bottom:dashed 1px; margin-bottom:1em;">Acceder</div>
+    <div class="login-box">
+        <div class="title">Acceder</div>
         <form action="{{ path('login_check') }}" method="post">
             {% if(error) %}
             <div class="mensaje_error">{{ error }}</div>
             {% endif %}
-            Usuario<br>
-            <input type="text" name="_username" value="{{ last_username }}" style="width:95%; border-radius:.4em;"/><br><br>
-            Contraseña<br>
-            <input type="password" name="_password" value="" style="width:95%; border-radius:.4em;"/><br>
-            <input type="submit" style="cursor:pointer; width:60%; margin-top:.5em;" name="entrar" value="entrar"/>
+            
+            <label for="_username">Usuario</label>
+            <input type="text" name="_username" value="{{ last_username }}"/>
+            
+            <label for="_password">Contraseña</label>
+            <input type="password" name="_password" value=""/>
+            
+            <input type="submit" id="entrar" name="entrar" value="entrar"/>
+            
+            <div class="forgotten">
+                <a href="#">Has olvidado tu contraseña</a>
+            </div>
         </form>
     </div>
 {% endblock %}

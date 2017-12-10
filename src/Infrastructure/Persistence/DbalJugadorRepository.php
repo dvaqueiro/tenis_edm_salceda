@@ -26,7 +26,8 @@ class DbalJugadorRepository implements JugadorRepository
     {
         $sql = 'SELECT u.* FROM usuarios u '
             . 'INNER JOIN ud on ud.idusuario = u.id '
-            . 'INNER JOIN divisiones d on d.id = ud.iddivision WHERE d.id = ?';
+            . 'INNER JOIN divisiones d on d.id = ud.iddivision WHERE d.id = ? '
+            . 'ORDER BY u.nombre';
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $idDivision);
         $stmt->execute();

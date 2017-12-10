@@ -1,8 +1,10 @@
 {% extends "sidebar.html.twig" %}
 
 {% block login_form %}
-<div style="border-radius:.4em; background-color:#1F400F; color:white; padding:10px; margin-right:10px;">
-    Conectado como<br /><br /><strong>{{ global.user.name }}</strong><br /><br />
-    <a href="{{ path('logout') }}">salir</a>
+<div class="login-box">
+    <div class="title">Conectado como</div>
+    <div class="username"><strong>{{ global.user.name }}</strong></div>
+    <div class="link"><a href="#">Modificar datos</a></div>
+    <div class="link"><a href="{{ path('logout') }}">Salir</a></div>
 </div>
 {% endblock %}

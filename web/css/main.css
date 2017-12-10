@@ -529,3 +529,45 @@ ul#menu li.current a, ul#menu li:hover a
 #booking_fecha {
     width: 90px;
 }
+
+.login-box {
+    border-radius: .4em; 
+    background-color: #1F400F; 
+    color: white; 
+    padding: 10px; 
+    margin-right: 10px;
+}
+
+.login-box .title {
+    border-bottom: dashed 1px; 
+    margin-bottom: 1em;
+}
+
+.login-box input {
+    margin-bottom: 10px;
+    margin-top: 3px;
+    font-size: large;
+    width:95%; 
+    border-radius:.4em;
+}
+
+.login-box input[type="submit"], .login-box input[type="button"] {
+    cursor: pointer; 
+    width: 50%; 
+    margin-top: .5em;
+    font-size: inherit;
+    border-radius: 0.2em;
+}
+
+.forgotten {
+    margin-top: 10px;
+    font-size: smaller;
+}
+
+.login-box .link {
+    margin-bottom: 10px;
+}
+
+.login-box .username {
+    margin-bottom: 10px;
+}
