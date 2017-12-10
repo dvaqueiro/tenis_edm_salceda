@@ -2,6 +2,7 @@
 
 namespace Application\Player;
 
+use Ddd\Domain\DomainEventPublisher;
 use Domain\Model\JugadorRepository;
 use Infrastructure\Services\FileUploader;
 
@@ -36,8 +37,12 @@ class RegisterJugadorCommandHandler
         if($newJugador->getId()) {
             $out = "Enhorabuena {$newJugador->getNombre()}, tu inscripción ha sido procesada "
             . "correctamente. Los organizadores gestionarán tu alta lo antes posible.";
+
+            DomainEventPublisher::instance()->publish(
+                new PlayerWasRegisterEvent($newJugador->getId())
+            );
         }
-        //TODO: enviar email a persona encargada de formalizar registro
+        
 
         return $out;
     }

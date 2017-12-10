@@ -62,7 +62,8 @@ class SendMailToBookingConfirmationSuscriber implements DomainEventSubscriber
         $this->buildEmailBody($reserva, $jugador);
 
         $message = new Swift_Message('Confirmar de reserva de pista');
-        $message->setTo($this->config['to']);
+        $message->setTo($this->config['to.booking']);
+        $message->setBcc($this->config['to.admin']);
         $message->setFrom($this->config['from']);
         $message->setBody($this->body, 'text/html');
 

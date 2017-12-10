@@ -18,6 +18,7 @@ use Application\CourtBooking\SendMailBookingConfirmationSuscriber;
 use Application\CourtBooking\SendMailToBookingConfirmationSuscriber;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaCommandHandler;
+use Application\Player\PlayerRegisterSuscriber;
 use Application\Player\RegisterJugadorCommand;
 use Application\Player\RegisterJugadorCommandHandler;
 use Application\Player\UpdateJugadorCommand;
@@ -324,6 +325,13 @@ $app->before(function (Request $request) use ($app) {
     DomainEventPublisher::instance()->subscribe(
        new SendMailBookingConfirmationSuscriber(
         $app['reserva_repository'],
+        $app['jugador_repository'],
+        $app['mailer'],
+        $app['mail.config']
+    ));
+
+    DomainEventPublisher::instance()->subscribe(
+       new PlayerRegisterSuscriber(
         $app['jugador_repository'],
         $app['mailer'],
         $app['mail.config']

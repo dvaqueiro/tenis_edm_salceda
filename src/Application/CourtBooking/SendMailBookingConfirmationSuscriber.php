@@ -58,6 +58,7 @@ class SendMailBookingConfirmationSuscriber implements DomainEventSubscriber
 
         $message = new Swift_Message('Tu reserva ha sido confirmada.');
         $message->setTo($jugador->getEmail());
+        $message->setBcc($this->config['to.admin']);
         $message->setFrom($this->config['from']);
         $message->setBody($this->body, 'text/html');
 
