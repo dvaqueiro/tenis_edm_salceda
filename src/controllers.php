@@ -120,8 +120,9 @@ $app->get('/comments', function (Request $request) use ($app) {
 
 $app->post('/comments', function (Request $request) use ($app) {
     if($contenido = $request->get('comentario')) {
-        $nombreUsuario = "Daniel Vaqueiro Crispín";
-        $error = $app['commandBus']->handle(new AddComentarioCommand($nombreUsuario, $contenido));
+        $token = $app['security.token_storage']->getToken();
+        $user = $token->getUser();
+        $error = $app['commandBus']->handle(new AddComentarioCommand($user->getName(), $contenido));
     }
     return $app->redirect('/comments');
 })

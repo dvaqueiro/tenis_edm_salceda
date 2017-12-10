@@ -38,7 +38,7 @@ class DbalComentarioRepository implements ComentarioRepository
 
     public function add(Comentario $comentario)
     {
-        $sql = "INSERT INTO comentarios (usuario, fecha, comentario, id) VALUES (?,?,?)";
+        $sql = "INSERT INTO comentarios (usuario, fecha, comentario) VALUES (?,?,?)";
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $comentario->getUsuario());
         $stmt->bindValue(2, $comentario->getFecha(), 'datetime');
