@@ -85,16 +85,6 @@ $app->register(new SessionServiceProvider());
 $app->register(new TranslationServiceProvider(), array(
     'translator.domains' => array(),
 ));
-$app->register(new DoctrineServiceProvider(), array(
-    'db.options' => array (
-        'driver'    => 'pdo_mysql',
-        'host'      => '127.0.0.1',
-        'dbname'    => 'u298739358_edms',
-        'user'      => 'root',
-        'password'  => 'root',
-        'charset'   => 'utf8mb4',
-    )
-));
 
 $app->register(new SwiftmailerServiceProvider());
 
