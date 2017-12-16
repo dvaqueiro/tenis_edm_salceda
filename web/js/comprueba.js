@@ -1,50 +1,76 @@
-function comprueba()
+setsLocal = 0;
+setsVisitante = 0;
+
+$(document).ready(function () {
+    $('#resultado_submit').on('click', function () {
+        setsLocal = 0;
+        setsVisitante = 0;
+        error = validarResultado();
+        if (error) {
+            $('#resultado_error').text(error);
+            console.log(setsLocal);
+            console.log(setsVisitante);
+        } else {
+            $('#formulario_resultado').submit();
+        }
+    });
+});
+
+function validarResultado()
 {
-    if (document.forminscripcion.dni.value == '')
-    {
-        alert('Debe rellenar el DNI');
-        document.forminscripcion.dni.focus();
-        return false;
+    if ($('#jugadorVisitante').val() == '') {
+        return 'Debe seleccionar un oponente!';
     }
-    if (document.forminscripcion.nombre.value == '')
-    {
-        alert('Debe rellenar el nombre y apellidos');
-        document.forminscripcion.nombre.focus();
-        return false;
+
+    if (!validarSet(1)) {
+        return 'El resultado del primer set no es correcto!';
     }
-    if (document.forminscripcion.telefono.value == '')
-    {
-        alert('Debe rellenar el teléfono de contacto');
-        document.forminscripcion.telefono.focus();
-        return false;
+
+    if (!validarSet(2)) {
+        return 'El resultado del segundo set no es correcto!';
     }
-    if (document.forminscripcion.email.value == '')
-    {
-        alert('Debe rellenar el e-mail');
-        document.forminscripcion.email.focus();
-        return false;
+
+    if (setsLocal == setsVisitante) {
+        return 'Es necesario cubrir el resultado del tercer set';
     }
-    if (document.forminscripcion.contrasena.value == '')
-    {
-        alert('Debe rellenar la contraseña');
-        document.forminscripcion.contrasena.focus();
-        return false;
+
+    if (Math.abs(setsLocal - setsVisitante) == 1 && !validarSet(3)) {
+        return 'El resultado del tercer set no es correcto!';
     }
+
+    return '';
 }
 
-function compruebajuego(juego)
+function validarSet(numeroSet)
 {
-    if (juego.value.length > 1)
-    {
-        alert('solo puede introducir una cifra');
-        juego.value = '';
-        juego.focus();
-    }
-    if (juego.value > 7)
-    {
-        alert('no puede introducir una cifra mayor a 7');
-        juego.value = '';
-        juego.focus();
-    }
-}
+    juegosLocal = $('#set' + numeroSet + '_JuegosLocal').val();
+    juegosVisitante = $('#set' + numeroSet + '_JuegosVisitante').val();
 
+    if (juegosLocal == '' || juegosVisitante == '') {
+        return false;
+    }
+
+    if (juegosLocal > juegosVisitante) {
+        juegosGanador = juegosLocal;
+        juegosPerdedor = juegosVisitante
+        setsLocal += 1;
+    } else {
+        juegosGanador = juegosVisitante;
+        juegosPerdedor = juegosLocal
+        setsVisitante += 1;
+    }
+
+    if (juegosGanador < 6) {
+        return false;
+    }
+
+    if (juegosGanador == 6 && juegosPerdedor > 4) {
+        return false;
+    }
+
+    if (juegosGanador == 7 && (juegosPerdedor < 5 || juegosPerdedor == 7)) {
+        return false;
+    }
+
+    return true;
+}

@@ -37,7 +37,7 @@ class Resultado
         $this->idJugadorLocal = $idJugadorLocal;
         $this->idJugadorVisitante = $idJugadorVisitante;
         $this->nombreJugadorLocal =  mb_convert_case($nombreJugadorLocal, MB_CASE_TITLE, "UTF-8");
-        $this->nombreJugadorVisitante = mb_convert_case($nombreJugadorVisitante, MB_CASE_TITLE, "UTF-8");;
+        $this->nombreJugadorVisitante = mb_convert_case($nombreJugadorVisitante, MB_CASE_TITLE, "UTF-8");
         $this->sets = new ArrayCollection();
         $this->setGanadosLocal = 0;
         $this->setGanadosVisitante = 0;
@@ -200,5 +200,10 @@ class Resultado
     function getDiferenciaJuegosPerdedor()
     {
         return - $this->getDiferenciaSetsGanador();
+    }
+
+    function isValidResult()
+    {
+        return $this->getGanador();
     }
 }

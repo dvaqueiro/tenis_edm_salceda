@@ -16,7 +16,7 @@ class ContactFormCommandHandler
      */
     private $mailer;
 
-    function __construct(Swift_Mailer $mailer)
+    function __construct(Swift_Mailer $mailer, $config)
     {
         $this->mailer = $mailer;
     }
@@ -27,8 +27,9 @@ class ContactFormCommandHandler
 
         $message = new Swift_Message('Correo de contacto desde la web de la liga edmsalceda');
         $message->setFrom(array($contactForm->getEmail()))
-              ->setTo(array('chimidea@hotmail.com'))
-              ->setBody($this->generateMessageContent($contactForm), 'text/html');
+                ->setTo($config['to.manager'])
+                ->setTo($config['to.admin'])
+                ->setBody($this->generateMessageContent($contactForm), 'text/html');
 
         $ok = $this->mailer->send($message);
 

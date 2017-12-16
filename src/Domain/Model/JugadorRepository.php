@@ -9,6 +9,8 @@ namespace Domain\Model;
 interface JugadorRepository
 {
 
+    public function findRivales($idLiga, $idJugador);
+
     public function update(Jugador $jugador);
 
     public function findById($id);

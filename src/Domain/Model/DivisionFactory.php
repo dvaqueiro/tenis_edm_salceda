@@ -9,6 +9,8 @@ namespace Domain\Model;
 interface DivisionFactory
 {
 
+    public function make($data);
+
     /**
      *
      * @param mixed[] $data

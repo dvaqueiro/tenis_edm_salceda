@@ -9,5 +9,7 @@ namespace Domain\Model;
 interface ResultadoRepository
 {
 
+    public function findByLigaAndJugador($idLiga, $idJugador);
+
     public function findByDivision($idDivision);
 }

@@ -88,4 +88,22 @@ class DbalJugadorRepository implements JugadorRepository
             $jugador->getId(),
         ]);
     }
+
+    public function findRivales($idLiga, $idJugador)
+    {
+        $sql = 'SELECT ul.*
+                FROM divisiones d
+                INNER JOIN ud ON ud.`iddivision` = d.`id`
+                INNER JOIN ud ud2 ON ud2.`iddivision` = d.`id`
+                INNER JOIN usuarios ul ON ul.`id` = ud2.`idusuario` AND ul.id <> ?
+                WHERE  d.`idliga` = ? AND ud.`idusuario` = ?;';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $idJugador);
+        $stmt->bindValue(2, $idLiga);
+        $stmt->bindValue(3, $idJugador);
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        return $this->factory->makeAll($data);
+    }
 }

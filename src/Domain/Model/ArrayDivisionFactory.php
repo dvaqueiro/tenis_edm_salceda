@@ -19,4 +19,9 @@ class ArrayDivisionFactory implements DivisionFactory
 
         return $divisiones;
     }
+
+    public function make($data)
+    {
+        return new Division($data['id'], $data['idliga'], $data['nombre'], $data['categoria']);
+    }
 }

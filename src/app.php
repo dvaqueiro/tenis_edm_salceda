@@ -263,7 +263,7 @@ $app['register_jugador_command_handler'] = $app->factory(function ($app) {
 });
 
 $app['contactform_command_handler'] = $app->factory(function ($app) {
-    return new ContactFormCommandHandler($app['mailer']);
+    return new ContactFormCommandHandler($app['mailer'], $app['mail.config']);
 });
 
 $app['horas_libres_reserva_command_handler'] = $app->factory(function ($app) {

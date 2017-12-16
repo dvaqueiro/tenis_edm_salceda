@@ -30,4 +30,19 @@ class DbalDivisionRepository implements DivisionRepository
         $data = $stmt->fetchAll();
         return $this->factory->makeAll($data);
     }
+
+    public function findByLigaAndJugador($idLiga, $idJugador)
+    {
+        $sql = 'SELECT d.*
+                FROM divisiones d
+                INNER JOIN ud ON ud.`iddivision` = d.`id`
+                INNER JOIN ligas l on l.id = d.idliga
+                WHERE d.`idliga` = ? AND ud.`idusuario` = ?';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $idLiga);
+        $stmt->bindValue(2, $idJugador);
+        $stmt->execute();
+        $data = $stmt->fetch();
+        return $this->factory->make($data);
+    }
 }

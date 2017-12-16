@@ -8,6 +8,8 @@ use Application\CourtBooking\AddReservaCommand;
 use Application\CourtBooking\ConfirmBookingCommand;
 use Application\CourtBooking\HorasLibresReservaCommand;
 use Application\JugadoresPorLigaCommand;
+use Application\Player\PlayerResultsCommand;
+use Application\Player\PlayerResultsCommandHandler;
 use Application\Player\RegisterJugadorCommand;
 use Application\Player\UpdateJugadorCommand;
 use Application\RankingCommand;
@@ -15,6 +17,8 @@ use Application\ResultadosPorLigaCommand;
 use Domain\Model\ContactForm;
 use Domain\Model\Jugador;
 use Domain\Model\Reserva;
+use Domain\Model\Resultado;
+use Domain\Model\Set;
 use Infrastructure\Forms\BookingType;
 use Infrastructure\Forms\ContactType;
 use Infrastructure\Forms\JugadorType;
@@ -46,10 +50,37 @@ $app->match('/login', function(Request $request) use ($app) {
     ]);
 });
 
-$app->get('/', function () use ($app) {
-    return $app['twig']->render('homepage.html.twig', array());
+$app->get('/', function (Request $request) use ($app) {
+    $token = $app['security.token_storage']->getToken();
+    $user = $token->getUser();
+    $handler = new PlayerResultsCommandHandler($app['jugador_repository'], $app['liga_repository'], 
+        $app['resultado_repository'], $app['division_repository']);
+    $resultadosJugador = $handler->handle(new PlayerResultsCommand($user->getId()));
+
+    Symfony\Component\VarDumper\VarDumper::dump($resultadosJugador);
+    
+    return $app['twig']->render('homepage.html.twig', [
+        'resultadosJugador' => $resultadosJugador,
+    ]);
 })
 ->bind('homepage');
+
+$app->post('/', function (Request $request) use ($app) {
+    if($request->get('form')) {
+        $formData = $request->get('form');
+        $resultado = new Resultado(null, $formData['idDivision'],
+            $formData['jugadorLocal'], $formData['jugadorVisitante']);
+        foreach ($formData['sets'] as $value) {
+            $resultado->addSet(new Set($value['juegosLocal'], $value['juegosVisitante']));
+        }
+        if($resultado->isValidResult()) {
+            Symfony\Component\VarDumper\VarDumper::dump('Saved');
+        }
+    }
+
+    return $app->redirect('/');
+})
+->bind('homepage_post');
 
 $app->match('/player/update', function (Request $request) use ($app) {
     $token = $app['security.token_storage']->getToken();

@@ -571,3 +571,38 @@ ul#menu li.current a, ul#menu li:hover a
 .login-box .username {
     margin-bottom: 10px;
 }
+
+.resultado{
+    padding: 1em;
+    background-color: #1F400F;
+    border-radius: .4em;
+    margin: 5px;
+}
+
+.formulario_resultado{
+    background-color: #3F861B;
+    padding: 1em;
+    border-radius: .4em;
+}
+
+.formulario_resultado select.juegos, .formulario_resultado label.juegos{
+    width: 40px;
+    margin-left: 10px;
+    font-size: larger;
+}
+
+.formulario_resultado select.jugador, .formulario_resultado label.jugador{
+    width: 230px;
+    font-size: larger;
+}
+
+.formulario_resultado .submit{
+    text-align: right;
+    padding: 6px;
+        padding: 0px 5px 0px;
+}
+
+.formulario_resultado .submit button{
+    font-size: larger;
+    padding: 5px;
+}
