@@ -1,8 +1,10 @@
 <?php
 
-namespace Domain\Model;
+namespace Infrastructure\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Domain\Model\Division;
+use Domain\Model\DivisionFactory;
 
 /**
  *

@@ -2,6 +2,8 @@
 
 use Application\AddComentarioCommand;
 use Application\AddComentarioCommandHandler;
+use Application\AddResultadoCommad;
+use Application\AddResultadoCommandHandler;
 use Application\ClasificacionPorLigaCommand;
 use Application\ClasificacionPorLigaHandler;
 use Application\ComentariosCommand;
@@ -28,21 +30,21 @@ use Application\RankingCommandHandler;
 use Application\ResultadosPorLigaCommand;
 use Application\ResultadosPorLigaCommandHandler;
 use Ddd\Domain\DomainEventPublisher;
-use Domain\Model\ArrayComentarioFactory;
-use Domain\Model\ArrayDivisionFactory;
-use Domain\Model\ArrayJugadorFactory;
-use Domain\Model\ArrayLigaFactory;
-use Domain\Model\ArrayReservaFactory;
-use Domain\Model\ArrayResultadoFactory;
 use Domain\Model\BookingChecker;
 use Infrastructure\Events\DbalEventRepository;
 use Infrastructure\Events\DomainEventsMiddelware;
+use Infrastructure\Model\ArrayComentarioFactory;
+use Infrastructure\Model\ArrayDivisionFactory;
+use Infrastructure\Model\ArrayJugadorFactory;
+use Infrastructure\Model\ArrayLigaFactory;
+use Infrastructure\Model\ArrayReservaFactory;
+use Infrastructure\Model\Resultado\ArrayResultadoFactory;
+use Infrastructure\Model\Resultado\DbalResultadoRepository;
 use Infrastructure\Persistence\DbalComentarioRepository;
 use Infrastructure\Persistence\DbalDivisionRepository;
 use Infrastructure\Persistence\DbalJugadorRepository;
 use Infrastructure\Persistence\DbalLigaRepository;
 use Infrastructure\Persistence\DbalReservaRespository;
-use Infrastructure\Persistence\DbalResultadoRepository;
 use Infrastructure\Services\FileUploader;
 use Infrastructure\UserProvider;
 use League\Tactician\CommandBus;
@@ -84,6 +86,17 @@ $app->register(new ValidatorServiceProvider());
 $app->register(new SessionServiceProvider());
 $app->register(new TranslationServiceProvider(), array(
     'translator.domains' => array(),
+));
+
+$app->register(new DoctrineServiceProvider(), array(
+    'db.options' => array (
+        'driver'    => 'pdo_mysql',
+        'host'      => '127.0.0.1',
+        'dbname'    => 'tenis_edm',
+        'user'      => 'root',
+        'password'  => 'abc123456',
+        'charset'   => 'utf8mb4',
+    )
 ));
 
 $app->register(new SwiftmailerServiceProvider());
@@ -274,6 +287,10 @@ $app['update_jugador_command_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['add_resultado_command_handler'] = $app->factory(function ($app) {
+    return new AddResultadoCommandHandler($app['resultado_repository']);
+});
+
 /**
  * Command Bus
  */
@@ -297,6 +314,7 @@ $app['commandBus'] = function ($app){
                 AddReservaCommand::class => $app['add_reserva_command_handler'],
                 ConfirmBookingCommand::class => $app['confirm_booking_command_handler'],
                 UpdateJugadorCommand::class => $app['update_jugador_command_handler'],
+                AddResultadoCommad::class => $app['add_resultado_command_handler'],
             ]), new HandleInflector()
         )
     ]);

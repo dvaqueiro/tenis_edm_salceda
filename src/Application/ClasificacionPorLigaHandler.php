@@ -5,7 +5,7 @@ namespace Application;
 use Domain\Model\Clasificacion;
 use Domain\Model\DivisionRepository;
 use Domain\Model\LigaRepository;
-use Domain\Model\ResultadoRepository;
+use Domain\Model\Resultado\ResultadoRepository;
 
 /**
  *

@@ -1,6 +1,9 @@
 <?php
 
-namespace Domain\Model;
+namespace Infrastructure\Model;
+
+use Domain\Model\Liga;
+use Domain\Model\LigaFactory;
 
 /**
  *

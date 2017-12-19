@@ -1,6 +1,7 @@
 <?php
 
 use Application\AddComentarioCommand;
+use Application\AddResultadoCommad;
 use Application\ClasificacionPorLigaCommand;
 use Application\ComentariosCommand;
 use Application\ContactFormCommand;
@@ -16,9 +17,9 @@ use Application\RankingCommand;
 use Application\ResultadosPorLigaCommand;
 use Domain\Model\ContactForm;
 use Domain\Model\Jugador;
+use Domain\Model\PersistenceException;
 use Domain\Model\Reserva;
-use Domain\Model\Resultado;
-use Domain\Model\Set;
+use Domain\Model\Resultado\InvalidResultException;
 use Infrastructure\Forms\BookingType;
 use Infrastructure\Forms\ContactType;
 use Infrastructure\Forms\JugadorType;
@@ -57,8 +58,6 @@ $app->get('/', function (Request $request) use ($app) {
         $app['resultado_repository'], $app['division_repository']);
     $resultadosJugador = $handler->handle(new PlayerResultsCommand($user->getId()));
 
-    Symfony\Component\VarDumper\VarDumper::dump($resultadosJugador);
-    
     return $app['twig']->render('homepage.html.twig', [
         'resultadosJugador' => $resultadosJugador,
     ]);
@@ -67,14 +66,17 @@ $app->get('/', function (Request $request) use ($app) {
 
 $app->post('/', function (Request $request) use ($app) {
     if($request->get('form')) {
-        $formData = $request->get('form');
-        $resultado = new Resultado(null, $formData['idDivision'],
-            $formData['jugadorLocal'], $formData['jugadorVisitante']);
-        foreach ($formData['sets'] as $value) {
-            $resultado->addSet(new Set($value['juegosLocal'], $value['juegosVisitante']));
-        }
-        if($resultado->isValidResult()) {
-            Symfony\Component\VarDumper\VarDumper::dump('Saved');
+        try {
+            $formData = $request->get('form');
+            $app['commandBus']->handle(
+                new AddResultadoCommad($formData)
+            );
+            $app['session']->getFlashBag()->add('mensaje',
+                'Resultado guardado correctamente');
+        } catch (InvalidResultException $exc) {
+            $app['session']->getFlashBag()->add('error', $exc->getMessage());
+        } catch (PersistenceException $exc) {
+            $app['session']->getFlashBag()->add('error', $exc->getMessage());
         }
     }
 

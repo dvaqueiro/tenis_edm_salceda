@@ -1,8 +1,10 @@
 <?php
 
-namespace Domain\Model;
+namespace Infrastructure\Model;
 
 use DateTime;
+use Domain\Model\Reserva;
+use Domain\Model\ReservaFactory;
 
 /**
  *

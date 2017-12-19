@@ -1,10 +1,11 @@
 <?php
 
-namespace Infrastructure\Persistence;
+namespace Infrastructure\Model\Resultado;
 
 use Doctrine\DBAL\Connection;
-use Domain\Model\ResultadoFactory;
-use Domain\Model\ResultadoRepository;
+use Domain\Model\Resultado\Resultado;
+use Domain\Model\Resultado\ResultadoFactory;
+use Domain\Model\Resultado\ResultadoRepository;
 
 /**
  *
@@ -53,5 +54,28 @@ class DbalResultadoRepository implements ResultadoRepository
         $stmt->execute();
         $data = $stmt->fetchAll();
         return $this->factory->makeAll($data);
+    }
+
+    public function add(Resultado $resultado)
+    {
+        $sql = "INSERT INTO resultados (idu1, idu2, division, j11, j12, j21, j22, j31, j32, ganador) "
+                . "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $resultado->getIdJugadorLocal());
+        $stmt->bindValue(2, $resultado->getIdJugadorVisitante());
+        $stmt->bindValue(3, $resultado->getIdDivision());
+        $stmt->bindValue(4, $resultado->getSet(0)->getJuegosLocal());
+        $stmt->bindValue(5, $resultado->getSet(0)->getJuegosVisitante());
+        $stmt->bindValue(6, $resultado->getSet(1)->getJuegosLocal());
+        $stmt->bindValue(7, $resultado->getSet(1)->getJuegosVisitante());
+        $stmt->bindValue(8, $resultado->getSet(2)->getJuegosLocal());
+        $stmt->bindValue(9, $resultado->getSet(2)->getJuegosVisitante());
+        $stmt->bindValue(10, $resultado->getGanador());
+        $stmt->execute();
+
+        $id = $this->dbal->lastInsertId();
+        $resultado->setIdResultado($id);
+
+        return $resultado;
     }
 }

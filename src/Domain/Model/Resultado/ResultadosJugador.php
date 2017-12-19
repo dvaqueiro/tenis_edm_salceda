@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Domain\Model;
+namespace Domain\Model\Resultado;
 
 /**
  *

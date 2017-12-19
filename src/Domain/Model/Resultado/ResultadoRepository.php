@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Model;
+namespace Domain\Model\Resultado;
 
 /**
  *
@@ -8,6 +8,8 @@ namespace Domain\Model;
  */
 interface ResultadoRepository
 {
+
+    public function add(Resultado $resultado);
 
     public function findByLigaAndJugador($idLiga, $idJugador);
 

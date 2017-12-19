@@ -2,11 +2,12 @@
 
 namespace Application\Player;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Domain\Model\DivisionRepository;
 use Domain\Model\JugadorRepository;
 use Domain\Model\LigaRepository;
-use Domain\Model\ResultadoRepository;
-use Domain\Model\ResultadosJugador;
+use Domain\Model\Resultado\ResultadoRepository;
+use Domain\Model\Resultado\ResultadosJugador;
 
 /**
  *
@@ -37,7 +38,6 @@ class PlayerResultsCommandHandler
         $rivales = $this->userRepository->findRivales($liga->getIdLiga(), $jugadorId);
         $resultados = $this->resultadoRepository->findByLigaAndJugador($liga->getIdLiga(), $jugadorId);
 
-        return new ResultadosJugador($division, $jugador, $rivales,
-            new \Doctrine\Common\Collections\ArrayCollection($resultados->slice(0, 3)));
+        return new ResultadosJugador($division, $jugador, $rivales,$resultados);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Model;
+namespace Domain\Model\Resultado;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -81,9 +81,19 @@ class Resultado
         return $this->idResultado;
     }
 
+    /**
+     *
+     * @param int $numeroSet
+     * @return Set
+     */
     function getSet($numeroSet)
     {
-        return $this->sets->get($numeroSet);
+        $set = $this->sets->get($numeroSet);
+        if($set === null) {
+            $set = new NullSet();
+        }
+
+        return $set;
     }
 
     function getGanador()
@@ -205,5 +215,10 @@ class Resultado
     function isValidResult()
     {
         return $this->getGanador();
+    }
+
+    function setIdResultado($idResultado)
+    {
+        $this->idResultado = $idResultado;
     }
 }
