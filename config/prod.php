@@ -9,10 +9,18 @@ $app['photos_directory'] = __DIR__ . '/../web';
 $app['photos_public_directory'] ='/fotos/';
 
 $app['swiftmailer.options'] = array(
-    'host' => '',
-    'port' => '',
-    'username' => '',
-    'password' => '',
-    'encryption' => '',
-    'auth_mode' => '',
+    'host' => getenv('MAIL_HOST'),
+    'port' => getenv('MAIL_PORT'),
+    'username' => getenv('MAIL_USERNAME'),
+    'password' => getenv('MAIL_PASSOWRD'),
+    'encryption' => getenv('MAIL_ENCRYPTION'),
+    'auth_mode' => getenv('MAIL_AUTH_MODE'),
 );
+
+$app['mail.config'] = [
+    'to.booking' => getenv('MAIL_TO_BOOKING'),
+    'to.manager' => getenv('MAIL_TO_MANAGER'),
+    'to.admin' => getenv('MAIL_TO_ADMIN'),
+    'from' => getenv('MAIL_FROM'),
+    'subject' => getenv('MAIL_SUBJECT')
+];

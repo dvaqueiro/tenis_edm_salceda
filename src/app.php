@@ -68,7 +68,11 @@ use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
+
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__ . '/../config/.env');
 
 $app = new Application();
 
@@ -90,12 +94,12 @@ $app->register(new TranslationServiceProvider(), array(
 
 $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array (
-        'driver'    => 'pdo_mysql',
-        'host'      => '127.0.0.1',
-        'dbname'    => 'tenis_edm',
-        'user'      => 'root',
-        'password'  => 'abc123456',
-        'charset'   => 'utf8mb4',
+        'driver'    => getenv('DB_DRIVER'),
+        'host'      => getenv('DB_HOST'),
+        'dbname'    => getenv('DB_DBNAME'),
+        'user'      => getenv('DB_USER'),
+        'password'  => getenv('DB_PASSWORD'),
+        'charset'   => getenv('DB_CHARSET'),
     )
 ));
 
