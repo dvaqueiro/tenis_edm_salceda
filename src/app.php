@@ -120,25 +120,20 @@ $app->register(new SecurityServiceProvider(), array(
         'facebook' => array('pattern' => '^/facebook$'),
         'booking_confirm' => array('pattern' => '^/courts/confirm/.*$'),
         'login' => array('pattern' => '^/login$'),
+        'loginadmin' => array('pattern' => '^/loginadmin$'),
         'admin' => array(
             'pattern' => '^/admin',
             'form' => array('login_path' => '/loginadmin', 'check_path' => '/admin/login_check'),
             'logout' => array('logout_path' => '/admin/logout', 'invalidate_session' => true),
             'users' => array(
-                // raw password is foo
-                'admin' => array('ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
+                'admin' => array('ROLE_ADMIN', getenv('ADMIN_PASS')),
             ),
         ),
         'default' => array(
             'pattern' => '^.*$',
-//            'anonymous' => true, // Needed as the login path is under the secured area
             'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
             'logout' => array('logout_path' => '/logout', 'invalidate_session' => true),
             'users' => $app['user_provider'],
-//            'users' => array(
-//                // raw password is foo
-//                'user' => array('ROLE_USER', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
-//            ),
         ),
     ),
     'security.access_rules' => array(

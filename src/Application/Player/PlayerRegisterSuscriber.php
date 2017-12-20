@@ -60,7 +60,7 @@ class PlayerRegisterSuscriber implements DomainEventSubscriber
 
     public function buildEmailBody(Jugador $jugador)
     {
-        $this->body = "<h2>Un nuevo jugador ha solicitado suscribirse a la liga con los siguientes datos...</h2>";
+        $this->body = "<h2>Un nuevo jugador ha solicitado inscribirse a la liga con los siguientes datos...</h2>";
         $this->body .= "<table width='500' border='0' cellspacing='5' cellpadding='5'>
             <tr>
                 <td width='98' bgcolor='#CDFDC6'><strong>DNI</strong></td>
