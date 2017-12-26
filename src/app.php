@@ -120,15 +120,6 @@ $app->register(new SecurityServiceProvider(), array(
         'facebook' => array('pattern' => '^/facebook$'),
         'booking_confirm' => array('pattern' => '^/courts/confirm/.*$'),
         'login' => array('pattern' => '^/login$'),
-        'loginadmin' => array('pattern' => '^/loginadmin$'),
-        'admin' => array(
-            'pattern' => '^/admin',
-            'form' => array('login_path' => '/loginadmin', 'check_path' => '/admin/login_check'),
-            'logout' => array('logout_path' => '/admin/logout', 'invalidate_session' => true),
-            'users' => array(
-                'admin' => array('ROLE_ADMIN', getenv('ADMIN_PASS')),
-            ),
-        ),
         'default' => array(
             'pattern' => '^.*$',
             'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
@@ -138,7 +129,7 @@ $app->register(new SecurityServiceProvider(), array(
     ),
     'security.access_rules' => array(
         array('^/admin$', 'ROLE_ADMIN'),
-        array('^/.+$', 'ROLE_USER'),
+        array('^/.+$', ['ROLE_USER','ROLE_ADMIN']),
     )
 ));
 

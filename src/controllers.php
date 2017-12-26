@@ -115,7 +115,7 @@ $app->get('/loginadmin', function(Request $request) use ($app) {
 });
 
 $app->get('/admin', function () use ($app) {
-    return $app['twig']->render('admin.html.twig', array());
+    return $app['twig']->render('admin_home.html.twig', array());
 })
 ->bind('admin');
 
@@ -187,6 +187,8 @@ $app->post('/comments', function (Request $request) use ($app) {
 ->bind('addcomment');
 
 $app->match('/contact', function (Request $request) use ($app) {
+    Symfony\Component\VarDumper\VarDumper::dump($app['swiftmailer.options']);
+    die();
     $contactForm = new ContactForm(null, null, null);
     /* @var $form Form */
     $form = $app['form.factory']->createBuilder(ContactType::class, $contactForm)->getForm();

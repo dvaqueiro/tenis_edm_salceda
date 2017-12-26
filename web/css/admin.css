@@ -1,0 +1,6 @@
+.sidebar .user-info {
+    background: url(/img/header.jpg); 
+    background-repeat: no-repeat no-repeat;
+    background-size:     cover; 
+    background-position: center center; 
+}

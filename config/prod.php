@@ -12,7 +12,7 @@ $app['swiftmailer.options'] = array(
     'host' => getenv('MAIL_HOST'),
     'port' => getenv('MAIL_PORT'),
     'username' => getenv('MAIL_USERNAME'),
-    'password' => getenv('MAIL_PASSOWRD'),
+    'password' => getenv('MAIL_PASSWORD'),
     'encryption' => getenv('MAIL_ENCRYPTION'),
     'auth_mode' => getenv('MAIL_AUTH_MODE'),
 );

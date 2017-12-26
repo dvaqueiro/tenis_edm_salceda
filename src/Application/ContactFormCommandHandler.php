@@ -11,6 +11,8 @@ use Swift_Message;
  */
 class ContactFormCommandHandler
 {
+    private $config;
+
     /**
      * @var Swift_Mailer
      */
@@ -19,6 +21,7 @@ class ContactFormCommandHandler
     function __construct(Swift_Mailer $mailer, $config)
     {
         $this->mailer = $mailer;
+        $this->config = $config;
     }
 
     public function handle(ContactFormCommand $command)
@@ -27,8 +30,8 @@ class ContactFormCommandHandler
 
         $message = new Swift_Message('Correo de contacto desde la web de la liga edmsalceda');
         $message->setFrom(array($contactForm->getEmail()))
-                ->setTo($config['to.manager'])
-                ->setTo($config['to.admin'])
+                ->setTo($this->config['to.manager'])
+                ->setTo($this->config['to.admin'])
                 ->setBody($this->generateMessageContent($contactForm), 'text/html');
 
         $ok = $this->mailer->send($message);
