@@ -30,6 +30,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
+$app->mount('/admin', new AdminControllerProvider());
+
 $app->match('/login', function(Request $request) use ($app) {
     $jugador = new Jugador(null, null, null, null, null, null, null);
     /* @var $form Form */
@@ -113,11 +115,6 @@ $app->get('/loginadmin', function(Request $request) use ($app) {
         'last_username' => $app['session']->get('_security.last_username'),
     ));
 });
-
-$app->get('/admin', function () use ($app) {
-    return $app['twig']->render('admin_home.html.twig', array());
-})
-->bind('admin');
 
 $app->get('/players/{ligaId}', function ($ligaId) use ($app) {
     $liga = $app['commandBus']->handle(new JugadoresPorLigaCommand(null));

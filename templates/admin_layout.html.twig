@@ -47,8 +47,11 @@
     {{ include('admin_left_sidebar.html.twig') }}
     {{ include('admin_right_sidebar.html.twig') }}
     </section>
+    
+    <section class="content">
     {% block content %}{% endblock %}
-
+    </section>
+    
     <!-- Jquery Core Js -->
     <script src="../node_modules/adminbsb-materialdesign/plugins/jquery/jquery.min.js"></script>
 
