@@ -17,7 +17,7 @@ class ArrayJugadorFactory implements JugadorFactory
         $jugadores = new ArrayCollection();
         foreach ($data as $objData) {
             $jugadores->set($objData['id'], new Jugador($objData['id'], $objData['dni'], $objData['nombre'], $objData['telefono'],
-                $objData['email'], $objData['password'], $objData['foto']));
+                $objData['email'], $objData['password'], $objData['foto'], $objData['roles']));
         }
 
         return $jugadores;
@@ -26,6 +26,6 @@ class ArrayJugadorFactory implements JugadorFactory
     public function make($data)
     {
         return new Jugador($data['id'], $data['dni'], $data['nombre'], $data['telefono'],
-                $data['email'], $data['password'], $data['foto']);
+                $data['email'], $data['password'], $data['foto'], $data['roles']);
     }
 }

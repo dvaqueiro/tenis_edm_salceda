@@ -16,8 +16,9 @@ class Jugador
     private $nombre;
     private $dni;
     private $id;
+    private $roles;
 
-    function __construct($id, $dni, $nombre, $telefono, $email, $password, $foto)
+    function __construct($id, $dni, $nombre, $telefono, $email, $password, $foto, $roles)
     {
 
         $this->id = $id;
@@ -27,6 +28,7 @@ class Jugador
         $this->email = $email;
         $this->password = $password;
         $this->foto = $foto;
+        $this->roles = $roles;
     }
 
     function getFotoFile()
@@ -109,6 +111,11 @@ class Jugador
     function setId($id)
     {
         $this->id = $id;
+    }
+
+    function getRoles()
+    {
+        return $this->roles;
     }
 
 }

@@ -21,4 +21,6 @@ interface JugadorRepository
 
     function findByDivision($idDivision);
 
+    function findAll();
+
 }

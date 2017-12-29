@@ -106,4 +106,14 @@ class DbalJugadorRepository implements JugadorRepository
 
         return $this->factory->makeAll($data);
     }
+
+    public function findAll()
+    {
+        $sql = 'SELECT u.* FROM usuarios u ';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        return $this->factory->makeAll($data);
+    }
 }

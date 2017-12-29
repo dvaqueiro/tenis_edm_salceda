@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
 $app->mount('/admin', new AdminControllerProvider());
 
 $app->match('/login', function(Request $request) use ($app) {
-    $jugador = new Jugador(null, null, null, null, null, null, null);
+    $jugador = new Jugador(null, null, null, null, null, null, null, null);
     /* @var $form Form */
     $form = $app['form.factory']->createBuilder(JugadorType::class, $jugador)->getForm();
 

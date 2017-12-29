@@ -1,5 +1,80 @@
 {% extends "admin_layout.html.twig" %}
 
+{% block extra_css %}
+    <link href="../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-    <h1>Players...</h1>
+    <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Jugadores
+                            </h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Nuevo Usuario</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>DNI</th>
+                                            <th>Nombre</th>
+                                            <th>Telefono</th>
+                                            <th>Mail</th>
+                                            <th>Opc.</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>DNI</th>
+                                            <th>Nombre</th>
+                                            <th>Telefono</th>
+                                            <th>Mail</th>
+                                            <th>Opc.</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for jugador in jugadores %}
+                                            <tr>
+                                                <td>{{ jugador.id }}</td>
+                                                <td>{{ jugador.dni }}</td>
+                                                <td>{{ jugador.nombre }}</td>
+                                                <td>{{ jugador.telefono }}</td>
+                                                <td>{{ jugador.email }}</td>
+                                                <td>
+                                                    <button id="btn_edit" jugadorid="{{ jugador.id }}" type="button" class="btn btn-primary waves-effect">
+                                                        <i class="material-icons">edit</i>
+                                                    </button>
+                                                    <button id="btn_del" jugadorid="{{ jugador.id }}" type="button" class="btn btn-danger waves-effect">
+                                                        <i class="material-icons">delete</i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block extra_script %}
+    <script>
+        
+    </script>
 {% endblock %}

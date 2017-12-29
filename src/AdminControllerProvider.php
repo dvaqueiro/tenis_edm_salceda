@@ -16,7 +16,14 @@ class AdminControllerProvider implements ControllerProviderInterface
         })->bind('admin');
 
         $controllers->get('/players', function (Application $app) {
-            return $app['twig']->render('admin_players.html.twig', array());
+            $jugadorRepository = $app['jugador_repository'];
+            $jugadores = $jugadorRepository->findAll();
+
+            Symfony\Component\VarDumper\VarDumper::dump($jugadores);
+
+            return $app['twig']->render('admin_players.html.twig', [
+                'jugadores' => $jugadores
+            ]);
         })->bind('admin_players');
 
         $controllers->get('/leagues', function (Application $app) {
