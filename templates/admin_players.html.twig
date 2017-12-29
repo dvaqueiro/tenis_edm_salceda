@@ -55,12 +55,12 @@
                                                 <td>{{ jugador.telefono }}</td>
                                                 <td>{{ jugador.email }}</td>
                                                 <td>
-                                                    <button id="btn_edit" jugadorid="{{ jugador.id }}" type="button" class="btn btn-primary waves-effect">
+                                                    <a href="jugadores/{{ jugador.id }}" class="btn btn-xs btn-primary waves-effect">
                                                         <i class="material-icons">edit</i>
-                                                    </button>
+                                                    </a>
                                                     <button id="btn_del" jugadorid="{{ jugador.id }}" type="button" class="btn btn-danger waves-effect">
                                                         <i class="material-icons">delete</i>
-                                                    </button>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -75,6 +75,8 @@
 
 {% block extra_script %}
     <script>
-        
+        $( document ).ready(function() {
+            console.log( "ready!" );
+        });
     </script>
 {% endblock %}

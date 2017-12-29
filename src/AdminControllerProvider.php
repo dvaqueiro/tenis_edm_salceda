@@ -16,15 +16,31 @@ class AdminControllerProvider implements ControllerProviderInterface
         })->bind('admin');
 
         $controllers->get('/players', function (Application $app) {
-            $jugadorRepository = $app['jugador_repository'];
-            $jugadores = $jugadorRepository->findAll();
-
-            Symfony\Component\VarDumper\VarDumper::dump($jugadores);
+            $handler = new \Application\Player\AllPlayersCommandHandler($app['jugador_repository']);
+            $jugadores = $handler->handle(new \Application\Player\AllPlayersCommand(['ROLE_USER', 'ROLE_ADMIN']));
 
             return $app['twig']->render('admin_players.html.twig', [
                 'jugadores' => $jugadores
             ]);
         })->bind('admin_players');
+
+        $controllers->get('/inactive', function (Application $app) {
+            $handler = new \Application\Player\AllPlayersCommandHandler($app['jugador_repository']);
+            $jugadores = $handler->handle(new \Application\Player\AllPlayersCommand(['ROLE_NONE']));
+
+            return $app['twig']->render('admin_players.html.twig', [
+                'jugadores' => $jugadores
+            ]);
+        })->bind('admin_players_inactive');
+
+        $controllers->get('/admins', function (Application $app) {
+            $handler = new \Application\Player\AllPlayersCommandHandler($app['jugador_repository']);
+            $jugadores = $handler->handle(new \Application\Player\AllPlayersCommand(['ROLE_ADMIN']));
+
+            return $app['twig']->render('admin_players.html.twig', [
+                'jugadores' => $jugadores
+            ]);
+        })->bind('admin_admins');
 
         $controllers->get('/leagues', function (Application $app) {
             return $app['twig']->render('admin_leagues.html.twig', array());

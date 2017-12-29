@@ -8,11 +8,22 @@
                 <span>Home</span>
             </a>
         </li>
-        <li {% if currentRoute == 'admin_players' %}class="active"{% endif %}>
-            <a href="{{ url('admin_players') }}">
-                <i class="material-icons">group</i>
+        <li>
+            <a href="javascript:void(0);" class="menu-toggle waves-effect waves-block">
+                 <i class="material-icons">group</i>
                 <span>Usuarios</span>
             </a>
+            <ul class="ml-menu" style="display: block;">
+                <li {% if currentRoute == 'admin_players' %}class="active"{% endif %}>
+                    <a href="{{ url('admin_players') }}" class=" waves-effect waves-block">Jugadores</a>
+                </li>
+                <li {% if currentRoute == 'admin_players_inactive' %}class="active"{% endif %}>
+                    <a href="{{ url('admin_players_inactive') }}" class=" waves-effect waves-block">Inactivos</a>
+                </li>
+                <li {% if currentRoute == 'admin_admins' %}class="active"{% endif %}>
+                    <a href="{{ url('admin_admins') }}" class=" waves-effect waves-block">Administradores</a>
+                </li>
+            </ul>
         </li>
         <li {% if currentRoute == 'admin_leagues' %}class="active"{% endif %}>
             <a href="{{ url('admin_leagues') }}">

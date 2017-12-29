@@ -23,4 +23,6 @@ interface JugadorRepository
 
     function findAll();
 
+    function findAllWithRoles($roles);
+
 }

@@ -116,4 +116,20 @@ class DbalJugadorRepository implements JugadorRepository
 
         return $this->factory->makeAll($data);
     }
+
+    public function findAllWithRoles($roles)
+    {
+        if(empty($roles)) {
+            return $this->findAll();
+        }
+
+        $sql = 'SELECT u.* FROM usuarios u WHERE u.roles IN (?)';
+        $stmt = $this->dbal->executeQuery($sql,
+            array($roles),
+            array(Connection::PARAM_INT_ARRAY)
+        );
+        $data = $stmt->fetchAll();
+
+        return $this->factory->makeAll($data);
+    }
 }
