@@ -38,7 +38,7 @@ class DbalJugadorRepository implements JugadorRepository
 
     public function add(Jugador $newJugador)
     {
-        $sql = "INSERT INTO usuarios (dni, nombre, telefono, email, password, foto) VALUES (?,?,?,?,?,?)";
+        $sql = "INSERT INTO usuarios (dni, nombre, telefono, email, password, foto, roles) VALUES (?,?,?,?,?,?,?)";
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $newJugador->getDni());
         $stmt->bindValue(2, $newJugador->getNombre());
@@ -46,6 +46,7 @@ class DbalJugadorRepository implements JugadorRepository
         $stmt->bindValue(4, $newJugador->getEmail());
         $stmt->bindValue(5, $newJugador->getPassword());
         $stmt->bindValue(6, $newJugador->getFoto());
+        $stmt->bindValue(7, $newJugador->getRoles());
         $stmt->execute();
 
         $id = $this->dbal->lastInsertId();
@@ -78,13 +79,14 @@ class DbalJugadorRepository implements JugadorRepository
 
     public function update(Jugador $jugador)
     {
-        $sql = "UPDATE usuarios set nombre=?, telefono=?, email=?, foto=?, password=? WHERE id = ?";
+        $sql = "UPDATE usuarios set nombre=?, telefono=?, email=?, foto=?, password=?, roles=? WHERE id = ?";
         return $this->dbal->executeUpdate($sql, [
             $jugador->getNombre(),
             $jugador->getTelefono(),
             $jugador->getEmail(),
             $jugador->getFoto(),
             $jugador->getPassword(),
+            $jugador->getRoles(),
             $jugador->getId(),
         ]);
     }

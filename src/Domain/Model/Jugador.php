@@ -118,4 +118,9 @@ class Jugador
         return $this->roles;
     }
 
+    function setRoles($roles)
+    {
+        $this->roles = $roles;
+    }
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Application\Player\UpdateJugadorCommand;
+use Domain\Model\Jugador;
 use Infrastructure\Forms\JugadorUpdateAdminType;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
@@ -25,6 +26,28 @@ class AdminControllerProvider implements ControllerProviderInterface
                 'jugadores' => $jugadores
             ]);
         })->bind('admin_players');
+
+        $controllers->match('/players/add', function (Application $app) {
+            $jugador = new Jugador(null, null, null, null, null, null, null, null);
+
+            /* @var $form Form */
+            $form = $app['form.factory']->createBuilder(JugadorUpdateAdminType::class, $jugador)->getForm();
+
+            $request = $app['request_stack']->getCurrentRequest();
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $jugador = $form->getData();
+                $message = $app['commandBus']->handle(new \Application\Player\AddJugadorCommand($jugador));
+                $app['session']->getFlashBag()->add('mensaje', $message);
+                return $app->redirect($request->getUri());
+            }
+
+            return $app['twig']->render('admin_player_update.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        })->bind('admin_player_add');
 
         $controllers->match('/players/{idJugador}', function ($idJugador, Application $app) {
             $jugador = $app['jugador_repository']->findById($idJugador);
