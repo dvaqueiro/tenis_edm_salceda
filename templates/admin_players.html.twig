@@ -1,7 +1,7 @@
 {% extends "admin_layout.html.twig" %}
 
 {% block extra_css %}
-    <link href="../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -55,10 +55,10 @@
                                                 <td>{{ jugador.telefono }}</td>
                                                 <td>{{ jugador.email }}</td>
                                                 <td>
-                                                    <a href="jugadores/{{ jugador.id }}" class="btn btn-xs btn-primary waves-effect">
+                                                    <a href="players/{{ jugador.id }}" class="btn btn-xs btn-primary waves-effect">
                                                         <i class="material-icons">edit</i>
                                                     </a>
-                                                    <button id="btn_del" jugadorid="{{ jugador.id }}" type="button" class="btn btn-danger waves-effect">
+                                                    <button id="btn_del" jugadorid="{{ jugador.id }}" type="button" class="btn btn-xs btn-danger waves-effect">
                                                         <i class="material-icons">delete</i>
                                                     </a>
                                                 </td>

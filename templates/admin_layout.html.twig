@@ -8,11 +8,13 @@
         <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-        <link href="../node_modules/adminbsb-materialdesign/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
-        <link href="../node_modules/adminbsb-materialdesign/plugins/node-waves/waves.css" rel="stylesheet" />
-        <link href="../node_modules/adminbsb-materialdesign/plugins/animate-css/animate.css" rel="stylesheet" />
-        <link href="../node_modules/adminbsb-materialdesign/css/themes/all-themes.css" rel="stylesheet" />
-        <link href="../node_modules/adminbsb-materialdesign/css/style.css" rel="stylesheet" />
+        <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+        <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/node-waves/waves.css') }}" rel="stylesheet" />
+        <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/bootstrap-select/css/bootstrap-select.css') }}" rel="stylesheet" />
+        <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/animate-css/animate.css') }}" rel="stylesheet" />
+        <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/animate-css/animate.css') }}" rel="stylesheet" />
+        <link href="{{ asset('../node_modules/adminbsb-materialdesign/css/themes/all-themes.css') }}" rel="stylesheet" />
+        <link href="{{ asset('../node_modules/adminbsb-materialdesign/css/style.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
         {% block extra_css %}{% endblock %}
     </head>
@@ -47,25 +49,31 @@
     </section>
     
     <section class="content">
-    {% block content %}{% endblock %}
+        {% for error in app.session.flashbag.get('error') %}
+            <div class='alert alert-danger'>{{ error }}</div>
+        {% endfor %}
+        {% for mensaje in app.session.flashbag.get('mensaje') %}
+            <div class='alert alert-success'>{{ mensaje }}</div>
+        {% endfor %}
+        {% block content %}{% endblock %}
     </section>
     
     <!-- Jquery Core Js -->
-    <script src="../node_modules/adminbsb-materialdesign/plugins/jquery/jquery.min.js"></script>
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap Core Js -->
-    <script src="../node_modules/adminbsb-materialdesign/plugins/bootstrap/js/bootstrap.js"></script>
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/plugins/bootstrap/js/bootstrap.js') }}"></script>
     <!-- Slimscroll Plugin Js -->
-    <script src="../node_modules/adminbsb-materialdesign/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/plugins/jquery-slimscroll/jquery.slimscroll.js') }}"></script>
     <!-- Select Plugin Js -->
-    <script src="../node_modules/adminbsb-materialdesign/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/plugins/bootstrap-select/js/bootstrap-select.js') }}"></script>
     <!-- Waves Effect Plugin Js -->
-    <script src="../node_modules/adminbsb-materialdesign/plugins/node-waves/waves.js"></script>
+    <script src="{{ asset('./node_modules/adminbsb-materialdesign/plugins/node-waves/waves.js') }}"></script>
     <!-- Custom Js -->
-    <script src="../node_modules/adminbsb-materialdesign/js/admin.js"></script>
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/js/admin.js') }}"></script>
     <!-- Jquery DataTable Plugin Js -->
-    <script src="../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/jquery.dataTables.js"></script>
-    <script src="../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-    <script src="/js/jquery-datatable.js"></script>
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}"></script>
+    <script src="{{ asset('/js/jquery-datatable.js') }}"></script>
     {% block extra_script %}{% endblock %}
 </body>
 

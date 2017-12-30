@@ -20,6 +20,8 @@ use Application\CourtBooking\SendMailBookingConfirmationSuscriber;
 use Application\CourtBooking\SendMailToBookingConfirmationSuscriber;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaCommandHandler;
+use Application\Player\AllPlayersCommand;
+use Application\Player\AllPlayersCommandHandler;
 use Application\Player\PlayerRegisterSuscriber;
 use Application\Player\RegisterJugadorCommand;
 use Application\Player\RegisterJugadorCommandHandler;
@@ -281,6 +283,10 @@ $app['add_resultado_command_handler'] = $app->factory(function ($app) {
     return new AddResultadoCommandHandler($app['resultado_repository']);
 });
 
+$app['all_players_command_handler'] = $app->factory(function ($app) {
+    return new AllPlayersCommandHandler($app['jugador_repository']);
+});
+
 /**
  * Command Bus
  */
@@ -305,6 +311,7 @@ $app['commandBus'] = function ($app){
                 ConfirmBookingCommand::class => $app['confirm_booking_command_handler'],
                 UpdateJugadorCommand::class => $app['update_jugador_command_handler'],
                 AddResultadoCommad::class => $app['add_resultado_command_handler'],
+                AllPlayersCommand::class => $app['all_players_command_handler'],
             ]), new HandleInflector()
         )
     ]);
