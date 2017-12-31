@@ -5,6 +5,15 @@
 {% endblock %}
 
 {% block content %}
+    <div style="margin-top:0; margin-bottom:2em;">
+        <select id='select-ligas'>
+            {% for unaLiga in ligas %}
+                <option value="{{ unaLiga.idLiga }}" {% if (liga.idLiga == unaLiga.idLiga)%} selected {% endif %}>
+                    {{ unaLiga.nombreLiga }}
+                </option>
+            {% endfor %}
+        </select> 
+    </div>
     <h1 class="encabezado">{{ liga.nombreLiga }}</h1>
     {% for division in liga.divisiones %}
         <h2 class="divisiones" style="margin-bottom:0;">{{ division.nombre }}</h2>
@@ -27,4 +36,16 @@
             {% endfor %}
         </div>
     {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('js/jquery-1.10.2.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#select-ligas').on('change', function(){
+                var ligaId = $(this).val(); 
+                window.location.href = "/standings/" + ligaId;
+            });
+        });
+    </script>
 {% endblock %}

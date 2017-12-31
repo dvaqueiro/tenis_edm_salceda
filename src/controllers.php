@@ -9,6 +9,7 @@ use Application\CourtBooking\AddReservaCommand;
 use Application\CourtBooking\ConfirmBookingCommand;
 use Application\CourtBooking\HorasLibresReservaCommand;
 use Application\JugadoresPorLigaCommand;
+use Application\Leagues\AllLigasCommand;
 use Application\Player\PlayerResultsCommand;
 use Application\Player\PlayerResultsCommandHandler;
 use Application\Player\RegisterJugadorCommand;
@@ -131,6 +132,7 @@ $app->get('/scores/{ligaId}', function ($ligaId) use ($app) {
 ->bind('scores');
 
 $app->get('/standings/{ligaId}', function ($ligaId) use ($app) {
+    $ligas = $app['commandBus']->handle(new AllLigasCommand(6));
     $puntosGanador = 3;
     $puntosPerdedor = 1;
     $orderBy = [
@@ -139,7 +141,10 @@ $app->get('/standings/{ligaId}', function ($ligaId) use ($app) {
         'difJuegos' => 'DESC',
     ];
     $liga = $app['commandBus']->handle(new ClasificacionPorLigaCommand($ligaId, $puntosGanador, $puntosPerdedor, $orderBy));
-    return $app['twig']->render('standings.html.twig', array('liga' => $liga));
+    return $app['twig']->render('standings.html.twig', [
+        'liga' => $liga,
+        'ligas' => $ligas
+    ]);
 })
 ->value('ligaId', null)
 ->bind('standings');
