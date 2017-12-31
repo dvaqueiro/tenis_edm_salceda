@@ -2,6 +2,7 @@
 
 use Application\Player\UpdateJugadorCommand;
 use Domain\Model\Jugador;
+use Domain\Model\PersistenceException;
 use Infrastructure\Forms\JugadorUpdateAdminType;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
@@ -20,7 +21,7 @@ class AdminControllerProvider implements ControllerProviderInterface
         })->bind('admin');
 
         $controllers->get('/players', function (Application $app) {
-            $jugadores = $app['commandBus']->handle(new \Application\Player\AllPlayersCommand(['ROLE_USER', 'ROLE_ADMIN']));
+            $jugadores = $app['commandBus']->handle(new \Application\Player\AllPlayersCommand());
 
             return $app['twig']->render('admin_players.html.twig', [
                 'jugadores' => $jugadores
@@ -48,6 +49,17 @@ class AdminControllerProvider implements ControllerProviderInterface
                 'form' => $form->createView(),
             ]);
         })->bind('admin_player_add');
+
+        $controllers->post('/players/delete/{idJugador}', function ($idJugador, Application $app) {
+            try {
+                $app['commandBus']->handle(new \Application\Player\DeleteJugadorCommand($idJugador));
+                $app['session']->getFlashBag()->add('mensaje', "se ha eliminado al jugador correctamente.");
+            } catch (PersistenceException $ex) {
+                $app['session']->getFlashBag()->add('error', "Se ha producido un error al intentar eliminar al jugador");
+            }
+            
+            return $app->redirect('/admin/players');
+        })->bind('admin_player_delete');
 
         $controllers->match('/players/{idJugador}', function ($idJugador, Application $app) {
             $jugador = $app['jugador_repository']->findById($idJugador);

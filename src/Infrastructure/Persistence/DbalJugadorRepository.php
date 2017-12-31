@@ -134,4 +134,9 @@ class DbalJugadorRepository implements JugadorRepository
 
         return $this->factory->makeAll($data);
     }
+
+    public function delete($jugadorId)
+    {
+        return $this->dbal->delete('usuarios', ['id' => $jugadorId]);
+    }
 }

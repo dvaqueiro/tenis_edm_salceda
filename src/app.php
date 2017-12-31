@@ -24,6 +24,8 @@ use Application\Player\AddJugadorCommand;
 use Application\Player\AddJugadorCommandHandler;
 use Application\Player\AllPlayersCommand;
 use Application\Player\AllPlayersCommandHandler;
+use Application\Player\DeleteJugadorCommand;
+use Application\Player\DeleteJugadorCommandHandler;
 use Application\Player\PlayerRegisterSuscriber;
 use Application\Player\RegisterJugadorCommand;
 use Application\Player\RegisterJugadorCommandHandler;
@@ -295,6 +297,12 @@ $app['add_jugador_command_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['delete_jugador_command_handler'] = $app->factory(function ($app) {
+    return new DeleteJugadorCommandHandler(
+        $app['jugador_repository'], $app['photo_uploader_service']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -320,7 +328,8 @@ $app['commandBus'] = function ($app){
                 UpdateJugadorCommand::class => $app['update_jugador_command_handler'],
                 AddResultadoCommad::class => $app['add_resultado_command_handler'],
                 AllPlayersCommand::class => $app['all_players_command_handler'],
-                AddJugadorCommand::class => $app['add_jugador_command_handler']
+                AddJugadorCommand::class => $app['add_jugador_command_handler'],
+                DeleteJugadorCommand::class => $app['delete_jugador_command_handler'],
             ]), new HandleInflector()
         )
     ]);

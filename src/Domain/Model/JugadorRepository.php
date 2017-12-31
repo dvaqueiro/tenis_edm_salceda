@@ -13,11 +13,18 @@ interface JugadorRepository
 
     public function update(Jugador $jugador);
 
+    /**
+     *
+     * @param int $id
+     * @return Jugador
+     */
     public function findById($id);
 
     public function findByDni($dni);
 
     public function add(Jugador $newJugador);
+
+    public function delete($jugadorId);
 
     function findByDivision($idDivision);
 

@@ -1,6 +1,8 @@
 {% extends "admin_layout.html.twig" %}
 
 {% block extra_css %}
+    <!-- Sweetalert Css -->
+    <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
     <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css') }}" rel="stylesheet">
 {% endblock %}
 
@@ -28,20 +30,20 @@
                                 <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                     <thead>
                                         <tr>
-                                            <th>id</th>
+                                            <th>Id</th>
                                             <th>DNI</th>
                                             <th>Nombre</th>
-                                            <th>Telefono</th>
+                                            <th>Teléfono</th>
                                             <th>Mail</th>
                                             <th>Opc.</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>id</th>
+                                            <th>Id</th>
                                             <th>DNI</th>
                                             <th>Nombre</th>
-                                            <th>Telefono</th>
+                                            <th>Teléfono</th>
                                             <th>Mail</th>
                                             <th>Opc.</th>
                                         </tr>
@@ -58,7 +60,7 @@
                                                     <a href="players/{{ jugador.id }}" class="btn btn-xs btn-primary waves-effect">
                                                         <i class="material-icons">edit</i>
                                                     </a>
-                                                    <button id="btn_del" jugadorid="{{ jugador.id }}" type="button" class="btn btn-xs btn-danger waves-effect">
+                                                    <button jugadorid="{{ jugador.id }}" type="button" class="btn_del btn btn-xs btn-danger waves-effect">
                                                         <i class="material-icons">delete</i>
                                                     </button>
                                                 </td>
@@ -74,9 +76,57 @@
 {% endblock %}
 
 {% block extra_script %}
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js') }}"></script>
     <script>
         $( document ).ready(function() {
-            console.log( "ready!" );
+            $('button.btn_del').on('click', function(){
+                var jugadorid = $(this).attr('jugadorid');
+                showCancelMessage(jugadorid);
+            });
         });
+        
+        function showCancelMessage(jugadorid) {
+            swal({
+                title: "¿Estás seguro?",
+                text: "Si eliminas el jugador no podrás recuperar sus datos posteriormente. Puedes simplemente deshabilitarlo editando sus datos...",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Si, borrarlo",
+                cancelButtonText: "No, cancelar",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    submit('players/delete/' + jugadorid, 'post');
+                } else {
+                    swal("Cancelado", "El usuario sigue activo en el sistema", "error");
+                }
+            });
+        }
+        
+        function submit(path, method, params) {
+            method = method || "post"; // Set method to post by default if not specified.
+
+            // The rest of this code assumes you are not using a library.
+            // It can be made less wordy if you use one.
+            var form = document.createElement("form");
+            form.setAttribute("method", method);
+            form.setAttribute("action", path);
+
+    {#        for(var key in params) {
+                if(params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
+
+                    form.appendChild(hiddenField);
+                }
+            }#}
+
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
 {% endblock %}
