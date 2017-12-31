@@ -33,7 +33,7 @@ class DeleteJugadorCommandHandler
             throw new PersistenceException("No se ha encontrado el jugador con identificador {$jugadorId}");
         }
 
-        if($fotoFile = $jugador->getFotoFile()) {
+        if($fotoFile = $jugador->getFoto()) {
             $ok = $this->fileUploader->deleteFile($fotoFile);
         }
 

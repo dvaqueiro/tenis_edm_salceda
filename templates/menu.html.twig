@@ -32,6 +32,11 @@
           <li {% if currentRoute == 'facebook' %}class="current"{% endif %}>
               <a href="{{ url('facebook') }}">Facebook</a>
           </li>
+          {% if is_granted('ROLE_ADMIN') %}
+            <li>
+              <a href="{{ url('admin') }}">Admin</a>
+          </li>
+        {% endif %}
         </ul>
      </div>
  </div>

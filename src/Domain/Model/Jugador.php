@@ -28,7 +28,7 @@ class Jugador
         $this->email = $email;
         $this->password = $password;
         $this->foto = $foto;
-        $this->roles = $roles;
+        $this->roles = ($roles === null) ? 'ROLE_NONE' : $roles;
     }
 
     function getFotoFile()

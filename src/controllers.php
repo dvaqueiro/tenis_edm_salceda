@@ -184,8 +184,6 @@ $app->post('/comments', function (Request $request) use ($app) {
 ->bind('addcomment');
 
 $app->match('/contact', function (Request $request) use ($app) {
-    Symfony\Component\VarDumper\VarDumper::dump($app['swiftmailer.options']);
-    die();
     $contactForm = new ContactForm(null, null, null);
     /* @var $form Form */
     $form = $app['form.factory']->createBuilder(ContactType::class, $contactForm)->getForm();
