@@ -14,6 +14,7 @@
         <h2 class="divisiones" style="margin-bottom:0;">{{ division.nombre }}</h2>
         <div class="resultados" style="margin-top:0; margin-bottom:2em;">
         {% for resultado in division.resultados %}
+            {% if(resultado.ganador) %}
             <table class="cadaResultado" width="100%" border="0" cellspacing="3" cellpadding="0">
                 <tr>
                     <td height="30" width="40%" align="left"><strong>{{ resultado.nombreGanador }}</strong></td>
@@ -30,6 +31,20 @@
                     {% endfor %}
                 </tr>
             </table>
+            {% else %}
+                <table class="cadaResultado" width="100%" border="0" cellspacing="3" cellpadding="0">
+                    <tr>
+                        <td height="30" width="40%" align="left" style="font-weight:normal;">{{ resultado.nombreJugadorLocal }}</td>
+                        <td width="4%" align="center" style="font-weight:normal;font-size: smaller;"> - </td>
+                        <td width="40%" align="left" style="font-weight:normal;">{{ resultado.nombreJugadorVisitante }}</td>
+                        {% for setNumber in range(0,2) %}
+                            <td width="5%" align="center" style="font-weight:normal;">
+                                {{ resultado.set(setNumber).juegos(1) }}-{{ resultado.set(setNumber).juegos(2) }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            {% endif %}
         {% endfor %}
         </div>
     {% endfor %}
