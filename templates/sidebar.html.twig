@@ -2,9 +2,11 @@
     <div class="sidebar">
         <div class="sidebar_item">
             <p>Bienvenidos a la página web del Club de Tenis EDM Salceda de Caselas.</p>
-                {% block login_form %}{% endblock %}
-            <div id="fb-root"></div>
-{#            {{ include('facebook_script.html.twig') }}#}
-        </div>
+        {% block login_form %}{% endblock %}
+        <div id="fb-root"></div>
+        {% if(not global.debug) %}
+        {{ include('facebook_script.html.twig') }}
+        {% endif %}
     </div>
+</div>
 </div>
