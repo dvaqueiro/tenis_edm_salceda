@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Domain\Model\Clasificacion;
 use Domain\Model\DivisionRepository;
 use Domain\Model\LigaRepository;
 use Domain\Model\Resultado\ResultadoRepository;
@@ -10,7 +11,7 @@ use Domain\Model\Resultado\ResultadoRepository;
  *
  * @author Daniel Vaqueiro <danielvc4 at gmail.com>
  */
-class ResultadosPorLigaCommandHandler
+class AllAboutDivisionCommandHandler
 {
     private $ligaRepository;
     private $divisionRepositorio;
@@ -24,17 +25,23 @@ class ResultadosPorLigaCommandHandler
         $this->resultadoRepository = $resultadoRepository;
     }
 
-    public function handle(ResultadosPorLigaCommand $command)
+    public function handle(AllAboutDivisionCommand $command)
     {
         $ligaId = $command->getIdLiga();
+        $divisionId = $command->getIdDivision();
         $liga = $this->ligaRepository->findByIdOrLast($ligaId);
+        $division = $this->divisionRepositorio->findById($divisionId);
 
-        $divisiones = $this->divisionRepositorio->findByLiga($liga->getIdLiga());
-        foreach ($divisiones as $division) {
-            $resultados = $this->resultadoRepository->findByDivision($division->getIdDivision());
-            $division->setResultados($resultados);
-            $liga->addDivision($division);
-        }
+        $resultados = $this->resultadoRepository->findByDivision($division->getIdDivision());
+        $division->setResultados($resultados);
+        $division->setClasificacion(
+            new Clasificacion(
+                $resultados,
+                $command->getPuntosGanador(),
+                $command->getPuntosPerdedor(),
+                $command->getOrder())
+        );
+        $liga->addDivision($division);
 
         return $liga;
     }

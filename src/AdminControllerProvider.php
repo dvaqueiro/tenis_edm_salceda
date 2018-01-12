@@ -107,6 +107,22 @@ class AdminControllerProvider implements ControllerProviderInterface
             ]);
         })->bind('admin_leagues');
 
+        $controllers->get('/leagues/{idLiga}/division/{idDivision}', function ($idLiga, $idDivision, Application $app) {
+            $puntosGanador = 3;
+            $puntosPerdedor = 1;
+            $orderBy = [
+                'puntos' => 'DESC',
+                'difSets' => 'DESC',
+                'difJuegos' => 'DESC',
+            ];
+            $liga = $app['commandBus']->handle(new \Application\AllAboutDivisionCommand($idLiga, $idDivision,
+                $puntosGanador, $puntosPerdedor, $orderBy));
+            return $app['twig']->render('admin_results.html.twig', [
+                'liga' => $liga,
+                'idDivision' => $idDivision
+            ]);
+        })->bind('admin_results');
+
         $controllers->get('/courts', function (Application $app) {
             return $app['twig']->render('admin_courts.html.twig', array());
         })->bind('admin_courts');

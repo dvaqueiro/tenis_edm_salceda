@@ -4,6 +4,8 @@ use Application\AddComentarioCommand;
 use Application\AddComentarioCommandHandler;
 use Application\AddResultadoCommad;
 use Application\AddResultadoCommandHandler;
+use Application\AllAboutDivisionCommand;
+use Application\AllAboutDivisionCommandHandler;
 use Application\ClasificacionPorLigaCommand;
 use Application\ClasificacionPorLigaHandler;
 use Application\ComentariosCommand;
@@ -309,6 +311,14 @@ $app['all_leagues_command_handler'] = $app->factory(function ($app) {
     return new AllLigasCommandHandler($app['liga_repository'],$app['division_repository']);
 });
 
+$app['all_about_division_command_handler'] = $app->factory(function ($app) {
+    return new AllAboutDivisionCommandHandler(
+        $app['liga_repository'],
+        $app['division_repository'],
+        $app['resultado_repository']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -337,6 +347,7 @@ $app['commandBus'] = function ($app){
                 AddJugadorCommand::class => $app['add_jugador_command_handler'],
                 DeleteJugadorCommand::class => $app['delete_jugador_command_handler'],
                 AllLigasCommand::class => $app['all_leagues_command_handler'],
+                AllAboutDivisionCommand::class => $app['all_about_division_command_handler'],
             ]), new HandleInflector()
         )
     ]);

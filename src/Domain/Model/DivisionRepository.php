@@ -9,6 +9,8 @@ namespace Domain\Model;
 interface DivisionRepository
 {
 
+    public function findById($divisionId);
+
     public function findByLigaAndJugador($idLiga, $idJugador);
 
     /**

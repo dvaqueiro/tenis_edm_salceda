@@ -1,0 +1,122 @@
+{% extends "admin_layout.html.twig" %}
+{% set division = liga.divisiones[idDivision] %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="body">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+                            <h2 class="card-inside-title">Liga</h2>
+                            <label for="liga_id">Id</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="liga_id" class="form-control" value="{{ liga.idLiga }}" disabled>
+                                </div>
+                            </div>
+                            <label for="liga_nombre">Nombre</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="liga_nombre" class="form-control" value="{{ liga.nombreLiga }}" disabled>
+                                </div>
+                            </div>
+                            <h2 class="card-inside-title">División</h2>
+                            <label for="division_id">Id</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="division_id" class="form-control" value="{{ division.idDivision }}" disabled>
+                                </div>
+                            </div>
+                            <label for="division_nombre">Nombre</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="division_nombre" class="form-control" value="{{ division.nombre }}" disabled>
+                                </div>
+                            </div>
+                            <h2 class="card-inside-title">Clasificación</h2>
+                            <div class="body table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Pos.</th>
+                                            <th>Jugador</th>
+                                            <th>Puntos</th>
+                                            <th>Jugados</th>
+                                            <th>D.S.</th>
+                                            <th>D.J.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for clasificacion in division.clasificacion.agregados %}
+                                            <tr>
+                                                <th>{{ loop.index }}</th>
+                                                <td>{{ clasificacion.nombre }}</td>
+                                                <td>{{ clasificacion.puntos }}</td>
+                                                <td>{{ clasificacion.partidos }}</td>
+                                                <td>{{ clasificacion.difSets }}</td>
+                                                <td>{{ clasificacion.difJuegos }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                            <h2 class="card-inside-title">Resultados</h2>
+                            <ul class="list-group">
+                                {% for resultado in division.resultados %}
+                                    <li class="list-group-item">
+                                        {% if(resultado.ganador) %}
+                                            <div class="tenis_result">
+                                                <div>
+                                                    <div class="result_player"><strong>{{ resultado.nombreGanador }}</strong></div>
+                                                    {% for setNumber in range(0,2) %}
+                                                        {% if resultado.set(setNumber).ganadorSet %}
+                                                            {% set strong = ''%}
+                                                            {% if resultado.set(setNumber).ganadorSet == resultado.ganador %} 
+                                                            {% set strong = ' winner'%}
+                                                            {% endif %}
+                                                            <div class="result_games{{strong}}"> {{ resultado.set(setNumber).juegos(resultado.ganador) }} </div>
+                                                        {% endif %}    
+                                                    {% endfor %}
+                                                </div>
+                                                <div>
+                                                    <div class="result_player">{{ resultado.nombrePerdedor }}</div>
+                                                    {% for setNumber in range(0,2) %}
+                                                        {% if resultado.set(setNumber).ganadorSet %}
+                                                            {% set strong2 = ''%}
+                                                            {% if resultado.set(setNumber).ganadorSet == resultado.perdedor %} 
+                                                            {% set strong2 = ' winner'%}
+                                                            {% endif %}
+                                                            <div class="result_games{{ strong2 }}"> {{ resultado.set(setNumber).juegos(resultado.perdedor) }} </div>
+                                                        {% endif %}    
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="tenis_result">
+                                                <div>
+                                                    <div class="result_player">{{ resultado.nombreJugadorLocal }}</div>
+                                                    {% for setNumber in range(0,2) %}
+                                                        <div class="result_games"> {{ resultado.set(setNumber).juegos(1) }} </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <div>
+                                                    <div class="result_player">{{ resultado.nombreJugadorVisitante }}</div>
+                                                    {% for setNumber in range(0,2) %}
+                                                        <div class="result_games"> {{ resultado.set(setNumber).juegos(2) }} </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

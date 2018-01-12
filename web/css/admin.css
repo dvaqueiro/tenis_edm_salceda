@@ -4,3 +4,20 @@
     background-size:     cover; 
     background-position: center center; 
 }
+
+.tenis_result div div {
+    display: inline-block;
+}
+
+.result_games {
+    width: 5%;
+    text-align: center;
+}
+
+.result_player {
+    width: 70%;
+}
+
+.winner {
+    font-weight: bold;
+}

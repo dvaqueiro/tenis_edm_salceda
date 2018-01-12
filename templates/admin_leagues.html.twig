@@ -24,7 +24,7 @@
                 <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                         {% for liga in ligas %}
-                            <div class="panel panel-primary">
+                            <div class="panel">
                                 <div class="panel-heading" role="tab" id="headingOne_{{ loop.index }}">
                                     <h4 class="panel-title">
                                         <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne_{{ loop.index }}" aria-expanded="true" aria-controls="collapseOne_{{ loop.index }}" class="collapsed">
@@ -36,7 +36,7 @@
                                     <div class="panel-body">
                                         <ul class="list-group">
                                             {% for division in liga.divisiones %}
-                                            <a href="javascript:void(0);" class="list-group-item">{{ division.idDivision }} - {{ division.nombre }}</a>
+                                            <a href="leagues/{{ liga.idLiga }}/division/{{ division.idDivision }}" class="list-group-item">{{ division.idDivision }} - {{ division.nombre }}</a>
                                             {% endfor %}
                                         </ul>
                                     </div>

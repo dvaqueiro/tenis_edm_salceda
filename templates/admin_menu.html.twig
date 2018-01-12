@@ -11,7 +11,7 @@
         <li {% if currentRoute == 'admin_player_update' or currentRoute == 'admin_player_add'%}class="active"{% endif %}>
             <a href="javascript:void(0);" class="menu-toggle waves-effect waves-block">
                  <i class="material-icons">group</i>
-                <span>Usuarios</span>
+                <span>Jugadores</span>
             </a>
             <ul class="ml-menu" style="display: block;">
                 <li {% if currentRoute == 'admin_players' %}class="active"{% endif %}>
@@ -25,7 +25,7 @@
                 </li>
             </ul>
         </li>
-        <li {% if currentRoute == 'admin_leagues' %}class="active"{% endif %}>
+        <li {% if currentRoute == 'admin_leagues' or currentRoute == 'admin_results'%}class="active"{% endif %}>
             <a href="{{ url('admin_leagues') }}">
                 <i class="material-icons">golf_course</i>
                 <span>Ligas</span>

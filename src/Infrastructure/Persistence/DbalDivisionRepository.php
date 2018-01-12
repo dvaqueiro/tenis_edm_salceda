@@ -45,4 +45,14 @@ class DbalDivisionRepository implements DivisionRepository
         $data = $stmt->fetch();
         return $this->factory->make($data);
     }
+
+    public function findById($divisionId)
+    {
+        $sql = 'SELECT * FROM divisiones WHERE id = ?';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $divisionId);
+        $stmt->execute();
+        $data = $stmt->fetch();
+        return $this->factory->make($data);
+    }
 }
