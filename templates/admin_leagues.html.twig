@@ -1,5 +1,52 @@
 {% extends "admin_layout.html.twig" %}
 
 {% block content %}
-    <h1>Ligas...</h1>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card">
+        <div class="header">
+            <h2>
+                Ligas
+            </h2>
+            <ul class="header-dropdown m-r--5">
+                <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="material-icons">more_vert</i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="leagues/add">Nueva Liga</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="body">
+            
+            <div class="row clearfix">
+                <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        {% for liga in ligas %}
+                            <div class="panel panel-primary">
+                                <div class="panel-heading" role="tab" id="headingOne_{{ loop.index }}">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne_{{ loop.index }}" aria-expanded="true" aria-controls="collapseOne_{{ loop.index }}" class="collapsed">
+                                            {{ liga.idLiga }} - {{ liga.nombreLiga }}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseOne_{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne_{{ loop.index }}">
+                                    <div class="panel-body">
+                                        <ul class="list-group">
+                                            {% for division in liga.divisiones %}
+                                            <a href="javascript:void(0);" class="list-group-item">{{ division.idDivision }} - {{ division.nombre }}</a>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

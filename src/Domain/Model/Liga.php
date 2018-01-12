@@ -41,4 +41,8 @@ class Liga
         return $this->divisiones;
     }
 
+    function setDivisiones($divisiones)
+    {
+        $this->divisiones = $divisiones;
+    }
 }

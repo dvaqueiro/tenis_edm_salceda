@@ -306,7 +306,7 @@ $app['delete_jugador_command_handler'] = $app->factory(function ($app) {
 });
 
 $app['all_leagues_command_handler'] = $app->factory(function ($app) {
-    return new AllLigasCommandHandler($app['liga_repository']);
+    return new AllLigasCommandHandler($app['liga_repository'],$app['division_repository']);
 });
 
 /**

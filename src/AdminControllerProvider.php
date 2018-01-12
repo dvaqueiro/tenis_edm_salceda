@@ -100,7 +100,11 @@ class AdminControllerProvider implements ControllerProviderInterface
         })->bind('admin_admins');
 
         $controllers->get('/leagues', function (Application $app) {
-            return $app['twig']->render('admin_leagues.html.twig', array());
+            $limit = 20;
+            $ligas = $app['commandBus']->handle(new \Application\Leagues\AllLigasCommand($limit));
+            return $app['twig']->render('admin_leagues.html.twig', [
+                'ligas' => $ligas,
+            ]);
         })->bind('admin_leagues');
 
         $controllers->get('/courts', function (Application $app) {
