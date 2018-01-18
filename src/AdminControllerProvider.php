@@ -59,7 +59,8 @@ class AdminControllerProvider implements ControllerProviderInterface
             }
             
             return $app->redirect('/admin/players');
-        })->bind('admin_player_delete');
+        })->bind('admin_player_delete')
+            ->assert('idJugador','\d+');
 
         $controllers->match('/players/{idJugador}', function ($idJugador, Application $app) {
             $jugador = $app['jugador_repository']->findById($idJugador);
@@ -81,7 +82,8 @@ class AdminControllerProvider implements ControllerProviderInterface
             return $app['twig']->render('admin_player_update.html.twig', [
                 'form' => $form->createView(),
             ]);
-        })->bind('admin_player_update');
+        })->bind('admin_player_update')
+            ->assert('idJugador','\d+');
 
         $controllers->get('/inactive', function (Application $app) {
             $jugadores = $app['commandBus']->handle(new \Application\Player\AllPlayersCommand(['ROLE_NONE']));
@@ -121,7 +123,9 @@ class AdminControllerProvider implements ControllerProviderInterface
                 'liga' => $liga,
                 'idDivision' => $idDivision
             ]);
-        })->bind('admin_results');
+        })->bind('admin_results')
+        ->assert('idLiga','\d+')
+        ->assert('idDivision','\d+');
 
         $controllers->get('/courts', function (Application $app) {
             return $app['twig']->render('admin_courts.html.twig', array());

@@ -121,6 +121,7 @@ $app->get('/players/{ligaId}', function ($ligaId) use ($app) {
     $liga = $app['commandBus']->handle(new JugadoresPorLigaCommand(null));
     return $app['twig']->render('players.html.twig', array('liga' => $liga));
 })
+->assert('ligaId','\d+')
 ->value('ligaId', null)
 ->bind('players');
 
@@ -128,6 +129,7 @@ $app->get('/scores/{ligaId}', function ($ligaId) use ($app) {
     $liga = $app['commandBus']->handle(new ResultadosPorLigaCommand(null));
     return $app['twig']->render('scores.html.twig', array('liga' => $liga));
 })
+->assert('ligaId','\d+')
 ->value('ligaId', null)
 ->bind('scores');
 
@@ -146,6 +148,7 @@ $app->get('/standings/{ligaId}', function ($ligaId) use ($app) {
         'ligas' => $ligas
     ]);
 })
+->assert('ligaId','\d+')
 ->value('ligaId', null)
 ->bind('standings');
 
@@ -247,6 +250,7 @@ $app->get('/courts/confirm/{token}/{idReserva}', function ($token, $idReserva) u
     
     return $app->json($out);
 })
+->assert('idReserva','\d+')
 ->bind('booking_confirm');
 
 

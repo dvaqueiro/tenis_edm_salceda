@@ -45,6 +45,9 @@ class Clasificacion
             $this->incrementValue($resultado->getIdGanador(), 'partidos', 1);
             $this->incrementValue($resultado->getIdPerdedor(), 'partidos', 1);
 
+            $this->incrementValue($resultado->getIdGanador(), 'win', 1);
+            $this->incrementValue($resultado->getIdPerdedor(), 'lost', 1);
+
             $this->incrementValue($resultado->getIdGanador(), 'difSets', $resultado->getDiferenciaSetsGanador());
             $this->incrementValue($resultado->getIdPerdedor(), 'difSets', $resultado->getDiferenciaSetsPerdedor());
 
@@ -62,6 +65,8 @@ class Clasificacion
                 'partidos' => 0,
                 'difSets' => 0,
                 'difJuegos' => 0,
+                'win' => 0,
+                'lost' => 0,
             ]);
         }
     }
