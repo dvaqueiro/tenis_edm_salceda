@@ -21,7 +21,7 @@ class AdminControllerProvider implements ControllerProviderInterface
         })->bind('admin');
 
         $controllers->get('/players', function (Application $app) {
-            $jugadores = $app['commandBus']->handle(new \Application\Player\AllPlayersCommand());
+            $jugadores = $app['commandBus']->handle(new \Application\Player\AllPlayersCommand(['ROLE_USER','ROLE_ADMIN']));
 
             return $app['twig']->render('admin_players.html.twig', [
                 'jugadores' => $jugadores
