@@ -127,6 +127,9 @@ $app->register(new SecurityServiceProvider(), array(
     'security.firewalls' => array(
         'profiler' => array('pattern' => '^/_'), // Example of an url available as anonymous user
         'scores' => array('pattern' => '^/scores$'),
+        'standings' => array('pattern' => '^/standings$'),
+        'ranking' => array('pattern' => '^/ranking$'),
+        'contact' => array('pattern' => '^/contact$'),
         'facebook' => array('pattern' => '^/facebook$'),
         'booking_confirm' => array('pattern' => '^/courts/confirm/.*$'),
         'login' => array('pattern' => '^/login$'),
