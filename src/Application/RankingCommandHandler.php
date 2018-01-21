@@ -4,6 +4,7 @@
 namespace Application;
 
 use Domain\Model\DivisionRepository;
+use Domain\Model\JugadorRepository;
 use Domain\Model\LigaRepository;
 use Domain\Model\Ranking;
 use Domain\Model\Resultado\ResultadoRepository;
@@ -14,16 +15,21 @@ use Domain\Model\Resultado\ResultadoRepository;
  */
 class RankingCommandHandler
 {
+    /**
+     * @var JugadorRepository
+     */
+    private $jugadorRepository;
     private $ligaRepository;
     private $divisionRepositorio;
     private $resultadoRepository;
 
     function __construct(LigaRepository $ligaRepository, DivisionRepository $divisionRepositorio,
-        ResultadoRepository $resultadoRepository)
+        ResultadoRepository $resultadoRepository, JugadorRepository $jugadorRepository)
     {
         $this->ligaRepository = $ligaRepository;
         $this->divisionRepositorio = $divisionRepositorio;
         $this->resultadoRepository = $resultadoRepository;
+        $this->jugadorRepository = $jugadorRepository;
     }
     
     public function handle(RankingCommand $command)
@@ -35,6 +41,8 @@ class RankingCommandHandler
             foreach ($divisiones as $division) {
                 $resultados = $this->resultadoRepository->findByDivision($division->getIdDivision());
                 $division->setResultados($resultados);
+                $participantes = $this->jugadorRepository->findByDivision($division->getIdDivision());
+                $division->setParticipantes($participantes);
                 $liga->addDivision($division);
             }
         }

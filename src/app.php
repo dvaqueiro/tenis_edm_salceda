@@ -247,7 +247,8 @@ $app['ranking_command_handler'] = $app->factory(function ($app) {
     return new RankingCommandHandler(
         $app['liga_repository'],
         $app['division_repository'],
-        $app['resultado_repository']
+        $app['resultado_repository'],
+        $app['jugador_repository']
     );
 });
 

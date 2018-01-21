@@ -50,20 +50,29 @@ class Ranking
     private function procesarDivisiones($liga)
     {
         foreach ($liga->getDivisiones() as $division) {
+            $this->initParticipantes($division);
             $this->procesarResultados($division);
+        }
+    }
+
+    private function initParticipantes(\Domain\Model\Division $division)
+    {
+        $categoria = $division->getCategoria();
+        $puntosPorCategoria = (isset($this->puntosPorCategoria[$categoria])) ? $this->puntosPorCategoria[$categoria] : 0;
+
+        $participantes = $division->getParticipantes();
+        foreach ($participantes as $participante) {
+            /* @var $participante Jugador */
+            $this->initAgregado($participante->getId(), $participante->getNombre());
+            $this->incrementarPuntosPorCategoria($participante->getId(), $division, 'puntos', $puntosPorCategoria);
         }
     }
 
     private function procesarResultados(Division $division)
     {
-        /* @var $division Division */
-        $categoria = $division->getCategoria();
-        $puntosPorCategoria = (isset($this->puntosPorCategoria[$categoria])) ? $this->puntosPorCategoria[$categoria] : 0;
         foreach ($division->getResultados() as $resultado) {
             /* @var $resultado Resultado */
             if($resultado->getIdGanador() == null) continue;
-            $this->initAgregado($resultado->getIdGanador(), $resultado->getNombreGanador());
-            $this->initAgregado($resultado->getIdPerdedor(), $resultado->getNombrePerdedor());
 
             $this->incrementValue($resultado->getIdGanador(), 'puntos', $this->puntosGanador);
             $this->incrementValue($resultado->getIdPerdedor(), 'puntos', $this->puntosPerdedor);
@@ -72,9 +81,6 @@ class Ranking
             $this->incrementValue($resultado->getIdPerdedor(), 'jugados', 1);
 
             $this->incrementValue($resultado->getIdGanador(), 'victorias', 1);
-
-            $this->incrementarPuntosPorCategoria($resultado->getIdGanador(), $division, 'puntos', $puntosPorCategoria);
-            $this->incrementarPuntosPorCategoria($resultado->getIdPerdedor(), $division, 'puntos', $puntosPorCategoria);
         }
     }
 
