@@ -238,7 +238,8 @@ $app['clasificacion_por_liga_handler'] = $app->factory(function ($app) {
     return new ClasificacionPorLigaHandler(
         $app['liga_repository'],
         $app['division_repository'],
-        $app['resultado_repository']
+        $app['resultado_repository'],
+        $app['jugador_repository']
     );
 });
 
@@ -318,7 +319,8 @@ $app['all_about_division_command_handler'] = $app->factory(function ($app) {
     return new AllAboutDivisionCommandHandler(
         $app['liga_repository'],
         $app['division_repository'],
-        $app['resultado_repository']
+        $app['resultado_repository'],
+        $app['jugador_repository']
     );
 });
 

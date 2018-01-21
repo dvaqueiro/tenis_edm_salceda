@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Criteria;
  */
 class Clasificacion
 {
+    private $participantes;
     private $orderBy;
     private $puntosPerdedor;
     private $puntosGanador;
@@ -22,22 +23,30 @@ class Clasificacion
      */
     private $agregados;
 
-    function __construct($resultados, $puntosGanador = 3, $puntosPerdedor = 1, $orderBy = null)
+    function __construct($participantes, $resultados, $puntosGanador = 3, $puntosPerdedor = 1, $orderBy = null)
     {
+        $this->participantes = $participantes;
         $this->resultados = $resultados;
         $this->agregados = new ArrayCollection();
         $this->puntosGanador = $puntosGanador;
         $this->puntosPerdedor = $puntosPerdedor;
         $this->orderBy = $orderBy;
+        $this->setParticipantes();
         $this->construirClasificacion();
+    }
+
+    private function setParticipantes()
+    {
+        foreach ($this->participantes as $participante) {
+            /* @var $participante Jugador */
+            $this->initAgregado($participante->getId(), $participante->getNombre());
+        }
     }
 
     private function construirClasificacion()
     {
         foreach ($this->resultados as $resultado) {
             if($resultado->getIdGanador() == null) continue;
-            $this->initAgregado($resultado->getIdGanador(), $resultado->getNombreGanador());
-            $this->initAgregado($resultado->getIdPerdedor(), $resultado->getNombrePerdedor());
 
             $this->incrementValue($resultado->getIdGanador(), 'puntos', $this->puntosGanador);
             $this->incrementValue($resultado->getIdPerdedor(), 'puntos', $this->puntosPerdedor);
