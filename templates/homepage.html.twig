@@ -12,29 +12,6 @@
 {% endblock %}
 
 {% block content %}
-    {% if resultadosJugador.resultados|length > 0 %}
-        <h1 class="encabezado">Resultados de {{ resultadosJugador.jugador.nombre }}</h1>
-        <div class="resultados" style="margin-top:0; margin-bottom:2em;">
-            {% for resultado in resultadosJugador.resultados %}
-                <table class="cadaResultado" width="100%" border="0" cellspacing="3" cellpadding="0">
-                    <tr>
-                        <td height="30" width="40%" align="left"><strong>{{ resultado.nombreGanador }}</strong></td>
-                        <td width="4%" align="center" style="font-weight:normal;font-size: smaller;">def</td>
-                        <td width="40%" align="left" style="font-weight:normal;">{{ resultado.nombrePerdedor }}</td>
-                        {% for setNumber in range(0,2) %}
-                            {% if resultado.set(setNumber).ganadorSet %}
-                                <td width="5%" align="center" style="font-weight:normal;">
-                                    {{ resultado.set(setNumber).juegos(resultado.ganador) }}-{{ resultado.set(setNumber).juegos(resultado.perdedor) }}
-                                </td>
-                            {% else %}
-                                <td width="5%" align="center" style="font-weight:normal;"></td>
-                            {% endif %}    
-                        {% endfor %}
-                    </tr>
-                </table>
-            {% endfor %}
-        </div>
-    {% endif %}
     
     {% if resultadosJugador.rivalesSinJugar|length > 0 %}
         <form class="formulario_resultado" method="post" action="" id="formulario_resultado">
@@ -75,4 +52,29 @@
             </div>
         </form>
     {% endif %}
+    
+    {% if resultadosJugador.resultados|length > 0 %}
+        <h1 class="encabezado">Resultados de {{ resultadosJugador.jugador.nombre }}</h1>
+        <div class="resultados" style="margin-top:0; margin-bottom:2em;">
+            {% for resultado in resultadosJugador.resultados %}
+                <table class="cadaResultado" width="100%" border="0" cellspacing="3" cellpadding="0">
+                    <tr>
+                        <td height="30" width="40%" align="left"><strong>{{ resultado.nombreGanador }}</strong></td>
+                        <td width="4%" align="center" style="font-weight:normal;font-size: smaller;">def</td>
+                        <td width="40%" align="left" style="font-weight:normal;">{{ resultado.nombrePerdedor }}</td>
+                        {% for setNumber in range(0,2) %}
+                            {% if resultado.set(setNumber).ganadorSet %}
+                                <td width="5%" align="center" style="font-weight:normal;">
+                                    {{ resultado.set(setNumber).juegos(resultado.ganador) }}-{{ resultado.set(setNumber).juegos(resultado.perdedor) }}
+                                </td>
+                            {% else %}
+                                <td width="5%" align="center" style="font-weight:normal;"></td>
+                            {% endif %}    
+                        {% endfor %}
+                    </tr>
+                </table>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
 {% endblock %}

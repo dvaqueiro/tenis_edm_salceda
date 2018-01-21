@@ -583,6 +583,7 @@ ul#menu li.current a, ul#menu li:hover a
     background-color: #3F861B;
     padding: 1em;
     border-radius: .4em;
+    margin-bottom: 20px;
 }
 
 .formulario_resultado select.juegos, .formulario_resultado label.juegos{
