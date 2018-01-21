@@ -79,8 +79,9 @@ class DbalJugadorRepository implements JugadorRepository
 
     public function update(Jugador $jugador)
     {
-        $sql = "UPDATE usuarios set nombre=?, telefono=?, email=?, foto=?, password=?, roles=? WHERE id = ?";
+        $sql = "UPDATE usuarios set dni=?, nombre=?, telefono=?, email=?, foto=?, password=?, roles=? WHERE id = ?";
         return $this->dbal->executeUpdate($sql, [
+            $jugador->getDni(),
             $jugador->getNombre(),
             $jugador->getTelefono(),
             $jugador->getEmail(),
