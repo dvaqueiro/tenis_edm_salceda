@@ -18,7 +18,7 @@ $(document).ready(function () {
 
 function validarResultado()
 {
-    if ($('#jugadorVisitante').val() == '') {
+    if ($('#jugadorVisitante').val() === '') {
         return 'Debe seleccionar un oponente!';
     }
 
@@ -30,11 +30,7 @@ function validarResultado()
         return 'El resultado del segundo set no es correcto!';
     }
 
-    if (setsLocal == setsVisitante) {
-        return 'Es necesario cubrir el resultado del tercer set';
-    }
-
-    if (Math.abs(setsLocal - setsVisitante) == 1 && !validarSet(3)) {
+    if (setsLocal == setsVisitante && !validarSet(3)) {
         return 'El resultado del tercer set no es correcto!';
     }
 
