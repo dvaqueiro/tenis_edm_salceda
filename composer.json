@@ -28,7 +28,8 @@
         "swiftmailer/swiftmailer": "^6.0",
         "nesbot/carbon": "^1.22",
         "carlosbuenosvinos/ddd": "^1.6",
-        "symfony/dotenv": "^4.0"
+        "symfony/dotenv": "^4.0",
+        "symfony/security-csrf": "^3.4"
     },
     "autoload": {
         "psr-4": { "": "src/" }
