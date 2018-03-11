@@ -454,12 +454,23 @@ ul#menu li.current a, ul#menu li:hover a
 
 .reservado
 {
+    margin: 2px;
     border-radius:.4em;
     background-color:white;
-    border:solid 2px grey;
-    width:25em;
-    padding:1em .5em;
+    border:solid 1px grey;
+    width:90%;
+    padding:0.5em .5em;
     text-align:center;	
+}
+
+div.reservas 
+{
+    margin: 12px;
+}
+
+.reservado.aprobado
+{
+    background-color: #3f861b;
 }
 
 .pista
@@ -522,13 +533,13 @@ ul#menu li.current a, ul#menu li:hover a
     border-radius: 0.4em;
     border: solid 2px #ccc;
     width: 20em;
-    height: 20px;
+    height: 30px;
     margin: .3em 0;
     padding: .2em 1em;
 }
 
 #booking_fecha {
-    width: 90px;
+    width: 100px;
 }
 
 .login-box {

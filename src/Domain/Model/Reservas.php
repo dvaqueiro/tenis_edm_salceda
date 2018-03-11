@@ -13,16 +13,9 @@ class Reservas
     private $horasLibres;
     private $reservas;
 
-    public function __construct()
+    public function __construct($horasLibres)
     {
-        $this->horasLibres = [
-            1 => '10:00 a 12:00',
-            2 => '12:00 a 14:00',
-            3 => '14:00 a 16:00',
-            4 => '16:00 a 18:00',
-            5 => '18:00 a 20:00',
-            6 => '20:00 a 22:00',
-        ];
+        $this->horasLibres = $horasLibres;
         $this->reservas = new ArrayCollection();
     }
 
@@ -43,5 +36,22 @@ class Reservas
             unset($this->horasLibres[$reserva->getHora()]);
         }
         return array_flip($this->horasLibres);
+    }
+
+    function getDetalleReservas()
+    {
+        $out = [];
+
+        foreach ($this->reservas as $reserva) {
+            /* @var $reserva Reserva */
+            $estado = ($reserva->getAprobado()) ? '(Aprobada)' : '(En curso)';
+            $out[] = [
+                'hora'    => $reserva->getHoraTexto(),
+                'jugador' => $reserva->getNombreJugador(),
+                'estado'  => $estado
+            ];
+        }
+
+        return $out;
     }
 }

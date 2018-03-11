@@ -9,7 +9,7 @@ use Carbon\Carbon;
  */
 class BookingChecker
 {
-    public function checkInDate()
+    public function checkAllowedDate($selectedDate)
     {
         $out = true;
 

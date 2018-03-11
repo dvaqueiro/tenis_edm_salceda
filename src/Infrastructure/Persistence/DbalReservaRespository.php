@@ -26,9 +26,10 @@ class DbalReservaRespository implements ReservaRespository
 
     public function findByPistaYFecha($pista, DateTime $fecha)
     {
-        $sql = 'SELECT *
-                FROM pabellon
-                where fecha = ? and pista = ?';
+        $sql = 'SELECT p.*, u.nombre
+                FROM pabellon p
+                INNER JOIN usuarios u on u.id = p.idusuario
+                where p.fecha = ? and p.pista = ? ORDER BY p.hora ASC';
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $fecha->format('Y-m-d'), PDO::PARAM_STR);
         $stmt->bindValue(2, $pista, PDO::PARAM_INT);
@@ -58,9 +59,10 @@ class DbalReservaRespository implements ReservaRespository
 
     public function findById($reservaId)
     {
-        $sql = 'SELECT *
+        $sql = 'SELECT p.*, u.nombre
                 FROM pabellon p
-                where id = ?';
+                INNER JOIN usuarios u on u.id = p.idusuario
+                where p.id = ?';
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $reservaId, PDO::PARAM_INT);
         $stmt->execute();

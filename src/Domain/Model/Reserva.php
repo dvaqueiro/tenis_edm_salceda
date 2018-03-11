@@ -12,6 +12,8 @@ use function random_bytes;
  */
 class Reserva
 {
+    private $nombreJugador;
+
     const _PABELLON_ = 1;
     const _EXTERIOR_ = 2;
 
@@ -31,15 +33,16 @@ class Reserva
     ];
     private $token;
 
-    function __construct($id, $idJugador, $pista, $fecha, $hora, $token = null)
+    function __construct($id, $idJugador, $nombreJugador, $pista, $fecha, $hora, $aprobado, $token = null)
     {
         $this->hora = $hora;
         $this->fecha = $fecha;
         $this->pista = $pista;
         $this->id = $id;
         $this->idJugador = $idJugador;
-        $this->aprobado = false;
+        $this->aprobado = $aprobado;
         $this->token = ($token)?$token:bin2hex(random_bytes(10));
+        $this->nombreJugador = $nombreJugador;
     }
 
     function getId()
@@ -74,6 +77,11 @@ class Reserva
     function getAprobado()
     {
         return $this->aprobado;
+    }
+
+    function getNombreJugador()
+    {
+        return $this->nombreJugador;
     }
 
     function setId($id)

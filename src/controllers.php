@@ -210,17 +210,17 @@ $app->match('/contact', function (Request $request) use ($app) {
 ->bind('contact');
 
 $app->match('/courts', function (Request $request) use ($app) {
-    if(!$app['booking_checker']->checkInDate()) {
-        $app['session']->getFlashBag()->add('error', "Debe reservar la pista antes del viernes a las 12h");
-        return $app->redirect('/');
-    }
+//    if(!$app['booking_checker']->checkInDate()) {
+//        $app['session']->getFlashBag()->add('error', "Debe reservar la pista antes del viernes a las 12h");
+//        return $app->redirect('/');
+//    }
 
     $token = $app['security.token_storage']->getToken();
     $user = $token->getUser();
 
-    $newReserva = new Reserva(null, $user->getId(), null, null, null);
-    /* @var $form Form */
-    $form = $app['form.factory']->createBuilder(BookingType::class, $newReserva)->getForm();
+    $newReserva = new Reserva(null, $user->getId(), null, null, null, null, null);
+        /* @var $form Form */
+        $form = $app['form.factory']->createBuilder(BookingType::class, $newReserva)->getForm();
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {

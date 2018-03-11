@@ -17,8 +17,8 @@ class ArrayReservaFactory implements ReservaFactory
     {
         $reservas = [];
         foreach ($data as $row) {
-            $reservas[] = new Reserva($row['id'], $row['idusuario'], $row['pista'],
-                DateTime::createFromFormat('Y-m-d', $data['fecha']), $row['hora'], $row['token']);
+            $reservas[] = new Reserva($row['id'], $row['idusuario'], $row['nombre'], $row['pista'],
+                DateTime::createFromFormat('Y-m-d', $row['fecha']), $row['hora'], $row['aprobado'], $row['token']);
         }
 
         return $reservas;
@@ -26,7 +26,7 @@ class ArrayReservaFactory implements ReservaFactory
 
     public function make($data)
     {
-        return new Reserva($data['id'], $data['idusuario'], $data['pista'],
-            DateTime::createFromFormat('Y-m-d', $data['fecha']), $data['hora'], $data['token']);
+        return new Reserva($data['id'], $data['idusuario'], $row['nombre'], $data['pista'],
+            DateTime::createFromFormat('Y-m-d', $data['fecha']), $data['hora'], $row['aprobado'], $data['token']);
     }
 }

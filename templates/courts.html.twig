@@ -15,6 +15,11 @@
             $( "#{{ form.hora.vars.id }}" ).prop( "disabled", true );
             $( "#{{ form.submit.vars.id }}" ).prop( "disabled", true );
             $( "#{{ form.fecha.vars.id }}" ).datepicker({
+                beforeShowDay:
+                    function(dt)
+                    {
+                       return [dt.getDay() == 0 || dt.getDay() == 5 || dt.getDay() == 6, ""];
+                    },
                 dateFormat: "dd-mm-yy",
                 firstDay: 1,
                 minDate : 0,
@@ -57,9 +62,20 @@
                 data: data
             }).done(function(data) {
                 initHoraSelect();
+                initReservas();
                 if(data.horas_libres) {
                     for(var prop in data.horas_libres) {
                         $( "#{{ form.hora.vars.id }} option[value=" + data.horas_libres[prop] +"]" ).prop( "disabled", false );
+                    }
+                }
+                if(data.reservas) {
+                    for(var prop in data.reservas) {
+                        var aprobado = '';
+                        if(data.reservas[prop].estado == '(Aprobada)') {
+                            aprobado = 'aprobado';
+                        }
+                        $(".reservas").append("<div class='reservado " + aprobado +"'>De "+ data.reservas[prop].hora + ' reservado por ' 
+                                + data.reservas[prop].jugador + ' ' + data.reservas[prop].estado + "</div>");
                     }
                 }
             });
@@ -73,6 +89,11 @@
             $selectHora.prop( "disabled", false );
             $selectHora.children().prop( "disabled", true );
         }
+        
+        function initReservas()
+        {
+            $(".reservas").html('');
+        }
     </script> 
 {% endblock %}
 
@@ -83,4 +104,7 @@
         {{ form_widget(form, {'attr': {'class': 'formulario'}}) }}
         {{ form_end(form) }}
     {% endif %}
+    <div class="reservas">
+        
+    </div>
 {% endblock %}
