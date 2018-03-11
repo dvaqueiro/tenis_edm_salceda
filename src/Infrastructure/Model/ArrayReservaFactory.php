@@ -26,7 +26,7 @@ class ArrayReservaFactory implements ReservaFactory
 
     public function make($data)
     {
-        return new Reserva($data['id'], $data['idusuario'], $row['nombre'], $data['pista'],
-            DateTime::createFromFormat('Y-m-d', $data['fecha']), $data['hora'], $row['aprobado'], $data['token']);
+        return new Reserva($data['id'], $data['idusuario'], $data['nombre'], $data['pista'],
+            DateTime::createFromFormat('Y-m-d', $data['fecha']), $data['hora'], $data['aprobado'], $data['token']);
     }
 }

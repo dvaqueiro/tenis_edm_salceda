@@ -40,7 +40,7 @@ class Reserva
         $this->pista = $pista;
         $this->id = $id;
         $this->idJugador = $idJugador;
-        $this->aprobado = $aprobado;
+        $this->aprobado = (null == $aprobado)? 0 : $aprobado;
         $this->token = ($token)?$token:bin2hex(random_bytes(10));
         $this->nombreJugador = $nombreJugador;
     }

@@ -20,6 +20,7 @@ use Domain\Model\ContactForm;
 use Domain\Model\Jugador;
 use Domain\Model\PersistenceException;
 use Domain\Model\Reserva;
+use Domain\Model\ReservaException;
 use Domain\Model\Resultado\InvalidResultException;
 use Infrastructure\Forms\BookingType;
 use Infrastructure\Forms\ContactType;
@@ -210,25 +211,25 @@ $app->match('/contact', function (Request $request) use ($app) {
 ->bind('contact');
 
 $app->match('/courts', function (Request $request) use ($app) {
-//    if(!$app['booking_checker']->checkInDate()) {
-//        $app['session']->getFlashBag()->add('error', "Debe reservar la pista antes del viernes a las 12h");
-//        return $app->redirect('/');
-//    }
+    try{
+        $token = $app['security.token_storage']->getToken();
+        $user = $token->getUser();
 
-    $token = $app['security.token_storage']->getToken();
-    $user = $token->getUser();
-
-    $newReserva = new Reserva(null, $user->getId(), null, null, null, null, null);
+        $newReserva = new Reserva(null, $user->getId(), null, null, null, 0, null);
         /* @var $form Form */
         $form = $app['form.factory']->createBuilder(BookingType::class, $newReserva)->getForm();
-    $form->handleRequest($request);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $newReserva = $form->getData();
-        $message = $app['commandBus']->handle(new AddReservaCommand($newReserva));
-        $app['session']->getFlashBag()->add('mensaje', $message);
-        return $app->redirect($request->getUri());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newReserva = $form->getData();
+            $message = $app['commandBus']->handle(new AddReservaCommand($newReserva));
+            $app['session']->getFlashBag()->add('mensaje', $message);
+            return $app->redirect($request->getUri());
+        }
+    } catch (ReservaException $ex) {
+        $app['session']->getFlashBag()->add('error', $ex->getMessage());
     }
+    
 
     return $app['twig']->render('courts.html.twig', ['form' => $form->createView()]);
 })
