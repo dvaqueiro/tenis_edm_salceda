@@ -2,6 +2,7 @@
 
 use Infrastructure\Commands\FixUsersCommand;
 use Infrastructure\Commands\HelloCommand;
+use Infrastructure\Commands\SendMailBookingConfirmationCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -14,6 +15,7 @@ $console->setDispatcher($app['dispatcher']);
 $console->addCommands(array(
     new HelloCommand(),
     new FixUsersCommand($app),
+    new SendMailBookingConfirmationCommand($app),
 ));
 
 return $console;

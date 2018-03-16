@@ -81,6 +81,7 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
+use Application\CourtBooking\SendMailToBookingConfirmationCommandHandler;
 
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__ . '/../config/.env');
@@ -327,6 +328,15 @@ $app['all_about_division_command_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['send_mail_to_booking_confirmation_command_handler'] = $app->factory(function ($app) {
+    return new SendMailToBookingConfirmationCommandHandler(
+        $app['reserva_repository'],
+        $app['jugador_repository'],
+        $app['mailer'],
+        $app['mail.config']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -362,14 +372,7 @@ $app['commandBus'] = function ($app){
 };
 
 $app->before(function (Request $request) use ($app) {
-    DomainEventPublisher::instance()->subscribe(
-       new SendMailToBookingConfirmationSuscriber(
-        $app['reserva_repository'],
-        $app['jugador_repository'],
-        $app['url_generator'],
-        $app['mailer'],
-        $app['mail.config']
-    ));
+    DomainEventPublisher::instance()->subscribe($app['send_mail_to_booking_confirmation_command_handler']);
 
     DomainEventPublisher::instance()->subscribe(
        new SendMailBookingConfirmationSuscriber(
