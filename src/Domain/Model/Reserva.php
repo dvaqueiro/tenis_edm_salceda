@@ -17,6 +17,10 @@ class Reserva
     const _PABELLON_ = 1;
     const _EXTERIOR_ = 2;
 
+    const _EN_CURSO_ = 0;
+    const _APROBADO_ = 1;
+    const _RECHAZADO_ = 2;
+
     private $id;
     private $idJugador;
     private $pista;
@@ -40,7 +44,7 @@ class Reserva
         $this->pista = $pista;
         $this->id = $id;
         $this->idJugador = $idJugador;
-        $this->aprobado = (null == $aprobado)? 0 : $aprobado;
+        $this->aprobado = (null == $aprobado) ? self::_EN_CURSO_ : $aprobado;
         $this->token = ($token)?$token:bin2hex(random_bytes(10));
         $this->nombreJugador = $nombreJugador;
     }

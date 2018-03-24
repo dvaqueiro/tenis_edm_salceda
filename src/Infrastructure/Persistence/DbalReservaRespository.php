@@ -83,4 +83,28 @@ class DbalReservaRespository implements ReservaRespository
             $reserva->getId()
         ]);
     }
+
+    public function findAll($limit, $orderBy)
+    {
+        $first = true;
+        $sql = 'SELECT p.*, u.nombre
+                FROM pabellon p
+                INNER JOIN usuarios u on u.id = p.idusuario';
+        foreach ($orderBy as $key => $value) {
+            if($first) {
+                $sql .= " ORDER BY {$key} {$value}";
+                $first = false;
+            } else {
+                $sql .= ",{$key} {$value}";
+            }
+        }
+        if($limit) {
+            $sql .= " LIMIT {$limit}";
+        }
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        return $this->factory->makeAll($data);
+    }
 }

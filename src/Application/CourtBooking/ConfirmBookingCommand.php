@@ -10,11 +10,13 @@ class ConfirmBookingCommand
 {
     private $idReserva;
     private $token;
+    private $confirmado;
 
-    public function __construct($token, $idReserva)
+    public function __construct($token, $idReserva, $confirmado = \Domain\Model\Reserva::_APROBADO_)
     {
         $this->token = $token;
         $this->idReserva = $idReserva;
+        $this->confirmado = $confirmado;
     }
 
     function getIdReserva()
@@ -25,6 +27,11 @@ class ConfirmBookingCommand
     function getToken()
     {
         return $this->token;
+    }
+
+    function getConfirmado()
+    {
+        return $this->confirmado;
     }
 
 }

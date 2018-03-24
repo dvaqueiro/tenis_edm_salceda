@@ -3,6 +3,7 @@
 namespace Application\CourtBooking;
 
 use Ddd\Domain\DomainEventPublisher;
+use Domain\Model\Reserva;
 use Domain\Model\ReservaRespository;
 
 /**
@@ -29,22 +30,32 @@ class ConfirmBookingCommandHandler
         $reservaId = $command->getIdReserva();
         $reserva = $this->reservaRepository->findById($reservaId);
         $token = $command->getToken();
+        $confirmar = $command->getConfirmado();
 
         if(!$reserva->checkToken($token)) {
             $out['ok'] = false;
             $out['message'] = "Invalid token";
         }
 
-        $reserva->setAprobado(true);
+        $reserva->setAprobado($confirmar);
 
         $ok = $this->reservaRepository->update($reserva);
 
-        if($ok) {
+        if($ok && $confirmar == Reserva::_APROBADO_) {
             $out['ok'] = true;
             $out['message'] = "Reserva aprobada correctamente";
 
             DomainEventPublisher::instance()->publish(
                 new CourtBookingWasConfirmedEvent($reserva->getId())
+            );
+        }
+
+        if($ok && $confirmar == Reserva::_RECHAZADO_) {
+            $out['ok'] = true;
+            $out['message'] = "Reserva rechazada correctamente";
+
+            DomainEventPublisher::instance()->publish(
+                new CourtBookingWasRejectEvent($reserva->getId())
             );
         }
 

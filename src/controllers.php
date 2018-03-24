@@ -254,6 +254,13 @@ $app->get('/courts/confirm/{token}/{idReserva}', function ($token, $idReserva) u
 ->assert('idReserva','\d+')
 ->bind('booking_confirm');
 
+$app->get('/courts/reject/{token}/{idReserva}', function ($token, $idReserva) use ($app) {
+    $out = $app['commandBus']->handle(new ConfirmBookingCommand($token, $idReserva, Reserva::_RECHAZADO_));
+    
+    return $app->json($out);
+})
+->assert('idReserva','\d+')
+->bind('booking_reject');
 
 $app->get('/facebook', function () use ($app) {
     return $app['twig']->render('facebook.html.twig', array());

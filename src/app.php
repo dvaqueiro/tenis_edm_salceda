@@ -14,11 +14,14 @@ use Application\ContactFormCommand;
 use Application\ContactFormCommandHandler;
 use Application\CourtBooking\AddReservaCommand;
 use Application\CourtBooking\AddReservaCommandHandler;
+use Application\CourtBooking\AllBookingsCommand;
+use Application\CourtBooking\AllBookingsCommandHandler;
 use Application\CourtBooking\ConfirmBookingCommand;
 use Application\CourtBooking\ConfirmBookingCommandHandler;
 use Application\CourtBooking\HorasLibresReservaCommand;
 use Application\CourtBooking\HorasLibresReservaCommandHandler;
 use Application\CourtBooking\SendMailBookingConfirmationSuscriber;
+use Application\CourtBooking\SendMailToBookingConfirmationCommandHandler;
 use Application\CourtBooking\SendMailToBookingConfirmationSuscriber;
 use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaCommandHandler;
@@ -81,7 +84,6 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
-use Application\CourtBooking\SendMailToBookingConfirmationCommandHandler;
 
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__ . '/../config/.env');
@@ -337,6 +339,12 @@ $app['send_mail_to_booking_confirmation_command_handler'] = $app->factory(functi
     );
 });
 
+$app['all_bookings_command_handler'] = $app->factory(function ($app) {
+    return new AllBookingsCommandHandler(
+        $app['reserva_repository']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -366,13 +374,17 @@ $app['commandBus'] = function ($app){
                 DeleteJugadorCommand::class => $app['delete_jugador_command_handler'],
                 AllLigasCommand::class => $app['all_leagues_command_handler'],
                 AllAboutDivisionCommand::class => $app['all_about_division_command_handler'],
+                AllBookingsCommand::class => $app['all_bookings_command_handler'],
             ]), new HandleInflector()
         )
     ]);
 };
 
 $app->before(function (Request $request) use ($app) {
-    DomainEventPublisher::instance()->subscribe($app['send_mail_to_booking_confirmation_command_handler']);
+    DomainEventPublisher::instance()->subscribe(
+       new SendMailToBookingConfirmationSuscriber(
+        $app['send_mail_to_booking_confirmation_command_handler']
+    ));
 
     DomainEventPublisher::instance()->subscribe(
        new SendMailBookingConfirmationSuscriber(

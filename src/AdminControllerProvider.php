@@ -128,7 +128,22 @@ class AdminControllerProvider implements ControllerProviderInterface
         ->assert('idDivision','\d+');
 
         $controllers->get('/courts', function (Application $app) {
-            return $app['twig']->render('admin_courts.html.twig', array());
+            $limit = 100;
+            $orderBy = [
+                'fecha' => 'DESC',
+                'hora' => 'ASC'
+            ];
+            $reservas = $app['commandBus']->handle(new \Application\CourtBooking\AllBookingsCommand($limit, $orderBy));
+
+            $pistas = [
+                1 => 'Pabellón parderrubias',
+                2 => 'Pista exterior'
+            ];
+
+            return $app['twig']->render('admin_courts.html.twig', [
+                'reservas' => $reservas,
+                'pistas' => $pistas,
+            ]);
         })->bind('admin_courts');
 
         return $controllers;

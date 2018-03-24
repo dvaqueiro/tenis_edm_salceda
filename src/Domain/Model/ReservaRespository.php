@@ -36,4 +36,11 @@ interface ReservaRespository
      * @return Reserva[]
      */
     public function findByPistaYFecha($pista, \DateTime $fecha);
+
+    /**
+     * 
+     * @param int $limit
+     * @param [] $orderBy
+     */
+    public function findAll($limit, $orderBy);
 }

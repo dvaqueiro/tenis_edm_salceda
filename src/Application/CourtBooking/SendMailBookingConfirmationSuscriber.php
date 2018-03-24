@@ -56,7 +56,13 @@ class SendMailBookingConfirmationSuscriber implements DomainEventSubscriber
         $jugador = $this->jugadorRepository->findById($reserva->getIdJugador());
         $this->buildEmailBody($reserva, $jugador);
 
-        $message = new Swift_Message('Tu reserva ha sido confirmada.');
+        if ($reserva->getAprobado() == Reserva::_APROBADO_) {
+            $txt = 'Tu reserva ha sido confirmada.';
+        } else {
+            $txt = 'Tu reserva ha sido RECHAZADA.';
+        }
+
+        $message = new Swift_Message($txt);
         $message->setTo($jugador->getEmail());
         $message->setBcc($this->config['to.admin']);
         $message->setFrom($this->config['from']);
@@ -67,14 +73,21 @@ class SendMailBookingConfirmationSuscriber implements DomainEventSubscriber
 
     public function isSubscribedTo($aDomainEvent): bool
     {
-        return $aDomainEvent instanceof CourtBookingWasConfirmedEvent;
+        return $aDomainEvent instanceof CourtBookingWasConfirmedEvent ||
+            $aDomainEvent instanceof CourtBookingWasRejectEvent;
     }
 
     public function buildEmailBody(Reserva $reserva, Jugador $jugador)
     {
         $pista = ($reserva->getPista() == 1)? "Pabellón de Parderrubias":"Pista exterior de Parderrubias";
 
-        $this->body = "<h2>Tu reserva con los siguientes datos ha sido confirmada...</h2>";
+        if ($reserva->getAprobado() == Reserva::_APROBADO_) {
+            $txt = 'Tu reserva con los siguientes datos ha sido confirmada...';
+        } else {
+            $txt = 'Tu reserva con los siguientes datos ha sido RECHAZADA....';
+        }
+
+        $this->body = "<h2>{$txt}</h2>";
         $this->body .= "<table width='500' border='0' cellspacing='5' cellpadding='5'>
             <tr>
                 <td width='98' bgcolor='#CDFDC6'><strong>Pista</strong></td>
