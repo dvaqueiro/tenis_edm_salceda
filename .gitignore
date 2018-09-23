@@ -5,3 +5,4 @@
 /var/
 /config/.env
 /src/Infrastructure/Commands/ln_test.log
+/node_modules/

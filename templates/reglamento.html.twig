@@ -1,0 +1,219 @@
+{% extends "layout.html.twig" %}
+{% block sidebar %}
+    {% if is_granted('ROLE_USER') %}
+        {{ include('logout_sidebar.html.twig') }}
+    {% else %}
+        {{ include('sidebar.html.twig') }}
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <h1>Reglamento Liga de Tenis E.D.M. Salceda de Caselas</h1>
+    <div style="background-color: white; padding: 20px">
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 1. Comunicación.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            La forma general de comunicación con la organización será el correo electrónico que los participantes facilitarán a la organización en el momento de la inscripción. 
+            Queda a criterio de los participantes emplear cualquier otro medio que acuerden entre ellos. 
+            El desarrollo de la competición podrá seguirse en la página web <a href="http://tenissalceda.es/"> tenissalceda.es</a>
+            en donde aparecerán todos los participantes, su e-mail, las categorías y grupos con todos los partidos a disputar, resultados y clasificaciones.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 2. Participación.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Podrán participar todos aquellos jugadores con conocimiento de las normas elementales del tenis, indiferentemente de su nivel de juego. 
+            No es necesario estar en posesión de licencia federativa alguna. 
+            Los participantes deben estar en estado físico adecuado para la práctica deportiva,
+            tener su inscripción acepta y comprometerse al cumplimento de este reglamento,
+            así como a no reclamar nada a la organización en caso de lesión, accidente deportivo,
+            discapacidad o muerte derivada de la disputa de sus partidos en esta liga.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 3. Formanto de Competición.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Con los inscritos se conformarán categorías  compuestas de un
+            máximo de 14 jugadores divididos en dos grupos de 5, 6 ó 7, excepto la
+            última categoría que se adaptará a los inscritos. Los
+            participantes se enfrentarán a los demás jugadores de su mismo
+            grupo.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            La competición tendrá carácter anual,
+            dividida en tres rondas. Cada ronda durará 2 meses y medio para la
+            disputa de partidos y 15 días para la notificación a los
+            participantes y ajuste de posibles altas-bajas. A la finalización
+            del trimestre se actualizarán los grupos y continuará la competición.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+                Las rondas por defecto estarán organizadas de la siguiente manera, a
+                no ser que la organización decida hacer cambios que se comunicarían
+                con suficiente antelación.
+        </div>
+        <ul>
+            <li>
+                <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; widows: 0;">
+                    Primera ronda Enero, febrero, y hasta el 15 Marzo.
+                </div>
+            </li>
+        </ul>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; widows: 0;">
+            (Se descansa por la competicón de interclubes).
+        </div>
+        <ul>
+            <li>
+                <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; widows: 0;">
+                    Segunda ronda 15 de Mayo, Junio, y hasta el 31 de  Julio.
+                </div>
+            </li>
+        </ul>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; widows: 0;">
+            (Se descansa en Agosto).
+        </div>
+        <ul>
+            <li>
+                <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; widows: 0;">
+                    Tercera ronda Septiembre, Octubre, y hasta el 15 Noviembre.
+                </div>
+            </li>
+        </ul>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; widows: 0;">
+            (Se descansa en Diciembre).
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 4. Inscripción.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Los interesados enviarán un correo electrónico a la dirección <a href="mailto:presuntamentetenis@gmail.com">presuntamentetenis@gmail.com</a>
+            con los siguientes datos: nombre y apellidos, nif, fecha de nacimiento, ayuntamiento de
+            residencia, número de móvil y su dirección de correo electrónico.
+            Todos los participantes aceptan la publicación de su nombre, 
+            apellidos y dirección de correo electrónico en el la web <a href="http://tenissalceda.es/">tenissalceda.es</a>.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Todas las inscripciones tendrán que ser confirmadas por la organización.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 5. Cuantía de inscripción.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            La cuantía de inscripción será de 30€ anuales. Dicha cuota, además de dar derecho a participar en la liga,
+            incluye un seguro de accidentes con validez anual con las coberturas exigidas por el Real Decreto 849/19936,
+            de 4 de junio, por el que se determina las prestaciones mínimas del Seguro Obligatorio Deportivo.
+            Los participantes deberán efectuar el ingreso en la entidad Abanca, número de cuenta <b>ES45 2080 5523 2130 0000 2310</b>,
+            indicando como concepto “inscripción liga de tenis EDM Salceda de Caselas” y como ordenante el nombre del participante.
+            Es requisito indispensable para la inscripción estar al corriente de la cuantía y no existirá ningún otro mecanismo alternativo para satisfacerla.
+        </div>
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 6. Plazo de inscripción.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+                El plazo de inscripción con carácter general terminará 15 días antes del
+                inicio de cada ronda. En cualquier caso será publicado en el blog con suficiente antelación la fecha exacta. 
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 7. Partidos.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Una vez publicados los grupos, los participantes se pondrán en contacto con sus oponentes para convenir
+            fecha y hora para la celebración de los partidos. El vencedor introducirá el resultado en la página web
+            <a href="http://tenissalceda.es/">tenissalceda.es</a>.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            La organización no reservará pistas para ningún partido y no se opondrá a lo que los jugadores convengan.
+            En caso de no existir consenso respecto a la pista de celebración de los partidos se tomará como referencia las pistas de Parderrubias.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Las E.D.M. Salceda de Caselas, ponen a disposición de los participantes en la liga de tenis, la posibilidad de reservar el pabellón del I.E.S. Pedras Rubias,
+            así como la pista exterior, situada detrás del pabellón.
+            Para solicitar la pista, solo tienes que entrar en la web: <a href="http://tenissalceda.es/">tenissalceda.es</a>,
+            acceder con tu dni y contraseña, pinchar en la pestaña que pone pabellón, y seleccionar la pista y el dia y hora.
+            Esta reserva es provisional y no tiene validez hasta que sea confirmada en la propia página por parde de las E.D.M. Salceda.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Para poder abrir el pabellón, se tiene que coger previamente la llave en la cafetería Charango Café, facilitando a la hora de coger la llave tu Nombre, Dni y teléfono.
+            Una vez terminado el partido, la persona que cogió la llave, es la responsable de devolver la llave y dejar la red recogida y el pabellón en perfecto estado.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Las E.D.M. Salceda podrían cancelar cualquier reserva por los motivos que consideren oportunos.
+            En tal caso, la cancelación será notificada a los solicitantes con la suficiente antelación, para que puedan acordar otra fecha.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 8. Formato de los partidos.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+                Los encuentros se disputaran al mejor de tres sets, con tie-break en los tres set.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 9. Pelotas.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+                No existe pelota oficial para estos partidos. Los jugadores serán los encargados de poner a disposición de sus
+                rivales un bote de pelotas en buen estado y estos decidirán con cuales jugar.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 10. Clasificación.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Cada participante comenzará con 10 puntos por cada categoría inferior a la suya que exista en esa ronda. (no se tendrán en cuenta las categorías sub-18 o sub-14)
+            Por cada partido ganado se sumarán tres puntos, en caso de perderlo se sumará un punto y si no se juega no se sumará punto alguno.
+            Si algún grupo contara con menos de seis participantes, se asignará un 6-0/6-0 para cada jugador por cada plaza vacante.
+            Si un jugador es expulsado de la competición en base al artículo 13, o disputa menos de la mitad de los partidos de su grupo,
+            automáticamente todos los jugadores de su mismo grupo pasarían a ganar ese partido por 6-0/6-0.
+        </div>
+        <div style=" line-height: 19px; margin: 0.2cm 0px; outline: invert none medium; padding: 0px; text-align: justify; text-indent: 0.3cm;">
+            La acumulación de los puntos de la ronda en juego y las dos anteriores, 
+            dará como resultado una clasificación general que podrá ser usada por la organización para proclamar un campeón anual.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 11. Ascensos y descensos.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            En primera categoría no existirá ascenso posible.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            En el grupo A el 1º y 3º clasificados se mantienen en el mismo grupo, el 2º y 4º clasificado pasan al grupo
+            opuesto, el 5º desciende al grupo de la misma letra, y el 6º desciende al grupo de la letra opuesta.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            En el grupo B el 1º y 3º pasan al grupo A, los 2º y 4º se mantienen en el mismo grupo, el 5º desciende al
+            grupo de la misma letra, y el 6º desciende al grupo de la letra opuesta.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            En segunda, en ambos grupos, los 1º ascienden al grupo de la misma letra, los 2º ascienden al grupo de la letra
+            opuesta, los 4º se mantienen y pasan al grupo opuesto ,los 3º se mantienen en grupo y letra, el 6º desciende al grupo de letra
+            opuesta y el 5º desciende al grupo de la misma letra. El formato de segunda será el valido para las demás categorías, excepto la
+            última, en donde los clasificados en orden par que no asciendan cambiarán de grupo, con la finalidad de variar de rivales.
+            El 7º clasificado de cualquier grupo, en caso de existir, desciende al grupo de la misma letra.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 12. Empates y clasificación.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Cuando dos o más jugadores obtengan la misma puntuación, se tendrá en cuenta la diferencia de sets ganados-perdidos.
+            De seguir el empate se tendrá en cuenta el coeficiente juegos ganados-juegos perdidos.
+            De seguir el empate la organización tomará nuevas decisiones.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Estos desempates solo afectarán a la posición y no modificarán la puntuación.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 13. Expulsiones.</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            La organización se reserva el derecho de
+            expulsión de la competición a todos aquellos participantes que
+            incumplan alguno de estos artículos y muy especialmente en los
+            siguientes casos:
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Falta de interés injustificada para llevar a cabo los partidos, en este caso, se prestará especial atención al primer mes de competición,
+            donde todos los participantes tienen que haber jugado alguno de sus encuentros, así como una regularidad a la hora de participar. 
+            La falta de interés puede ser estudiada por la organización y conllevar la consiguiente expulsión e inclusión de nuevos jugadores que estén en lista de espera.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Por otro lado, cualquier falta grave de respeto, consideración, menosprecio al rival, agresión,... 
+            de cualquiera de los participantes a sus rivales también puede ser estudiada y causar expulsión.
+        </div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            En caso de expulsión, la organización no tiene la obligación de reembolsar la cuantía de inscripción.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 14. Bajas</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+            Una vez iniciada la competición los participantes podrán solicitar su baja en la misma si esta no es de su agrado, 
+            u otros motivos, sin que la organización tenga obligación de reembolsar la cuantía de la inscripción.
+        </div>
+
+        <div style="font-weight:bold; margin-bottom: 0.2cm; margin-top: 0.6cm; orphans: 0;">Artículo 15.Ampliación</div>
+        <div align="JUSTIFY" style=" margin-bottom: 0.2cm; margin-top: 0.2cm; orphans: 0; text-indent: 0.3cm; widows: 0;">
+                Al presente reglamento puede añadirse nuevos artículos en función del desarrollo de la competición.
+        </div>
+    </div>
+{% endblock %}

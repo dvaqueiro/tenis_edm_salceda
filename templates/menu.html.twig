@@ -29,6 +29,9 @@
           <li {% if currentRoute == 'courts' %}class="current"{% endif %}>
               <a href="{{ url('courts') }}">Pistas</a>
           </li>
+          <li {% if currentRoute == 'reglamento' %}class="current"{% endif %}>
+              <a href="{{ url('reglamento') }}">Reglamento</a>
+          </li>
           <li {% if currentRoute == 'facebook' %}class="current"{% endif %}>
               <a href="{{ url('facebook') }}">Facebook</a>
           </li>

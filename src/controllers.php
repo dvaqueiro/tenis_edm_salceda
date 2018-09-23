@@ -267,6 +267,11 @@ $app->get('/facebook', function () use ($app) {
 })
 ->bind('facebook');
 
+$app->get('/reglamento', function () use ($app) {
+    return $app['twig']->render('reglamento.html.twig', array());
+})
+->bind('reglamento');
+
 $app->error(function (Exception $e, Request $request, $code) use ($app) {
     if ($app['debug']) {
         return;

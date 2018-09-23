@@ -136,6 +136,7 @@ $app->register(new SecurityServiceProvider(), array(
         'ranking' => array('pattern' => '^/ranking$'),
         'contact' => array('pattern' => '^/contact$'),
         'facebook' => array('pattern' => '^/facebook$'),
+        'reglamento' => array('pattern' => '^/reglamento$'),
         'booking_confirm' => array('pattern' => '^/courts/confirm/.*$'),
         'login' => array('pattern' => '^/login$'),
         'default' => array(
