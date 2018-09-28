@@ -50,10 +50,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for clasificacion in division.clasificacion.agregados %}
+                                        {% for idJugador, clasificacion in division.clasificacion.agregados %}
                                             <tr>
                                                 <th>{{ loop.index }}</th>
-                                                <td>{{ clasificacion.nombre }}</td>
+                                                <td><a href="/admin/leagues/{{ liga.idLiga }}/division/{{ division.idDivision }}/player/{{ idJugador }}">{{ clasificacion.nombre }}</a></td>
                                                 <td>{{ clasificacion.puntos }}</td>
                                                 <td>{{ clasificacion.partidos }}</td>
                                                 <td>{{ clasificacion.win }}</td>

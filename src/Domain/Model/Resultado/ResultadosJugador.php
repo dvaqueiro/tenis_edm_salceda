@@ -79,4 +79,8 @@ class ResultadosJugador
         return $this->division;
     }
 
+    function getRivales()
+    {
+        return $this->rivales;
+    }
 }

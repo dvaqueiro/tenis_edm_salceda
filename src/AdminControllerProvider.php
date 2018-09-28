@@ -1,13 +1,17 @@
 <?php
 
+use Application\AddResultadoCommad;
 use Application\Player\UpdateJugadorCommand;
 use Domain\Model\Jugador;
 use Domain\Model\PersistenceException;
+use Domain\Model\Resultado\InvalidResultException;
 use Infrastructure\Forms\JugadorUpdateAdminType;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Symfony\Component\Form\Form;
+use Application\Player\PlayerResultsCommand;
+use Application\Player\PlayerResultsCommandHandler;
 
 class AdminControllerProvider implements ControllerProviderInterface
 {
@@ -33,7 +37,6 @@ class AdminControllerProvider implements ControllerProviderInterface
 
             /* @var $form Form */
             $form = $app['form.factory']->createBuilder(JugadorUpdateAdminType::class, $jugador)->getForm();
-
             $request = $app['request_stack']->getCurrentRequest();
 
             $form->handleRequest($request);
@@ -119,6 +122,8 @@ class AdminControllerProvider implements ControllerProviderInterface
             ];
             $liga = $app['commandBus']->handle(new \Application\AllAboutDivisionCommand($idLiga, $idDivision,
                 $puntosGanador, $puntosPerdedor, $orderBy));
+            //Symfony\Component\VarDumper\VarDumper::dump($liga);
+
             return $app['twig']->render('admin_results.html.twig', [
                 'liga' => $liga,
                 'idDivision' => $idDivision
@@ -126,6 +131,45 @@ class AdminControllerProvider implements ControllerProviderInterface
         })->bind('admin_results')
         ->assert('idLiga','\d+')
         ->assert('idDivision','\d+');
+
+        $controllers->get('/leagues/{idLiga}/division/{idDivision}/player/{idPlayer}', function ($idLiga, $idDivision, $idPlayer, Application $app) {       
+
+            $handler = new PlayerResultsCommandHandler($app['jugador_repository'], $app['liga_repository'], 
+                $app['resultado_repository'], $app['division_repository']);
+            $resultadosJugador = $handler->handle(new PlayerResultsCommand($idPlayer));
+            //Symfony\Component\VarDumper\VarDumper::dump($resultadosJugador);
+
+            return $app['twig']->render('admin_player_results.html.twig', [
+                'resultadosJugador' => $resultadosJugador
+            ]);
+        })->bind('admin_player_results')
+          ->assert('idLiga','\d+')
+          ->assert('idDivision','\d+')
+          ->assert('idPlayer','\d+');
+
+        $controllers->post('/leagues/{idLiga}/division/{idDivision}/player/{idPlayer}', function ($idLiga, $idDivision, $idPlayer, Application $app) 
+        {
+            $request = $app['request_stack']->getCurrentRequest();
+            if($request->get('form')) {
+                try {
+                    $formData = $request->get('form');
+                    $app['commandBus']->handle(
+                        new AddResultadoCommad($formData)
+                    );
+                    $app['session']->getFlashBag()->add('mensaje',
+                        'Resultado guardado correctamente');
+                } catch (InvalidResultException $exc) {
+                    $app['session']->getFlashBag()->add('error', $exc->getMessage());
+                } catch (PersistenceException $exc) {
+                    $app['session']->getFlashBag()->add('error', $exc->getMessage());
+                }
+            }
+            return $app->redirect($request->getUri());
+        })->bind('admin_player_add_results')
+          ->assert('idLiga','\d+')
+          ->assert('idDivision','\d+')
+          ->assert('idPlayer','\d+');
+
 
         $controllers->get('/courts', function (Application $app) {
             $limit = 100;

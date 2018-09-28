@@ -25,7 +25,7 @@
                 </li>
             </ul>
         </li>
-        <li {% if currentRoute == 'admin_leagues' or currentRoute == 'admin_results'%}class="active"{% endif %}>
+        <li {% if currentRoute == 'admin_leagues' or currentRoute == 'admin_results' or currentRoute == 'admin_player_results' %}class="active"{% endif %}>
             <a href="{{ url('admin_leagues') }}">
                 <i class="material-icons">golf_course</i>
                 <span>Ligas</span>
