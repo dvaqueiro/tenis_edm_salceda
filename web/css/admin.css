@@ -21,3 +21,19 @@
 .winner {
     font-weight: bold;
 }
+
+#formulario_resultado .btn-group.bootstrap-select.juegos {
+    width: 70px;
+}
+
+form#formulario_resultado {
+    border-color: #dcdcdc;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+#formulario_resultado .submit {
+    text-align: right;
+}
