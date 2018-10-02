@@ -4,6 +4,8 @@ use Application\AddComentarioCommand;
 use Application\AddComentarioCommandHandler;
 use Application\AddResultadoCommad;
 use Application\AddResultadoCommandHandler;
+use Application\DeleteResultadoCommand;
+use Application\DeleteResultadoCommandHandler;
 use Application\AllAboutDivisionCommand;
 use Application\AllAboutDivisionCommandHandler;
 use Application\ClasificacionPorLigaCommand;
@@ -135,6 +137,7 @@ $app->register(new SecurityServiceProvider(), array(
         'standings' => array('pattern' => '^/standings$'),
         'ranking' => array('pattern' => '^/ranking$'),
         'contact' => array('pattern' => '^/contact$'),
+        'delete' => array('pattern' => '^/admin/result/'),
         'facebook' => array('pattern' => '^/facebook$'),
         'reglamento' => array('pattern' => '^/reglamento$'),
         'booking_confirm' => array('pattern' => '^/courts/confirm/.*$'),
@@ -346,6 +349,12 @@ $app['all_bookings_command_handler'] = $app->factory(function ($app) {
     );
 });
 
+$app['delete_result_command_handler'] = $app->factory(function ($app) {
+    return new DeleteResultadoCommandHandler(
+        $app['resultado_repository']
+    );
+});
+
 /**
  * Command Bus
  */
@@ -376,6 +385,7 @@ $app['commandBus'] = function ($app){
                 AllLigasCommand::class => $app['all_leagues_command_handler'],
                 AllAboutDivisionCommand::class => $app['all_about_division_command_handler'],
                 AllBookingsCommand::class => $app['all_bookings_command_handler'],
+                DeleteResultadoCommand::class => $app['delete_result_command_handler'],
             ]), new HandleInflector()
         )
     ]);

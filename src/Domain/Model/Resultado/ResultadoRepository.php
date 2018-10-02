@@ -14,4 +14,8 @@ interface ResultadoRepository
     public function findByLigaAndJugador($idLiga, $idJugador);
 
     public function findByDivision($idDivision);
+
+    public function remove($resultadoId);
+
+    public function find($resultadoId);
 }

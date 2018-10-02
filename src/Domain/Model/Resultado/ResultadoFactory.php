@@ -9,4 +9,5 @@ namespace Domain\Model\Resultado;
 interface ResultadoFactory
 {
     function makeAll($data);
+    function make($data);
 }

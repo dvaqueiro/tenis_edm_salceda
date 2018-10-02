@@ -9,7 +9,7 @@ use Ddd\Domain\DomainEvent;
  *
  * @author dvaqueiro
  */
-class NewResultWasCreatedEvent implements DomainEvent
+class ResultWasDeleteEvent implements DomainEvent
 {
     private $resultadoId;
     private $occurredOn;

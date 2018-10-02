@@ -17,15 +17,23 @@ class ArrayResultadoFactory implements ResultadoFactory
     {
         $resultados = new ArrayCollection();
         foreach ($data as $objData) {
-            //$idResultado, $idDivision, $idJugadorLocal, $idJugadorVisitante, $nombreJugadorLocal , $nombreJugadorVisitante
-            $resultado = new Resultado($objData['id'], $objData['division'], $objData['idu1'], $objData['idu2'],
-                $objData['nombre_local'], $objData['nombre_visitante']);
-            $resultado->addSet(new Set($objData['j11'], $objData['j12']));
-            $resultado->addSet(new Set($objData['j21'], $objData['j22']));
-            $resultado->addSet(new Set($objData['j31'], $objData['j32']));
+            $resultado = $this->make($objData); 
             $resultados->set($resultado->getIdResultado(), $resultado);
         }
 
         return $resultados;
+    }
+
+    public function make($data)
+    {
+        $resultado = new Resultado(
+            $data['id'], $data['division'], $data['idu1'], $data['idu2'],
+            $data['nombre_local'], $data['nombre_visitante']
+        );
+        $resultado->addSet(new Set($data['j11'], $data['j12']));
+        $resultado->addSet(new Set($data['j21'], $data['j22']));
+        $resultado->addSet(new Set($data['j31'], $data['j32']));
+
+        return $resultado;
     }
 }

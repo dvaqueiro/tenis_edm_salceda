@@ -1,8 +1,15 @@
 {% extends "admin_layout.html.twig" %}
 
+
+{% block extra_css %}
+    <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+{% endblock %}
+
 {% block extra_script %}
     {% if resultadosJugador.rivalesSinJugar|length > 0 %}
     <script type="text/javascript" src="{{ asset('js/comprueba.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('js/confirma.js') }}"></script> 
+    <script src="{{ asset('node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js') }}"></script>
     {% endif %}
 {% endblock %}
 
@@ -14,7 +21,8 @@
                     <h2>
                         Resultados Jugador
                     </h2>
-                    <a class="header-dropdown m-r--5 btn waves-effect m-b-15" role="button" href="/admin/leagues/{{ resultadosJugador.division.idLiga }}/division/{{ resultadosJugador.division.idDivision }}">Volver</a>
+                    <a class="header-dropdown m-r--5 btn waves-effect m-b-15" 
+                        role="button" href="/admin/leagues/{{ resultadosJugador.division.idLiga }}/division/{{ resultadosJugador.division.idDivision }}">Volver</a>
                 </div>                
                 <div class="body">
                     <div class="row">
@@ -101,13 +109,16 @@
                                 <input type="hidden" name="form[idDivision]" value="{{ resultadosJugador.division.idDivision }}"/>
                                 <div class="submit">
                                     <span id="resultado_error"></span>
-                                    <button type="button" id="resultado_submit" name="resultado_submit"> Guardar resultado </button>
+                                    <button type="button" id="resultado_submit" class="btn btn-success waves-effect" name="resultado_submit"> Guardar resultado </button>
                                 </div>
                             </form>
                         {% endif %}
                             <ul class="list-group">
                                 {% for resultado in resultadosJugador.resultados %}
-                                    <li class="list-group-item">
+                                <li class="list-group-item" id="lg_{{ resultado.idResultado }}">
+                                        <span class="pull-right">
+                                            <span class="btn btn-xs btn-danger del-resultado" id="del_{{ resultado.idResultado }}">X</span>
+                                        </span>
                                         {% if(resultado.ganador) %}
                                             <div class="tenis_result">
                                                 <div>

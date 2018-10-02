@@ -1,6 +1,7 @@
 <?php
 
 use Application\AddResultadoCommad;
+use Application\DeleteResultadoCommand;
 use Application\Player\UpdateJugadorCommand;
 use Domain\Model\Jugador;
 use Domain\Model\PersistenceException;
@@ -12,6 +13,7 @@ use Silex\ControllerCollection;
 use Symfony\Component\Form\Form;
 use Application\Player\PlayerResultsCommand;
 use Application\Player\PlayerResultsCommandHandler;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdminControllerProvider implements ControllerProviderInterface
 {
@@ -189,6 +191,14 @@ class AdminControllerProvider implements ControllerProviderInterface
                 'pistas' => $pistas,
             ]);
         })->bind('admin_courts');
+
+        $controllers->delete('/result/{idResultado}', function ($idResultado, Application $app) {
+            $ok = $app['commandBus']->handle(new DeleteResultadoCommand($idResultado));
+            
+            return new JsonResponse(['ok' => $ok]);
+        })->bind('admin_result_delete')
+            ->assert('idResultado','\d+');
+
 
         return $controllers;
     }

@@ -35,5 +35,6 @@ form#formulario_resultado {
 }
 
 #formulario_resultado .submit {
+    margin: 8px;
     text-align: right;
 }

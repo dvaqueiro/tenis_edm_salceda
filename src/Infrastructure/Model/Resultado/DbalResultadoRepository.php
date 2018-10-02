@@ -58,8 +58,9 @@ class DbalResultadoRepository implements ResultadoRepository
 
     public function add(Resultado $resultado)
     {
-        $sql = "INSERT INTO resultados (idu1, idu2, division, j11, j12, j21, j22, j31, j32, ganador) "
-                . "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO resultados "
+            . " (idu1, idu2, division, j11, j12, j21, j22, j31, j32, ganador) "
+            . " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->dbal->prepare($sql);
         $stmt->bindValue(1, $resultado->getIdJugadorLocal());
         $stmt->bindValue(2, $resultado->getIdJugadorVisitante());
@@ -77,5 +78,25 @@ class DbalResultadoRepository implements ResultadoRepository
         $resultado->setIdResultado($id);
 
         return $resultado;
+    }
+
+    public function remove($resultadoId)
+    {
+        return $this->dbal->delete('resultados', ['id' => $resultadoId]);
+    }
+
+    public function find($resultadoId)
+    {
+        $sql = 'SELECT r.* , ul.nombre AS nombre_local, uv.nombre AS nombre_visitante
+                FROM resultados r 
+                INNER JOIN usuarios ul ON ul.`id` = r.idu1
+                INNER JOIN usuarios uv ON uv.`id` = r.idu2
+                WHERE r.id = ?';
+        $stmt = $this->dbal->prepare($sql);
+        $stmt->bindValue(1, $resultadoId);
+        $stmt->execute();
+        $data = $stmt->fetch();
+
+        return $this->factory->make($data);
     }
 }
