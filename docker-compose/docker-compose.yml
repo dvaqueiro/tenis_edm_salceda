@@ -30,5 +30,3 @@ services:
         environment:
             - MYSQL_ROOT_PASSWORD=root
             - MYSQL_DATABASE=u267264214_tenis
-            - MYSQL_USER=u267264214_user
-            - MYSQL_PASSWORD=JDww2Y9vl2FC
