@@ -13,7 +13,7 @@ class Resultado
     const _SIN_GANADOR_ = 0;
     const _LOCAL_ = 1;
     const _VISITANTE_ = 2;
-    
+
     private $nombreJugadorVisitante;
     private $nombreJugadorLocal;
     private $idJugadorVisitante;
@@ -89,7 +89,7 @@ class Resultado
     function getSet($numeroSet)
     {
         $set = $this->sets->get($numeroSet);
-        if($set === null) {
+        if ($set === null) {
             $set = new NullSet();
         }
 
@@ -98,7 +98,7 @@ class Resultado
 
     function getGanador()
     {
-        if($this->ganador == null) {
+        if ($this->ganador == null) {
             $this->calcularGanadorPartido();
         }
         return $this->ganador;
@@ -106,7 +106,7 @@ class Resultado
 
     function getPerdedor()
     {
-        if($this->perdedor == null) {
+        if ($this->perdedor == null) {
             $this->calcularGanadorPartido();
         }
         return $this->perdedor;
@@ -114,10 +114,10 @@ class Resultado
 
     private function calcularGanadorPartido()
     {
-        $setsParaGanar = intdiv($this->sets->count() , 2) + 1;
+        $setsParaGanar = intdiv($this->sets->count(), 2) + 1;
         $this->ganador = self::_SIN_GANADOR_;
         $this->acumularSetsGanados();
-        if($this->setGanadosLocal >= $setsParaGanar) {
+        if ($this->setGanadosLocal >= $setsParaGanar) {
             $this->ganador = self::_LOCAL_;
             $this->perdedor = self::_VISITANTE_;
             $this->nombreGanador = $this->nombreJugadorLocal;
@@ -126,7 +126,7 @@ class Resultado
             $this->idPerdedor = $this->idJugadorVisitante;
         }
 
-        if($this->setGanadosVisitante >= $setsParaGanar) {
+        if ($this->setGanadosVisitante >= $setsParaGanar) {
             $this->ganador = self::_VISITANTE_;
             $this->perdedor = self::_LOCAL_;
             $this->idGanador = $this->idJugadorVisitante;
@@ -140,10 +140,10 @@ class Resultado
     {
         foreach ($this->sets as $set) {
             $ganador = $set->getGanadorSet();
-            if($ganador == Set::_LOCAL_) {
+            if ($ganador == Set::_LOCAL_) {
                 $this->setGanadosLocal++;
             }
-            if($ganador == Set::_VISITANTE_) {
+            if ($ganador == Set::_VISITANTE_) {
                 $this->setGanadosVisitante++;
             }
         }
@@ -177,11 +177,11 @@ class Resultado
     {
         $this->getGanador();
         $diff = 0;
-        if($this->ganador == self::_LOCAL_) {
+        if ($this->ganador == self::_LOCAL_) {
             $diff = $this->setGanadosLocal - $this->setGanadosVisitante;
         }
 
-        if($this->ganador == self::_VISITANTE_) {
+        if ($this->ganador == self::_VISITANTE_) {
             $diff = $this->setGanadosVisitante - $this->setGanadosLocal;
         }
 
@@ -190,7 +190,7 @@ class Resultado
 
     function getDiferenciaSetsPerdedor()
     {
-        return - $this->getDiferenciaSetsGanador();
+        return -$this->getDiferenciaSetsGanador();
     }
 
     function getDiferenciaJuegosGanador()
@@ -209,7 +209,7 @@ class Resultado
 
     function getDiferenciaJuegosPerdedor()
     {
-        return - $this->getDiferenciaSetsGanador();
+        return -$this->getDiferenciaJuegosGanador();
     }
 
     function isValidResult()
@@ -222,3 +222,4 @@ class Resultado
         $this->idResultado = $idResultado;
     }
 }
+

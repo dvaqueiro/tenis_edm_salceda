@@ -44,7 +44,15 @@ class Reservas
 
         foreach ($this->reservas as $reserva) {
             /* @var $reserva Reserva */
-            $estado = ($reserva->getAprobado()) ? '(Aprobada)' : '(En curso)';
+            $estadoVal = $reserva->getAprobado();
+            $estado = '(En curso)';
+            if ($estadoVal == 1) {
+                $estado = '(Aprobada)';
+            }
+            if ($estadoVal == 2) {
+                $estado = '(RECHAZADA)';
+            }
+
             $out[] = [
                 'hora'    => $reserva->getHoraTexto(),
                 'jugador' => $reserva->getNombreJugador(),
@@ -55,3 +63,4 @@ class Reservas
         return $out;
     }
 }
+
