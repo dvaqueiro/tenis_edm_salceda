@@ -20,9 +20,12 @@ class PlayerResultsCommandHandler
     private $ligaRepository;
     private $divisionRepository;
 
-    function __construct(JugadorRepository $userRepository, LigaRepository $ligaRepository,
-        ResultadoRepository $resultadoRepository, DivisionRepository $divisionRepository)
-    {
+    function __construct(
+        JugadorRepository $userRepository,
+        LigaRepository $ligaRepository,
+        ResultadoRepository $resultadoRepository,
+        DivisionRepository $divisionRepository
+    ) {
         $this->userRepository = $userRepository;
         $this->resultadoRepository = $resultadoRepository;
         $this->ligaRepository = $ligaRepository;
@@ -32,12 +35,13 @@ class PlayerResultsCommandHandler
     function handle(PlayerResultsCommand $command)
     {
         $jugadorId = $command->getJugadorId();
-        $liga = $this->ligaRepository->findByIdOrLast(null);
+        $liga = $this->ligaRepository->findByIdOrLast($command->getIdLiga());
         $jugador = $this->userRepository->findById($jugadorId);
         $division = $this->divisionRepository->findByLigaAndJugador($liga->getIdLiga(), $jugadorId);
         $rivales = $this->userRepository->findRivales($liga->getIdLiga(), $jugadorId);
         $resultados = $this->resultadoRepository->findByLigaAndJugador($liga->getIdLiga(), $jugadorId);
 
-        return new ResultadosJugador($division, $jugador, $rivales,$resultados);
+        return new ResultadosJugador($division, $jugador, $rivales, $resultados);
     }
 }
+

@@ -9,14 +9,22 @@ namespace Application\Player;
 class PlayerResultsCommand
 {
     private $jugadorId;
+    private $idLiga;
 
-    function __construct($jugadorId)
+    function __construct($jugadorId, $idLiga = null)
     {
         $this->jugadorId = $jugadorId;
+        $this->idLiga = $idLiga;
     }
 
     function getJugadorId()
     {
         return $this->jugadorId;
     }
+
+    function getIdLiga()
+    {
+        return $this->idLiga;
+    }
 }
+
