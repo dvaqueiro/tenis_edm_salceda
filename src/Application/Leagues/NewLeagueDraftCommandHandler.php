@@ -17,7 +17,11 @@ use Domain\Model\Resultado\ResultadoRepository;
  */
 class NewLeagueDraftCommandHandler
 {
-    const PERIODOS = ['enero-marzo', 'mayo-julio', 'septiembre-noviembre'];
+    /** Rondas del artículo 3 del reglamento, en orden dentro del año. */
+    const PERIODOS = ['enero-marzo', 'mayo-julio', 'octubre-diciembre'];
+
+    /** Nombres antiguos de las rondas (antes de 2026 la primera era septiembre-noviembre). */
+    const PERIODOS_ANTIGUOS = ['septiembre-noviembre' => 'octubre-diciembre'];
 
     private $ligaRepository;
     private $divisionRepository;
@@ -109,17 +113,20 @@ class NewLeagueDraftCommandHandler
     }
 
     /**
-     * "Liga mayo-julio 2026" => "Liga septiembre-noviembre 2026"
-     * "Liga septiembre-noviembre 2026" => "Liga enero-marzo 2027"
+     * "Liga mayo-julio 2026" => "Liga octubre-diciembre 2026"
+     * "Liga octubre-diciembre 2026" => "Liga enero-marzo 2027"
+     * "Liga septiembre-noviembre 2025" => "Liga enero-marzo 2026"
      */
     public static function siguienteNombre($nombre)
     {
-        $periodos = implode('|', self::PERIODOS);
+        $periodos = implode('|', array_merge(self::PERIODOS, array_keys(self::PERIODOS_ANTIGUOS)));
         if (!preg_match('/^(.*?)(' . $periodos . ')\s+(\d{4})\s*$/u', $nombre, $partes)) {
             return '';
         }
 
-        $indice = array_search($partes[2], self::PERIODOS);
+        $antiguos = self::PERIODOS_ANTIGUOS;
+        $periodo = array_key_exists($partes[2], $antiguos) ? $antiguos[$partes[2]] : $partes[2];
+        $indice = array_search($periodo, self::PERIODOS);
         $anio = (int) $partes[3];
         $siguiente = ($indice + 1) % count(self::PERIODOS);
         if ($siguiente === 0) {

@@ -132,11 +132,30 @@
     }
 
     /**
-     * Rellena los grupos. Cada categoría de destino reparte por turnos A, B, A, B…
-     * en este orden: los que bajan de la categoría superior, los que se mantienen
-     * y los que suben de la inferior, cada uno según su puesto. Con 2 que suben y
-     * 2 que bajan, el primero de cada grupo va al A y el segundo al B; si las
-     * cuentas son impares, el turno sigue y los grupos quedan equilibrados.
+     * Índice de la letra de cada grupo de la liga anterior dentro de su
+     * categoría (A = 0, B = 1…). Si el nombre no lleva letra se usa su orden.
+     */
+    function letrasDeOrigen(divisiones) {
+        var res = {};
+        var vistos = {};
+        divisiones.forEach(function (d) {
+            var p = parseNombre(d.nombre);
+            vistos[d.categoria] = (vistos[d.categoria] || 0) + 1;
+            res[d.id] = p && p.letra ? LETRAS.indexOf(p.letra) : vistos[d.categoria] - 1;
+        });
+        return res;
+    }
+
+    /**
+     * Rellena los grupos según el artículo 11 del reglamento. Llamamos "misma
+     * letra" al grupo de destino con la letra del grupo de origen y "contraria"
+     * a la siguiente:
+     *  - Suben: el 1º a la misma letra, el 2º a la contraria.
+     *  - Bajan: el 5º a la misma letra, el 6º a la contraria y el 7º a la misma
+     *    (cuenta el puesto: si baja el 4º, va a la contraria).
+     *  - Se mantienen en la categoría más alta: impares al grupo A y pares al B.
+     *  - Se mantienen en el resto: impares (3º) en su grupo, pares (4º) al contrario.
+     * Si la categoría de destino tiene un solo grupo, van todos a él.
      *
      * @return {{grupos: Array, sinGrupo: number[]}} copia de `grupos` con jugadores
      */
@@ -147,14 +166,14 @@
         });
         var sinGrupo = [];
         var colocados = {};
-        var turno = {};
         var origen = origenes(divisiones, movimientos);
-        var llegadas = [];
+        var letras = letrasDeOrigen(divisiones);
 
         divisiones.forEach(function (d) {
             var total = d.clasificacion.length;
             var m = movimientos[d.id] || { sube: 0, baja: 0 };
             var i = cats.indexOf(d.categoria);
+            var misma = letras[d.id];
 
             d.clasificacion.forEach(function (fila, pos) {
                 if (colocados[fila.id]) {
@@ -162,35 +181,25 @@
                 }
                 colocados[fila.id] = true;
 
-                var destino;
+                var destino, letra;
                 if (pos < m.sube) {
                     destino = i > 0 ? cats[i - 1] : null;
+                    letra = misma + pos % 2;
                 } else if (pos >= total - m.baja) {
                     destino = i >= 0 && i < cats.length - 1 ? cats[i + 1] : null;
+                    letra = misma + pos % 2;
                 } else {
                     destino = i >= 0 ? d.categoria : null;
+                    letra = i === 0 ? pos % 2 : misma + pos % 2;
                 }
 
                 if (destino === null) {
                     sinGrupo.push(fila.id);
-                } else {
-                    llegadas.push({ id: fila.id, destino: destino });
+                    return;
                 }
+                var candidatos = gruposDeCategoria(nuevos, destino);
+                candidatos[letra % candidatos.length].jugadores.push(fila.id);
             });
-        });
-
-        // Orden de reparto: por procedencia (de arriba abajo) y dentro de cada grupo por puesto.
-        llegadas.sort(function (a, b) {
-            var oa = origen[a.id], ob = origen[b.id];
-            return (ORDEN_TIPO[oa.tipo] - ORDEN_TIPO[ob.tipo]) ||
-                (oa.categoria - ob.categoria) ||
-                (oa.nombre < ob.nombre ? -1 : oa.nombre > ob.nombre ? 1 : 0) ||
-                (oa.posicion - ob.posicion);
-        });
-        llegadas.forEach(function (l) {
-            var candidatos = gruposDeCategoria(nuevos, l.destino);
-            turno[l.destino] = turno[l.destino] || 0;
-            candidatos[turno[l.destino]++ % candidatos.length].jugadores.push(l.id);
         });
 
         nuevos.forEach(function (g) {
