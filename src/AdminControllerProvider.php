@@ -2,6 +2,9 @@
 
 use Application\AddResultadoCommad;
 use Application\DeleteResultadoCommand;
+use Application\Leagues\CreateLeagueCommand;
+use Application\Leagues\InvalidLeagueException;
+use Application\Leagues\NewLeagueDraftCommand;
 use Application\Player\UpdateJugadorCommand;
 use Domain\Model\Jugador;
 use Domain\Model\PersistenceException;
@@ -14,6 +17,9 @@ use Symfony\Component\Form\Form;
 use Application\Player\PlayerResultsCommand;
 use Application\Player\PlayerResultsCommandHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Csrf\CsrfToken;
 
 class AdminControllerProvider implements ControllerProviderInterface
 {
@@ -113,6 +119,73 @@ class AdminControllerProvider implements ControllerProviderInterface
                 'ligas' => $ligas,
             ]);
         })->bind('admin_leagues');
+
+        $soloAdmin = function (Request $request, Application $app) {
+            if (!$app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+                throw new AccessDeniedHttpException('Solo los administradores pueden crear ligas.');
+            }
+        };
+
+        $controllers->get('/leagues/add', function (Request $request, Application $app) {
+            $borrador = $app['commandBus']->handle(new NewLeagueDraftCommand(
+                $request->query->getInt('base') ?: null,
+                3,
+                1,
+                [
+                    'puntos' => 'DESC',
+                    'difSets' => 'DESC',
+                    'difJuegos' => 'DESC',
+                ]
+            ));
+
+            return $app['twig']->render('admin_league_add.html.twig', [
+                'borrador' => $borrador,
+                'borradorJson' => json_encode($borrador, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE),
+                'csrfToken' => $app['csrf.token_manager']->getToken('league_add')->getValue(),
+            ]);
+        })->bind('admin_league_add')
+            ->before($soloAdmin);
+
+        $controllers->post('/leagues/add', function (Request $request, Application $app) {
+            $token = new CsrfToken('league_add', $request->headers->get('X-CSRF-Token'));
+            if (!$app['csrf.token_manager']->isTokenValid($token)) {
+                return new JsonResponse(['ok' => false, 'errors' => [
+                    'La sesión ha caducado. Recarga la página: tu borrador se conserva en este navegador.'
+                ]], 403);
+            }
+
+            $datos = json_decode($request->getContent(), true);
+            if (!is_array($datos)) {
+                return new JsonResponse(['ok' => false, 'errors' => ['Datos no válidos.']], 400);
+            }
+
+            try {
+                $creada = $app['commandBus']->handle(new CreateLeagueCommand(
+                    isset($datos['nombre']) ? $datos['nombre'] : '',
+                    isset($datos['grupos']) ? $datos['grupos'] : []
+                ));
+            } catch (InvalidLeagueException $ex) {
+                return new JsonResponse(['ok' => false, 'errors' => $ex->getErrors()], 422);
+            } catch (\Exception $ex) {
+                $app['logger'] && $app['logger']->error('Error al crear la liga: ' . $ex->getMessage());
+                return new JsonResponse(['ok' => false, 'errors' => [
+                    'No se ha podido guardar la liga. No se ha creado nada; inténtalo de nuevo.'
+                ]], 500);
+            }
+
+            $mensaje = 'Liga «' . trim($datos['nombre']) . '» creada correctamente.';
+            if ($creada['reactivados'] > 0) {
+                $mensaje .= " Se han reactivado {$creada['reactivados']} jugadores que estaban inactivos.";
+            }
+            $app['session']->getFlashBag()->add('mensaje', $mensaje);
+
+            return new JsonResponse([
+                'ok' => true,
+                'idLiga' => $creada['idLiga'],
+                'redirect' => $app['url_generator']->generate('admin_leagues'),
+            ]);
+        })->bind('admin_league_create')
+            ->before($soloAdmin);
 
         $controllers->get('/leagues/{idLiga}/division/{idDivision}', function ($idLiga, $idDivision, Application $app) {
             $puntosGanador = 3;

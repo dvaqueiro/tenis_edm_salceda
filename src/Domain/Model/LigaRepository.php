@@ -17,4 +17,18 @@ interface LigaRepository
      * @return Liga
      */
     function findByIdOrLast($idLiga);
+
+    /**
+     *
+     * @param string $nombre
+     * @return int id de la nueva liga
+     */
+    public function add($nombre);
+
+    /**
+     *
+     * @param string $nombre
+     * @return bool
+     */
+    public function existsByNombre($nombre);
 }

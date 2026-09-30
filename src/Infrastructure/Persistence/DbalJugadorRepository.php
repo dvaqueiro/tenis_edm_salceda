@@ -136,6 +136,20 @@ class DbalJugadorRepository implements JugadorRepository
         return $this->factory->makeAll($data);
     }
 
+    public function activate(array $ids)
+    {
+        if (empty($ids)) {
+            return 0;
+        }
+
+        $sql = "UPDATE usuarios SET roles = 'ROLE_USER' WHERE roles = 'ROLE_NONE' AND id IN (?)";
+
+        return $this->dbal->executeUpdate($sql,
+            array($ids),
+            array(Connection::PARAM_INT_ARRAY)
+        );
+    }
+
     public function delete($jugadorId)
     {
         return $this->dbal->delete('usuarios', ['id' => $jugadorId]);

@@ -1,0 +1,222 @@
+{% extends "admin_layout.html.twig" %}
+
+{% block title 'Nueva liga' %}
+
+{% block extra_css %}
+    <link href="{{ asset('../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/admin_league_builder.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="row clearfix">
+<div class="col-xs-12">
+<div class="card lb" id="lb">
+    <div class="header">
+        <h2>
+            Nueva liga
+            <small>Grupos provisionales a partir de la clasificación final de «{{ borrador.base.nombre }}»</small>
+        </h2>
+    </div>
+    <div class="body">
+        <noscript>
+            <div class="alert alert-warning">Esta pantalla necesita JavaScript activado.</div>
+        </noscript>
+
+        <div class="row clearfix">
+            <div class="col-sm-7">
+                <label for="lb-nombre" class="lb-label">Nombre de la nueva liga</label>
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" id="lb-nombre" class="form-control" maxlength="150" autocomplete="off"
+                               aria-describedby="lb-nombre-aviso" required />
+                    </div>
+                    <p id="lb-nombre-aviso" class="lb-field-hint" aria-live="polite"></p>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <form method="get" action="{{ path('admin_league_add') }}" id="lb-base-form">
+                    <label for="lb-base" class="lb-label">Liga de referencia (clasificación de la que se parte)</label>
+                    <div class="lb-base-row">
+                        <select id="lb-base" name="base" class="form-control ms">
+                            {% for liga in borrador.ligas %}
+                                <option value="{{ liga.id }}" {% if liga.id == borrador.base.id %}selected{% endif %}>{{ liga.id }} - {{ liga.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-default waves-effect" id="lb-base-submit">Cargar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="lb-draft-banner" class="alert lb-banner" role="region" aria-label="Borrador guardado" hidden>
+            <p><i class="material-icons" aria-hidden="true">history</i> <span id="lb-draft-text"></span></p>
+            <div class="lb-banner-actions">
+                <button type="button" class="btn btn-primary waves-effect" id="lb-draft-restore">Recuperar borrador</button>
+                <button type="button" class="btn btn-default waves-effect" id="lb-draft-discard">Empezar de nuevo</button>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs tab-nav-right lb-tabs" role="tablist" aria-label="Pasos para crear la liga">
+            <li role="presentation" class="active">
+                <a href="#lb-panel-1" role="tab" id="lb-tab-1" aria-controls="lb-panel-1" aria-selected="true">
+                    <span class="lb-step">1</span> Grupos de la nueva liga
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#lb-panel-2" role="tab" id="lb-tab-2" aria-controls="lb-panel-2" aria-selected="false" tabindex="-1">
+                    <span class="lb-step">2</span> Revisar y crear
+                </a>
+            </li>
+        </ul>
+
+        <div class="lb-panels">
+            <section id="lb-panel-1" role="tabpanel" aria-labelledby="lb-tab-1" tabindex="-1">
+                <p class="lb-intro">
+                    Grupos provisionales creados con la clasificación final de «{{ borrador.base.nombre }}» según el
+                    <a href="{{ path('reglamento') }}" target="_blank" rel="noopener">artículo 11 del reglamento</a>:
+                    suben los 2 primeros y bajan los 2 últimos (3 si el grupo es de 7), el 1º a su misma letra y el 2º a la contraria.
+                    Cambia lo que necesites.
+                </p>
+                <div class="lb-toolbar" role="toolbar" aria-label="Acciones de edición" aria-controls="lb-board">
+                    <button type="button" class="btn btn-default waves-effect" id="lb-undo" title="Deshacer (Ctrl+Z)">
+                        <i class="material-icons" aria-hidden="true">undo</i><span>Deshacer</span>
+                    </button>
+                    <button type="button" class="btn btn-default waves-effect" id="lb-redo" title="Rehacer (Ctrl+Y)">
+                        <i class="material-icons" aria-hidden="true">redo</i><span>Rehacer</span>
+                    </button>
+                    <button type="button" class="btn btn-default waves-effect" id="lb-reset">
+                        <i class="material-icons" aria-hidden="true">autorenew</i><span>Volver a la propuesta</span>
+                    </button>
+                    <p class="lb-counter" id="lb-counter" aria-live="off"></p>
+                </div>
+
+                <details class="lb-help">
+                    <summary>Cómo editar las tablas</summary>
+                    <ul>
+                        <li><strong>Arrastrar:</strong> coge al jugador por el asa <i class="material-icons lb-inline-icon" aria-hidden="true">drag_indicator</i> y suéltalo en otro grupo. Funciona también con el dedo en el móvil.</li>
+                        <li><strong>Botón «Mover»:</strong> elige el grupo de destino de una lista. Es la forma más cómoda con teclado o lector de pantalla.</li>
+                        <li><strong>Quitar:</strong> el jugador pasa a «Sin grupo» y no jugará esta liga. Desde ahí puedes devolverlo a cualquier grupo.</li>
+                        <li><strong>Añadir jugador:</strong> abre el buscador con todos los jugadores del club, también los inactivos.</li>
+                        <li><strong>Deshacer:</strong> cualquier cambio se puede deshacer (Ctrl+Z) y el borrador se guarda solo en este navegador.</li>
+                    </ul>
+                </details>
+
+                <div id="lb-board"></div>
+
+                <div class="lb-board-footer">
+                    <button type="button" class="btn btn-default waves-effect" id="lb-add-category">
+                        <i class="material-icons" aria-hidden="true">add</i><span>Añadir categoría</span>
+                    </button>
+                </div>
+
+                <section class="lb-bench" id="lb-bench" aria-labelledby="lb-bench-title"></section>
+
+                <div class="lb-panel-nav">
+                    <button type="button" class="btn btn-success btn-lg waves-effect" data-goto-tab="2">
+                        Siguiente: revisar y crear <i class="material-icons" aria-hidden="true">arrow_forward</i>
+                    </button>
+                </div>
+            </section>
+
+            <section id="lb-panel-2" role="tabpanel" aria-labelledby="lb-tab-2" tabindex="-1" hidden>
+                <div id="lb-review"></div>
+                <div id="lb-save-errors" class="alert alert-danger" role="alert" hidden></div>
+                <div class="lb-panel-nav">
+                    <button type="button" class="btn btn-default waves-effect" data-goto-tab="1">
+                        <i class="material-icons" aria-hidden="true">arrow_back</i> Grupos
+                    </button>
+                    <button type="button" class="btn btn-success btn-lg waves-effect" id="lb-save">
+                        <i class="material-icons" aria-hidden="true">check</i> Crear liga
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<div id="lb-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+{# Diálogo: mover jugador #}
+<div class="modal fade" id="lb-move-modal" tabindex="-1" role="dialog" aria-labelledby="lb-move-title">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="lb-move-title">Mover jugador</h4>
+            </div>
+            <div class="modal-body" id="lb-move-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Diálogo: añadir jugadores #}
+<div class="modal fade" id="lb-add-modal" tabindex="-1" role="dialog" aria-labelledby="lb-add-title">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="lb-add-title">Añadir jugador</h4>
+            </div>
+            <div class="modal-body">
+                <label for="lb-search" class="lb-label">Buscar por nombre</label>
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="search" id="lb-search" class="form-control" autocomplete="off"
+                               placeholder="Escribe un nombre…" aria-controls="lb-search-results" aria-describedby="lb-search-status" />
+                    </div>
+                </div>
+                <div class="lb-check">
+                    <input type="checkbox" id="lb-search-inactive" class="lb-native" checked />
+                    <label for="lb-search-inactive">Mostrar también jugadores inactivos</label>
+                </div>
+                <p id="lb-search-status" class="lb-field-hint" aria-live="polite"></p>
+                <ul id="lb-search-results" class="lb-search-results" aria-label="Resultados"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Diálogo: renombrar grupo #}
+<div class="modal fade" id="lb-rename-modal" tabindex="-1" role="dialog" aria-labelledby="lb-rename-title">
+    <div class="modal-dialog modal-sm" role="document">
+        <form class="modal-content" id="lb-rename-form">
+            <div class="modal-header">
+                <h4 class="modal-title" id="lb-rename-title">Renombrar grupo</h4>
+            </div>
+            <div class="modal-body">
+                <label for="lb-rename-input" class="lb-label">Nombre del grupo</label>
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" id="lb-rename-input" class="form-control" maxlength="150" autocomplete="off" aria-describedby="lb-rename-hint" />
+                    </div>
+                    <p id="lb-rename-hint" class="lb-field-hint">Déjalo vacío para usar el nombre automático.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary waves-effect">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="application/json" id="lb-data">{{ borradorJson|raw }}</script>
+{% endblock %}
+
+{% block extra_script %}
+    <script src="{{ asset('../node_modules/adminbsb-materialdesign/plugins/sweetalert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('js/sortable/Sortable.min.js') }}"></script>
+    <script>
+        window.LB_CONFIG = {
+            saveUrl: {{ path('admin_league_create')|json_encode|raw }},
+            csrfToken: {{ csrfToken|json_encode|raw }}
+        };
+    </script>
+    <script src="{{ asset('js/admin_league_builder.js') }}"></script>
+{% endblock %}

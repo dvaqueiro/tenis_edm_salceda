@@ -55,4 +55,23 @@ class DbalDivisionRepository implements DivisionRepository
         $data = $stmt->fetch();
         return $this->factory->make($data);
     }
+
+    public function add($idLiga, $nombre, $categoria)
+    {
+        $this->dbal->insert('divisiones', [
+            'idliga' => $idLiga,
+            'nombre' => $nombre,
+            'categoria' => $categoria,
+        ]);
+
+        return (int) $this->dbal->lastInsertId();
+    }
+
+    public function addJugador($idDivision, $idJugador)
+    {
+        $this->dbal->insert('ud', [
+            'idusuario' => $idJugador,
+            'iddivision' => $idDivision,
+        ]);
+    }
 }
