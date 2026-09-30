@@ -141,7 +141,6 @@ $app->register(new SecurityServiceProvider(), array(
         'standings' => array('pattern' => '^/standings$'),
         'ranking' => array('pattern' => '^/ranking$'),
         'contact' => array('pattern' => '^/contact$'),
-        'delete' => array('pattern' => '^/admin/result/'),
         'facebook' => array('pattern' => '^/facebook$'),
         'reglamento' => array('pattern' => '^/reglamento$'),
         'booking_confirm' => array('pattern' => '^/courts/confirm/.*$'),
@@ -154,7 +153,7 @@ $app->register(new SecurityServiceProvider(), array(
         ),
     ),
     'security.access_rules' => array(
-        array('^/admin$', 'ROLE_ADMIN'),
+        array('^/admin', 'ROLE_ADMIN'),
         array('^/.+$', ['ROLE_USER','ROLE_ADMIN']),
     )
 ));
