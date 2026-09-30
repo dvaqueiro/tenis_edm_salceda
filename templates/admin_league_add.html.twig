@@ -14,7 +14,7 @@
     <div class="header">
         <h2>
             Nueva liga
-            <small>Tablas propuestas a partir de la clasificación final de «{{ borrador.base.nombre }}»</small>
+            <small>Grupos provisionales a partir de la clasificación final de «{{ borrador.base.nombre }}»</small>
         </h2>
     </div>
     <div class="body">
@@ -59,17 +59,12 @@
         <ul class="nav nav-tabs tab-nav-right lb-tabs" role="tablist" aria-label="Pasos para crear la liga">
             <li role="presentation" class="active">
                 <a href="#lb-panel-1" role="tab" id="lb-tab-1" aria-controls="lb-panel-1" aria-selected="true">
-                    <span class="lb-step">1</span> Clasificación y movimientos
+                    <span class="lb-step">1</span> Grupos de la nueva liga
                 </a>
             </li>
             <li role="presentation">
                 <a href="#lb-panel-2" role="tab" id="lb-tab-2" aria-controls="lb-panel-2" aria-selected="false" tabindex="-1">
-                    <span class="lb-step">2</span> Grupos de la nueva liga
-                </a>
-            </li>
-            <li role="presentation">
-                <a href="#lb-panel-3" role="tab" id="lb-tab-3" aria-controls="lb-panel-3" aria-selected="false" tabindex="-1">
-                    <span class="lb-step">3</span> Revisar y crear
+                    <span class="lb-step">2</span> Revisar y crear
                 </a>
             </li>
         </ul>
@@ -77,25 +72,11 @@
         <div class="lb-panels">
             <section id="lb-panel-1" role="tabpanel" aria-labelledby="lb-tab-1" tabindex="-1">
                 <p class="lb-intro">
-                    Clasificación final de cada grupo de «{{ borrador.base.nombre }}». Indica cuántos jugadores
-                    <strong>suben</strong> y <strong>bajan</strong> en cada grupo: las tablas de la nueva liga se
-                    rellenan solas siguiendo el <a href="{{ path('reglamento') }}" target="_blank" rel="noopener">artículo 11 del reglamento</a>
-                    (1º a su misma letra, 2º a la contraria…) y después puedes cambiar lo que quieras.
+                    Grupos provisionales creados con la clasificación final de «{{ borrador.base.nombre }}» según el
+                    <a href="{{ path('reglamento') }}" target="_blank" rel="noopener">artículo 11 del reglamento</a>:
+                    suben los 2 primeros y bajan los 2 últimos (3 si el grupo es de 7), el 1º a su misma letra y el 2º a la contraria.
+                    Cambia lo que necesites.
                 </p>
-                <ul class="lb-legend" aria-label="Leyenda">
-                    <li><span class="lb-chip lb-chip--sube"><i class="material-icons" aria-hidden="true">arrow_upward</i>Sube</span></li>
-                    <li><span class="lb-chip lb-chip--mantiene"><i class="material-icons" aria-hidden="true">remove</i>Se mantiene</span></li>
-                    <li><span class="lb-chip lb-chip--baja"><i class="material-icons" aria-hidden="true">arrow_downward</i>Baja</span></li>
-                </ul>
-                <div id="lb-prev" class="row lb-grid"></div>
-                <div class="lb-panel-nav">
-                    <button type="button" class="btn btn-success btn-lg waves-effect" data-goto-tab="2">
-                        Siguiente: grupos de la nueva liga <i class="material-icons" aria-hidden="true">arrow_forward</i>
-                    </button>
-                </div>
-            </section>
-
-            <section id="lb-panel-2" role="tabpanel" aria-labelledby="lb-tab-2" tabindex="-1" hidden>
                 <div class="lb-toolbar" role="toolbar" aria-label="Acciones de edición" aria-controls="lb-board">
                     <button type="button" class="btn btn-default waves-effect" id="lb-undo" title="Deshacer (Ctrl+Z)">
                         <i class="material-icons" aria-hidden="true">undo</i><span>Deshacer</span>
@@ -131,20 +112,17 @@
                 <section class="lb-bench" id="lb-bench" aria-labelledby="lb-bench-title"></section>
 
                 <div class="lb-panel-nav">
-                    <button type="button" class="btn btn-default waves-effect" data-goto-tab="1">
-                        <i class="material-icons" aria-hidden="true">arrow_back</i> Clasificación
-                    </button>
-                    <button type="button" class="btn btn-success btn-lg waves-effect" data-goto-tab="3">
+                    <button type="button" class="btn btn-success btn-lg waves-effect" data-goto-tab="2">
                         Siguiente: revisar y crear <i class="material-icons" aria-hidden="true">arrow_forward</i>
                     </button>
                 </div>
             </section>
 
-            <section id="lb-panel-3" role="tabpanel" aria-labelledby="lb-tab-3" tabindex="-1" hidden>
+            <section id="lb-panel-2" role="tabpanel" aria-labelledby="lb-tab-2" tabindex="-1" hidden>
                 <div id="lb-review"></div>
                 <div id="lb-save-errors" class="alert alert-danger" role="alert" hidden></div>
                 <div class="lb-panel-nav">
-                    <button type="button" class="btn btn-default waves-effect" data-goto-tab="2">
+                    <button type="button" class="btn btn-default waves-effect" data-goto-tab="1">
                         <i class="material-icons" aria-hidden="true">arrow_back</i> Grupos
                     </button>
                     <button type="button" class="btn btn-success btn-lg waves-effect" id="lb-save">

@@ -542,9 +542,6 @@
             return false;
         }
         var el = document.querySelector('[data-fk="' + clave.replace(/"/g, '') + '"]');
-        if (el && el.disabled && el.getAttribute('data-fk-alt')) {
-            el = document.querySelector('[data-fk="' + el.getAttribute('data-fk-alt') + '"]');
-        }
         if (el && !el.disabled) {
             el.focus();
             return true;
@@ -554,7 +551,6 @@
 
     function renderTodo(foco) {
         var previo = claveFoco();
-        renderAnterior();
         renderTablero();
         renderBanquillo();
         renderRevision();
@@ -564,60 +560,7 @@
         }
     }
 
-    /* ---------- paso 1: clasificación anterior ---------- */
-
-    function stepper(division, campo, lim, cats) {
-        var m = state.movimientos[division.id] || { sube: 0, baja: 0 };
-        var valor = m[campo];
-        var puede = campo === 'sube' ? lim.puedeSubir : lim.puedeBajar;
-        var destino = campo === 'sube' ? lim.destinoSube : lim.destinoBaja;
-        var labelId = 'lb-st-' + division.id + '-' + campo;
-        var verbo = campo === 'sube' ? 'Suben' : 'Bajan';
-
-        if (!puede) {
-            return h('p', { class: 'lb-stepper lb-stepper--off' },
-                icono(campo === 'sube' ? 'vertical_align_top' : 'vertical_align_bottom'),
-                campo === 'sube' ? 'Categoría más alta: no sube nadie' : 'Última categoría: no baja nadie');
-        }
-
-        var etiquetaDestino = etiquetaCategoria(destino);
-        var total = division.clasificacion.length;
-        var otro = campo === 'sube' ? m.baja : m.sube;
-
-        function ajustar(delta) {
-            return function () {
-                cambiar(function () {
-                    var nuevo = Object.assign({}, state.movimientos[division.id] || { sube: 0, baja: 0 });
-                    nuevo[campo] = Math.max(0, Math.min(nuevo[campo] + delta, total - otro));
-                    state.movimientos[division.id] = nuevo;
-                    regenerar();
-                }, {
-                    anuncio: verbo + ' ' + (valor + delta) + ' en ' + division.nombre + '. Tablas de la nueva liga recalculadas; puedes deshacerlo.'
-                });
-            };
-        }
-
-        return h('div', { class: 'lb-stepper', role: 'group', 'aria-labelledby': labelId },
-            h('span', { class: 'lb-stepper-label', id: labelId },
-                icono(campo === 'sube' ? 'arrow_upward' : 'arrow_downward'),
-                verbo + ' a ' + etiquetaDestino),
-            h('button', {
-                type: 'button', class: 'btn btn-default waves-effect lb-stepper-btn',
-                'aria-label': verbo + ' uno menos', title: verbo + ' uno menos',
-                'data-fk': 'st-' + division.id + '-' + campo + '-menos',
-                'data-fk-alt': 'st-' + division.id + '-' + campo + '-mas',
-                disabled: valor <= 0, onclick: ajustar(-1)
-            }, icono('remove')),
-            h('span', { class: 'lb-stepper-value' }, String(valor)),
-            h('button', {
-                type: 'button', class: 'btn btn-default waves-effect lb-stepper-btn',
-                'aria-label': verbo + ' uno más', title: verbo + ' uno más',
-                'data-fk': 'st-' + division.id + '-' + campo + '-mas',
-                'data-fk-alt': 'st-' + division.id + '-' + campo + '-menos',
-                disabled: valor + otro >= total, onclick: ajustar(1)
-            }, icono('add'))
-        );
-    }
+    /* ---------- grupos ---------- */
 
     function etiquetaCategoria(cat) {
         var g = LB.gruposDeCategoria(state.grupos, cat)[0];
@@ -627,68 +570,9 @@
     var TEXTO_TIPO = { sube: 'Sube', baja: 'Baja', mantiene: 'Se mantiene' };
     var ICONO_TIPO = { sube: 'arrow_upward', baja: 'arrow_downward', mantiene: 'remove' };
 
-    function renderAnterior() {
-        var cont = byId('lb-prev');
-        var cats = LB.categorias(state.grupos);
-        var origen = origenActual();
-        cont.textContent = '';
-
-        if (!DIVISIONES.length) {
-            cont.appendChild(h('div', { class: 'col-xs-12' },
-                h('p', { class: 'alert alert-info' }, 'La liga de referencia no tiene grupos. Crea los grupos en el paso 2 y añade los jugadores.')));
-            return;
-        }
-
-        DIVISIONES.forEach(function (d) {
-            var lim = LB.limites(d, cats);
-            var hId = 'lb-prev-h-' + d.id;
-            var filas = d.clasificacion.map(function (f) {
-                var o = origen[f.id];
-                var donde = dondeEsta(f.id);
-                var textoDonde = donde === 'banquillo' || !donde ? 'Sin grupo' : donde.nombre;
-                return h('tr', { class: 'lb-row lb-row--' + o.tipo },
-                    h('td', { class: 'lb-num' }, f.posicion + 'º'),
-                    h('th', { scope: 'row', class: 'lb-name' }, f.nombre),
-                    h('td', { class: 'lb-num' }, String(f.partidos)),
-                    h('td', { class: 'lb-num' }, String(f.puntos)),
-                    h('td', { class: 'lb-num hidden-xs' }, String(f.difSets)),
-                    h('td', { class: 'lb-num hidden-xs' }, String(f.difJuegos)),
-                    h('td', { class: 'lb-dest' },
-                        h('span', { class: 'lb-chip lb-chip--' + o.tipo },
-                            icono(ICONO_TIPO[o.tipo]), TEXTO_TIPO[o.tipo]),
-                        h('span', { class: 'lb-dest-name' + (donde === 'banquillo' || !donde ? ' lb-dest-name--none' : '') }, textoDonde))
-                );
-            });
-
-            var tabla = h('div', { class: 'table-responsive' },
-                h('table', { class: 'table table-condensed lb-table' },
-                    h('caption', { class: 'sr-only' }, 'Clasificación final de ' + d.nombre + ' y grupo en la nueva liga'),
-                    h('thead', null, h('tr', null,
-                        h('th', { scope: 'col', class: 'lb-num' }, h('abbr', { title: 'Posición' }, 'Pos.')),
-                        h('th', { scope: 'col' }, 'Jugador'),
-                        h('th', { scope: 'col', class: 'lb-num' }, h('abbr', { title: 'Partidos jugados' }, 'PJ')),
-                        h('th', { scope: 'col', class: 'lb-num' }, h('abbr', { title: 'Puntos' }, 'Pts')),
-                        h('th', { scope: 'col', class: 'lb-num hidden-xs' }, h('abbr', { title: 'Diferencia de sets' }, 'DS')),
-                        h('th', { scope: 'col', class: 'lb-num hidden-xs' }, h('abbr', { title: 'Diferencia de juegos' }, 'DJ')),
-                        h('th', { scope: 'col' }, 'Nueva liga')
-                    )),
-                    h('tbody', null, filas)
-                ));
-
-            cont.appendChild(h('div', { class: 'col-lg-6 col-xs-12' },
-                h('section', { class: 'lb-prev-card', 'aria-labelledby': hId },
-                    h('h3', { id: hId, class: 'lb-prev-title' }, d.nombre,
-                        h('span', { class: 'lb-sub' }, plural(d.clasificacion.length, 'jugador', 'jugadores'))),
-                    tabla,
-                    h('div', { class: 'lb-steppers' },
-                        stepper(d, 'sube', lim, cats),
-                        stepper(d, 'baja', lim, cats))
-                )));
-        });
-    }
-
-    /** Recalcula los grupos con la estructura y los movimientos actuales. */
+    /** Vuelve a crear los grupos provisionales (artículo 11) sobre la estructura actual. */
     function regenerar() {
+        state.movimientos = LB.movimientosPorDefecto(DIVISIONES, LB.categorias(state.grupos));
         var propuesta = LB.proponer(DIVISIONES, state.grupos, state.movimientos);
         var enLigaAnterior = {};
         DIVISIONES.forEach(function (d) {
@@ -706,7 +590,7 @@
         state.sinGrupo = propuesta.sinGrupo.concat(state.sinGrupo.filter(function (id) { return !enLigaAnterior[id]; }));
     }
 
-    /* ---------- paso 2: tablero ---------- */
+    /* ---------- paso 1: tablero ---------- */
 
     function avisoTamano(n) {
         if (n === 0) {
@@ -1118,7 +1002,7 @@
     function volverAPropuesta() {
         swal({
             title: '¿Volver a la propuesta?',
-            text: 'Se recalculan las tablas con la clasificación y los movimientos del paso 1. Se mantiene la estructura de grupos actual. Podrás deshacerlo.',
+            text: 'Se vuelven a crear los grupos provisionales según el reglamento, con la estructura de grupos actual. Se pierden los cambios a mano, pero podrás deshacerlo.',
             type: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, recalcular',
@@ -1133,7 +1017,7 @@
         });
     }
 
-    /* ---------- paso 3: revisión ---------- */
+    /* ---------- paso 2: revisión ---------- */
 
     function problemas() {
         var errores = [];
@@ -1154,13 +1038,13 @@
         state.grupos.forEach(function (g) {
             var clave = LB.normalizar(g.nombre);
             if (vistos[clave]) {
-                errores.push({ texto: 'Hay dos grupos llamados «' + g.nombre + '».', tab: 2, fk: 'rename-' + g.uid });
+                errores.push({ texto: 'Hay dos grupos llamados «' + g.nombre + '».', tab: 1, fk: 'rename-' + g.uid });
             }
             vistos[clave] = true;
             if (!g.jugadores.length) {
-                errores.push({ texto: g.nombre + ' está vacío: añade jugadores o elimínalo.', tab: 2, fk: 'add-' + g.uid });
+                errores.push({ texto: g.nombre + ' está vacío: añade jugadores o elimínalo.', tab: 1, fk: 'add-' + g.uid });
             } else if (g.jugadores.length < MIN_JUGADORES || g.jugadores.length > MAX_JUGADORES) {
-                avisos.push({ texto: g.nombre + ' tiene ' + plural(g.jugadores.length, 'jugador', 'jugadores') + '.', tab: 2, fk: 'add-' + g.uid });
+                avisos.push({ texto: g.nombre + ' tiene ' + plural(g.jugadores.length, 'jugador', 'jugadores') + '.', tab: 1, fk: 'add-' + g.uid });
             }
         });
 
@@ -1173,7 +1057,7 @@
             avisos.push({
                 texto: plural(fuera.length, 'jugador', 'jugadores') + ' de la liga anterior no ' + (fuera.length === 1 ? 'jugará' : 'jugarán') + ': ' +
                     fuera.map(nombreJugador).join(', ') + '.',
-                tab: 2, fk: null, banquillo: true
+                tab: 1, fk: null, banquillo: true
             });
         }
 
@@ -1202,7 +1086,7 @@
                         var btn = byId('lb-bench').querySelector('button');
                         (btn || byId('lb-bench')).focus();
                     } else if (!enfocar(p.fk)) {
-                        byId('lb-panel-2').focus();
+                        byId('lb-panel-1').focus();
                     }
                 }
             }, 'Ir al grupo');
@@ -1343,7 +1227,7 @@
     /* ---------- pestañas ---------- */
 
     function activarPestana(n, enfocarPestana) {
-        [1, 2, 3].forEach(function (i) {
+        [1, 2].forEach(function (i) {
             var tab = byId('lb-tab-' + i);
             var activa = i === n;
             tab.setAttribute('aria-selected', activa ? 'true' : 'false');
@@ -1351,7 +1235,7 @@
             tab.parentNode.classList.toggle('active', activa);
             byId('lb-panel-' + i).hidden = !activa;
         });
-        if (n === 3) {
+        if (n === 2) {
             renderRevision();
         }
         if (enfocarPestana) {
@@ -1360,7 +1244,7 @@
     }
 
     function initPestanas() {
-        [1, 2, 3].forEach(function (i) {
+        [1, 2].forEach(function (i) {
             var tab = byId('lb-tab-' + i);
             tab.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1368,10 +1252,9 @@
             });
             tab.addEventListener('keydown', function (e) {
                 var destino = null;
-                if (e.key === 'ArrowRight') { destino = i % 3 + 1; }
-                if (e.key === 'ArrowLeft') { destino = (i + 1) % 3 + 1; }
+                if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { destino = i === 1 ? 2 : 1; }
                 if (e.key === 'Home') { destino = 1; }
-                if (e.key === 'End') { destino = 3; }
+                if (e.key === 'End') { destino = 2; }
                 if (destino) {
                     e.preventDefault();
                     activarPestana(destino, true);
@@ -1419,7 +1302,7 @@
                 byId('lb-draft-banner').hidden = true;
                 renderTodo();
                 anunciar('Borrador recuperado.');
-                byId('lb-tab-2').focus();
+                byId('lb-tab-1').focus();
             });
             byId('lb-draft-discard').addEventListener('click', function () {
                 borrarBorrador();
@@ -1438,7 +1321,7 @@
             state.nombre = nombre.value;
             validarNombre();
             guardarBorrador();
-            if (!byId('lb-panel-3').hidden) {
+            if (!byId('lb-panel-2').hidden) {
                 renderRevision();
             }
         });

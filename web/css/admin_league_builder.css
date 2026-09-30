@@ -168,15 +168,6 @@
     max-width: 75em;
 }
 
-.lb-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 16px;
-}
-
 /* Chips (sube / baja / se mantiene…) : icono + texto, nunca solo color */
 .lb-chip {
     display: inline-flex;
@@ -201,16 +192,6 @@
 .lb-chip--new { background: var(--lb-blue-bg); color: var(--lb-blue); }
 .lb-chip--inactive { background: var(--lb-amber-bg); color: var(--lb-amber); }
 
-/* Paso 1: tablas de la liga anterior */
-.lb-prev-card {
-    border: 1px solid var(--lb-border);
-    border-radius: 2px;
-    padding: 12px 12px 4px;
-    margin-bottom: 20px;
-    background: #fff;
-}
-
-.lb-prev-title,
 .lb-cat-title {
     display: flex;
     flex-wrap: wrap;
@@ -228,37 +209,6 @@
     color: #666;
 }
 
-.lb-table {
-    margin-bottom: 8px;
-}
-
-.lb-table > thead > tr > th {
-    border-bottom-width: 1px;
-    font-size: 12px;
-    color: #555;
-    white-space: nowrap;
-}
-
-.lb-table abbr[title] {
-    text-decoration: none;
-    border-bottom: none;
-    cursor: help;
-}
-
-.lb-table .lb-num {
-    text-align: right;
-    width: 1%;
-    white-space: nowrap;
-}
-
-.lb-table th.lb-name {
-    font-weight: normal;
-}
-
-.lb-row > td:first-child { border-left: 4px solid transparent; }
-.lb-row--sube > td:first-child { border-left-color: #43A047; }
-.lb-row--baja > td:first-child { border-left-color: #E53935; }
-
 /* Rejilla sin huecos aunque las tarjetas tengan alturas distintas */
 .lb-grid {
     display: flex;
@@ -272,72 +222,6 @@
 
 .lb-grid > [class*="col-"] {
     float: none;
-}
-
-.lb-dest {
-    white-space: nowrap;
-}
-
-.lb-dest-name {
-    margin-left: 6px;
-    font-size: 13px;
-    color: #333;
-}
-
-.lb-dest-name--none {
-    color: #8A5300;
-    font-weight: bold;
-}
-
-.lb-steppers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 24px;
-    padding: 8px 0;
-    border-top: 1px solid var(--lb-border);
-}
-
-.lb-stepper {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 0;
-}
-
-.lb-stepper-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    min-width: 7.5em;
-    font-weight: bold;
-    color: #333;
-}
-
-.lb-stepper-label .material-icons {
-    font-size: 18px;
-}
-
-.lb .lb-stepper-btn {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-}
-
-.lb-stepper-value {
-    min-width: 1.6em;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.lb-stepper--off {
-    color: #666;
-    font-size: 13px;
-    gap: 4px;
-}
-
-.lb-stepper--off .material-icons {
-    font-size: 18px;
 }
 
 .lb-panel-nav {
@@ -890,15 +774,6 @@
     .lb-panel-nav .btn {
         flex: 1 1 100%;
         white-space: normal;
-    }
-
-    .lb-dest-name {
-        display: block;
-        margin: 2px 0 0;
-    }
-
-    .lb-stepper-label {
-        min-width: 0;
     }
 }
 
