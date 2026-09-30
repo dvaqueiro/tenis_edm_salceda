@@ -29,6 +29,10 @@ use Application\JugadoresPorLigaCommand;
 use Application\JugadoresPorLigaCommandHandler;
 use Application\Leagues\AllLigasCommand;
 use Application\Leagues\AllLigasCommandHandler;
+use Application\Leagues\CreateLeagueCommand;
+use Application\Leagues\CreateLeagueCommandHandler;
+use Application\Leagues\NewLeagueDraftCommand;
+use Application\Leagues\NewLeagueDraftCommandHandler;
 use Application\Player\AddJugadorCommand;
 use Application\Player\AddJugadorCommandHandler;
 use Application\Player\AllPlayersCommand;
@@ -325,6 +329,23 @@ $app['all_leagues_command_handler'] = $app->factory(function ($app) {
     return new AllLigasCommandHandler($app['liga_repository'],$app['division_repository']);
 });
 
+$app['new_league_draft_command_handler'] = $app->factory(function ($app) {
+    return new NewLeagueDraftCommandHandler(
+        $app['liga_repository'],
+        $app['division_repository'],
+        $app['resultado_repository'],
+        $app['jugador_repository']
+    );
+});
+
+$app['create_league_command_handler'] = $app->factory(function ($app) {
+    return new CreateLeagueCommandHandler(
+        $app['liga_repository'],
+        $app['division_repository'],
+        $app['jugador_repository']
+    );
+});
+
 $app['all_about_division_command_handler'] = $app->factory(function ($app) {
     return new AllAboutDivisionCommandHandler(
         $app['liga_repository'],
@@ -383,6 +404,8 @@ $app['commandBus'] = function ($app){
                 AddJugadorCommand::class => $app['add_jugador_command_handler'],
                 DeleteJugadorCommand::class => $app['delete_jugador_command_handler'],
                 AllLigasCommand::class => $app['all_leagues_command_handler'],
+                NewLeagueDraftCommand::class => $app['new_league_draft_command_handler'],
+                CreateLeagueCommand::class => $app['create_league_command_handler'],
                 AllAboutDivisionCommand::class => $app['all_about_division_command_handler'],
                 AllBookingsCommand::class => $app['all_bookings_command_handler'],
                 DeleteResultadoCommand::class => $app['delete_result_command_handler'],

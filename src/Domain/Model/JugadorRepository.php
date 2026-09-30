@@ -32,4 +32,12 @@ interface JugadorRepository
 
     function findAllWithRoles($roles);
 
+    /**
+     * Pasa a ROLE_USER a los jugadores inactivos (ROLE_NONE) indicados.
+     *
+     * @param int[] $ids
+     * @return int número de jugadores reactivados
+     */
+    function activate(array $ids);
+
 }

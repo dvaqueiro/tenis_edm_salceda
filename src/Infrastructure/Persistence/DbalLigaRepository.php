@@ -49,4 +49,18 @@ class DbalLigaRepository implements LigaRepository
 
         return $this->factory->makeAll($data);
     }
+
+    public function add($nombre)
+    {
+        $this->dbal->insert('ligas', ['nombre' => $nombre]);
+
+        return (int) $this->dbal->lastInsertId();
+    }
+
+    public function existsByNombre($nombre)
+    {
+        $sql = 'SELECT COUNT(*) FROM ligas WHERE nombre = ?';
+
+        return $this->dbal->fetchColumn($sql, [$nombre]) > 0;
+    }
 }
